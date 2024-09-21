@@ -1,1 +1,1 @@
-web: gunicorn travel_planner_cs3240_b_25.wsgi
+web: gunicorn project-b-25.wsgi
