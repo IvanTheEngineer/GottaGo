@@ -17,7 +17,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 import secrets
 from pathlib import Path
-
+import django_heroku
 import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -27,12 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get(
-    "DJANGO_SECRET_KEY",
-    default=secrets.token_urlsafe(nbytes=64)
-)
-
-IS_HEROKU_APP = "DYNO" in os.environ and not "CI" in os.environ
+SECRET_KEY = 'django-insecure-4e%b606a&s9#z97jc8vv@2n4z1f2jyb3__okmp-q1!1d-2!=6i'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -146,3 +141,4 @@ WHITENOISE_KEEP_ONLY_HASHED_FILES = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
+django_heroku.settings(locals())
