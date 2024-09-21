@@ -38,7 +38,7 @@ IS_HEROKU_APP = "DYNO" in os.environ and not "CI" in os.environ
 DEBUG = True
 
 
-ALLOWED_HOSTS = [".localhost", "127.0.0.1", "[::1]", "0.0.0.0"]
+ALLOWED_HOSTS = [".localhost", "127.0.0.1", "[::1]", "0.0.0.0", "travel-planner-cs3240-b-25-7745206e8d01.herokuapp.com"]
 
 # Application definition
 
