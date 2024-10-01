@@ -1,0 +1,6 @@
+{% if user.is_authenticated %}
+    <h1>Welcome, {{ user.get_full_name }}!</h1>
+{% else %}
+    <h1>Welcome, Guest!</h1>
+{% endif %}
+<a type="button" href="{% url 'login' %}" >Log in</a>
