@@ -16,7 +16,6 @@ from .forms import UserLoginForm
 from .decorators import user_not_authenticated
 from django.contrib.auth.decorators import login_required
 
-
 @login_required
 def profile(request):
     user = request.user
@@ -32,6 +31,12 @@ def profile(request):
 def custom_login(request):
     print("HERE")
     return render(request, 'users/login.html')
+
+
+@login_required
+def custom_logout(request):
+    logout(request)
+    return redirect('home')
 
 
 def home(request):
