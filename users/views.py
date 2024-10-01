@@ -27,9 +27,17 @@ def profile(request):
     }
     return render(request, 'users/profile.html', context)
 
+
 def custom_login(request):
     print("HERE")
     return render(request, 'users/login.html')
+
+
+@login_required
+def custom_logout(request):
+    logout(request)
+    return redirect('home')
+
 
 def home(request):
     return render(request, 'users/home.html')
