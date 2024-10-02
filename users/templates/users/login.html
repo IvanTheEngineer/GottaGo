@@ -1,4 +1,8 @@
+{% extends "users/base.html" %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
 {% load socialaccount %}
+{% block navbar_and_footer %}
 {% block content %}
     <h1> Log In </h1>
     <button class="btn btn-outline-info">
@@ -7,4 +11,5 @@
             Login with Google
         </a>
     </button>
-{% endblock content %} 
+{% endblock content %}
+{% endblock %}

@@ -1,3 +1,5 @@
+{% extends "users/base.html" %}
+{% block navbar_and_footer %}
 <head>
     <title>User Profile</title>
 </head>
@@ -11,3 +13,4 @@
 </body>
 
 <a type="button" href="{% url 'home' %}" >Home</a>
+{% endblock %}
