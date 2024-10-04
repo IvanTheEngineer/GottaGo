@@ -10,6 +10,11 @@
     <p>Email: {{ email }}</p>
     <p>First Name: {{ first_name }}</p>
     <p>Last Name: {{ last_name }}</p>
+    {% if PMA %}
+        <p>You are a PMA user</p>
+    {% else %}
+        <p>You are a regular user</p>
+    {% endif %}
 </body>
 
 <a type="button" href="{% url 'home' %}" >Home</a>

@@ -24,6 +24,7 @@ def profile(request):
         'email': user.email,
         'first_name': user.first_name,
         'last_name': user.last_name,
+        'PMA': user.groups.filter(name='PMA').exists(),
     }
     return render(request, 'users/profile.html', context)
 
