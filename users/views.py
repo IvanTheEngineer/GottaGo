@@ -18,15 +18,7 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def profile(request):
-    user = request.user
-    context = {
-        'username': user.username,
-        'email': user.email,
-        'first_name': user.first_name,
-        'last_name': user.last_name,
-        'PMA': user.groups.filter(name='PMA').exists(),
-    }
-    return render(request, 'users/profile.html', context)
+    return render(request, 'users/profile.html')
 
 
 def custom_login(request):
