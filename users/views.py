@@ -41,4 +41,8 @@ def custom_logout(request):
 
 
 def home(request):
-    return render(request, 'users/home.html')
+    user = request.user
+    context = {
+        'PMA': user.groups.filter(name='PMA').exists(),
+    }
+    return render(request, 'users/home.html', context)
