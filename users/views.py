@@ -16,6 +16,7 @@ from .forms import UserLoginForm
 from .decorators import user_not_authenticated
 from django.contrib.auth.decorators import login_required
 
+
 @login_required
 def profile(request):
     return render(request, 'users/profile.html')
@@ -38,3 +39,7 @@ def home(request):
         'PMA': user.groups.filter(name='PMA').exists(),
     }
     return render(request, 'users/home.html', context)
+
+
+def cancel_login(request):
+    return redirect('home')
