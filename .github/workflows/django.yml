@@ -31,3 +31,8 @@ jobs:
     - name: Run database migrations
       run: |
         python manage.py migrate
+    - name: Create Django admin account
+      run: |
+        python manage.py createsuperuser
+        admin
+        ProjectB25!
