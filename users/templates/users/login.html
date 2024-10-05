@@ -1,15 +1,15 @@
 {% extends "users/base.html" %}
 {% load bootstrap5 %}
-{% bootstrap_css %}
 {% load socialaccount %}
 {% block navbar_and_footer %}
 {% block content %}
-    <h1> Log In </h1>
-    <button class="btn btn-outline-info">
-        <a href="{% provider_login_url 'google'%}?next=/profile/">
-            <i class="fab fa-google"></i>
-            Login with Google
-        </a>
-    </button>
+    <div class="d-flex justify-content-center align-items-center min-vh-100">
+        <div class="text-center">
+            <h1 class="mb-3">Log In</h1>
+            <button class="btn btn-outline-info btn-lg" onclick="window.location.href='{% provider_login_url 'google' %}?next=/profile/'">
+                <i class="fab fa-google"></i> Login with Google
+            </button>
+        </div>
+    </div>
 {% endblock content %}
 {% endblock %}
