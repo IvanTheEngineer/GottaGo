@@ -43,3 +43,11 @@ def home(request):
 
 def cancel_login(request):
     return redirect('home')
+
+
+def project_creation(request):
+    user = request.user
+    context = {
+        'PMA': user.groups.filter(name='PMA').exists(),
+    }
+    return render(request, 'users/project_creator.html', context)

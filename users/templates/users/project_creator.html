@@ -1,0 +1,36 @@
+{% extends "users/base.html" %}
+{% block navbar_and_footer %}
+{% load custom_filters %}
+{% load static %}
+
+<head>
+    <title>Create Plan</title>
+</head>
+
+<body>
+    <h1>Create Plan</h1>
+    {% if user.is_authenticated %}
+    <form>
+        <div class="form-group">
+        <label for="exampleFormControlInput1">Plan Name</label>
+        <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="">
+        </div>
+        <div data-mdb-input-init class="form-outline" style="width: 22rem;">
+            <label class="form-label" for="typeNumber">Group size</label>
+            <input min="1" max="20" type="number" id="typeNumber" class="form-control" />
+
+        </div>
+        <div class="form-group">
+            <label for="exampleFormControlTextarea1">Trip Description</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn btn-outline-success">Save</button>
+    </form>
+    {% else %}
+        <p>
+            Log in to access project creation
+        </p>
+    {% endif %}
+
+</body>
+{% endblock %}
