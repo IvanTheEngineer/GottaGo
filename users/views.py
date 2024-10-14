@@ -16,6 +16,7 @@ from .forms import UserLoginForm
 from .decorators import user_not_authenticated
 from django.contrib.auth.decorators import login_required
 
+
 @login_required
 def profile(request):
     return render(request, 'users/profile.html')
@@ -33,4 +34,20 @@ def custom_logout(request):
 
 
 def home(request):
-    return render(request, 'users/home.html')
+    user = request.user
+    context = {
+        'PMA': user.groups.filter(name='PMA').exists(),
+    }
+    return render(request, 'users/home.html', context)
+
+
+def cancel_login(request):
+    return redirect('home')
+
+
+def project_creation(request):
+    user = request.user
+    context = {
+        'PMA': user.groups.filter(name='PMA').exists(),
+    }
+    return render(request, 'users/project_creator.html', context)

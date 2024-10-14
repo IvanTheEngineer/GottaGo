@@ -25,6 +25,12 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+    - name: Run database migrations
+      run: |
+        python manage.py migrate
+    - name: Create Django superuser account
+      run: |
+        python manage.py create_superuser
     - name: Run Tests
       run: |
         python manage.py test

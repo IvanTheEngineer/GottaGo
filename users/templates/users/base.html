@@ -12,12 +12,15 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         {% if user.is_authenticated and user|has_group:"PMA" %}
-                            <a class="nav-link" href="#">Welcome PMA {{ user.get_full_name }}!</a>
+                            <a class="nav-link" href="{% url 'profile' %}">Welcome PMA {{ user|display_name }}!</a>
                         {% elif user.is_authenticated %}
-                            <a class="nav-link" href="#">Welcome, {{ user.get_full_name }}!</a>
+                            <a class="nav-link" href="{% url 'profile' %}">Welcome, {{ user|display_name }}!</a>
                         {% else %}
                             <a class="nav-link" href="#">Welcome, Guest!</a>
                         {% endif %}
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'project_creator' %}">Create a Travel Plan</a>
                     </li>
                     <li class="nav-item">
                         {% if user.is_authenticated %}
