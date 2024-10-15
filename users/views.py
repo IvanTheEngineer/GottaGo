@@ -15,6 +15,9 @@ from django.db.models.query_utils import Q
 from .forms import UserLoginForm
 from .decorators import user_not_authenticated
 from django.contrib.auth.decorators import login_required
+from .forms import PlanForm
+from django.views import generic
+from .models import TravelPlan
 
 
 @login_required
@@ -46,8 +49,30 @@ def cancel_login(request):
 
 
 def project_creation(request):
-    user = request.user
-    context = {
-        'PMA': user.groups.filter(name='PMA').exists(),
-    }
-    return render(request, 'users/project_creator.html', context)
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            form = PlanForm(request.POST, request.FILES)
+            if form.is_valid():
+                plan = form.save(commit=False, user=request.user)
+                print(request.user)
+                plan.user = request.user
+                plan.save()
+                # print(f"File uploaded to S3: {plan.jpg_upload_file.url}")
+                return redirect('home')
+        else:
+            form = PlanForm()
+        return render(request, 'users/project_creator.html', {'form': form})
+    else:
+        return render(request, 'users/project_creator.html')
+    
+def user_plans_view(request):
+    if request.user.is_authenticated:
+        # Get all group codes the user is in
+        group_codes = request.user.group_codes.all()
+        
+        # Get all travel plans associated with those group codes
+        travel_plans = TravelPlan.objects.filter(primary_group_code__in=group_codes)
+        
+        return render(request, 'users/plans.html', {'travel_plans': travel_plans})
+    else:
+        return render(request, 'users/plans.html')

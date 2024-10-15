@@ -1,0 +1,35 @@
+{% extends "users/base.html" %}
+{% block navbar_and_footer %}
+{% load custom_filters %}
+{% load static %}
+{% block content %}
+{% if user.is_authenticated %}
+    {% if travel_plans%}
+        <ul class="list-group">
+        {% for plan in travel_plans %}
+        <li>{{ plan.plan_name }} - Group Code: {{ plan.primary_group_code.code }} - Group Size: {{ plan.group_size}}</li>
+        <li> Description: {{ plan.trip_description }}</li>
+        <li> Images:</li>
+        {% if plan.jpg_upload_file%}
+            <img src="{{ plan.jpg_upload_file.url }}" width="200" height="200"/>
+        {% endif %}
+        <li> Text Files:</li>
+        {% if plan.txt_upload_file%}
+            <a href="{{ plan.txt_upload_file.url }}" target="_blank">View Text File</a>
+        {% endif %}
+        <li> PDF Files:</li>
+        {% if plan.pdf_upload_file%}
+        <a href="{{ plan.pdf_upload_file.url }}" target="_blank">View PDF File</a>
+        {% endif %}
+        <div class="mt-2"></div>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No plans are available.</p>
+    {% endif %}
+{% else %}
+    <p>Log in to access projects</p>
+{% endif %}
+
+{% endblock content %}
+{% endblock %}

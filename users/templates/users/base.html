@@ -23,6 +23,9 @@
                         <a class="nav-link" href="{% url 'project_creator' %}">Create a Travel Plan</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="{% url 'plans' %}">View Plans</a>
+                    </li>
+                    <li class="nav-item">
                         {% if user.is_authenticated %}
                             <a class="nav-link" href="{% url 'logout' %}">Logout</a>
                         {% else %}
