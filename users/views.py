@@ -15,9 +15,9 @@ from django.db.models.query_utils import Q
 from .forms import UserLoginForm
 from .decorators import user_not_authenticated
 from django.contrib.auth.decorators import login_required
-from .forms import PlanForm
+from .forms import PlanForm, JoinGroupForm
 from django.views import generic
-from .models import TravelPlan
+from .models import TravelPlan, GroupCode
 
 
 @login_required
@@ -76,3 +76,22 @@ def user_plans_view(request):
         return render(request, 'users/plans.html', {'travel_plans': travel_plans})
     else:
         return render(request, 'users/plans.html')
+
+def join_group(request):
+    if request.user.is_authenticated:
+        context = {'form': JoinGroupForm()}
+        if request.method == 'POST':
+            form = JoinGroupForm(request.POST)
+            if form.is_valid():
+                group_code = form.cleaned_data['group_code']
+                try:
+                    group = GroupCode.objects.get(code=group_code)
+                    group.users.add(request.user)
+                    context['success_message'] = 'Successfully joined the group!'
+                except GroupCode.DoesNotExist:
+                    context['error_message'] = 'Invalid group code. Please try again.'
+        else:
+            pass
+        return render(request, 'users/join_group.html', context)
+    else:
+        return render(request, 'users/join_group.html')

@@ -1,0 +1,27 @@
+{% extends "users/base.html" %}
+{% block navbar_and_footer %}
+{% load custom_filters %}
+{% load static %}
+{% block content %}
+{% if user.is_authenticated %}
+<body>
+    <h2>Join Group</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+    </form>
+</body>
+{% if success_message %}
+<div class="alert alert-success">{{ success_message }}</div>
+{% endif %}
+
+{% if error_message %}
+<div class="alert alert-danger">{{ error_message }}</div>
+{% endif %}
+
+{% else %}
+    <p>Log in to join groups</p>
+{% endif %}
+{% endblock content %}
+{% endblock %}

@@ -73,3 +73,6 @@ class PlanForm(forms.ModelForm):
             travel_plan.save()
             self.save_m2m()  # Save many-to-many relationships
         return travel_plan
+    
+class JoinGroupForm(forms.Form):
+    group_code = forms.CharField(max_length=64, label='Group Code')
