@@ -7,7 +7,7 @@
     {% if travel_plans%}
         <ul class="list-group">
         {% for plan in travel_plans %}
-        <li>{{ plan.plan_name }} - Group Code: {{ plan.primary_group_code.code }} - Group Size: {{ plan.group_size}}</li>
+        <li>{{ plan.plan_name }} - Group Code: {{ plan.primary_group_code }} - Group Size: {{ plan.group_size}}</li>
         <li> Description: {{ plan.trip_description }}</li>
         <li> Images:</li>
         {% if plan.jpg_upload_file%}

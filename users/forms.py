@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .models import TravelPlan, GroupCode
+from .models import TravelPlan
 import uuid
 
 class UserLoginForm(AuthenticationForm):
@@ -64,14 +64,16 @@ class PlanForm(forms.ModelForm):
         
         # Generate a unique group code
         unique_code = str(uuid.uuid4())[:8]  # Generate an 8-character unique code
-        group_code, created = GroupCode.objects.get_or_create(code=unique_code)
-        if user:
-            group_code.users.add(user)
-        travel_plan.primary_group_code = group_code
+        travel_plan.primary_group_code = unique_code
 
-        if commit:
-            travel_plan.save()
-            self.save_m2m()  # Save many-to-many relationships
+        if user is not None:
+            travel_plan.user = user  # Set the user field
+
+        travel_plan.save()
+
+        if user is not None:
+                travel_plan.users.add(user)  # Add the user to the many-to-many relationship
+
         return travel_plan
     
 class JoinGroupForm(forms.Form):

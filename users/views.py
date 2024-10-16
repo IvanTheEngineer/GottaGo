@@ -17,7 +17,7 @@ from .decorators import user_not_authenticated
 from django.contrib.auth.decorators import login_required
 from .forms import PlanForm, JoinGroupForm
 from django.views import generic
-from .models import TravelPlan, GroupCode
+from .models import TravelPlan
 
 
 @login_required
@@ -67,11 +67,8 @@ def project_creation(request):
     
 def user_plans_view(request):
     if request.user.is_authenticated:
-        # Get all group codes the user is in
-        group_codes = request.user.group_codes.all()
-        
-        # Get all travel plans associated with those group codes
-        travel_plans = TravelPlan.objects.filter(primary_group_code__in=group_codes)
+        # Get all plans the user is in
+        travel_plans = request.user.plans.all()
         
         return render(request, 'users/plans.html', {'travel_plans': travel_plans})
     else:
@@ -85,10 +82,10 @@ def join_group(request):
             if form.is_valid():
                 group_code = form.cleaned_data['group_code']
                 try:
-                    group = GroupCode.objects.get(code=group_code)
-                    group.users.add(request.user)
+                    travelPlan = TravelPlan.objects.get(primary_group_code=group_code)
+                    travelPlan.users.add(request.user)
                     context['success_message'] = 'Successfully joined the group!'
-                except GroupCode.DoesNotExist:
+                except TravelPlan.DoesNotExist:
                     context['error_message'] = 'Invalid group code. Please try again.'
         else:
             pass

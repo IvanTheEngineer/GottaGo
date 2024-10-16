@@ -1,10 +1,8 @@
 from django.contrib import admin
-from .models import GroupCode, TravelPlan
+from .models import TravelPlan
 
-@admin.register(GroupCode)
-class GroupCodeAdmin(admin.ModelAdmin):
-    list_display = ('code',)
-    search_fields = ('code',)
+# admin.site.register(TravelPlan)
+
+@admin.register(TravelPlan)
+class TravelPlanAdmin(admin.ModelAdmin):
     filter_horizontal = ('users',)
-
-admin.site.register(TravelPlan)
