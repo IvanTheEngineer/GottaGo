@@ -8,16 +8,19 @@
 </head>
 
 <body>
-    <h1>Create Plan</h1>
-    {% if user.is_authenticated %}
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-outline-success">Save</button>
-    </form>
-{% else %}
-    <p>Log in to access project creation</p>
-{% endif %}
-
+    <div class="container" style="display: flex; justify-content: center; align-items: center">
+        <div class= "form" style="background-color: lightgrey; border-color: #006b1b; padding: 20px; border-radius: 30px; width: 100%; justify-content: center; align-items: center">
+            <h1 style="text-align: center">Create a New Travel Plan</h1>
+            {% if user.is_authenticated %}
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn" style="width: 100%; background-color: palegreen">Save</button>
+            </form>
+            {% else %}
+            <p style="text-align: center; font-size: large"><a href="{% url 'login' %}">Log in</a> to access project creation</p>
+            {% endif %}
+        </div>
+    </div>
 </body>
 {% endblock %}
