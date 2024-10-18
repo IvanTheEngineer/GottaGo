@@ -15,10 +15,10 @@
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <button type="submit" class="btn" style="width: 100%; background-color: palegreen">Save</button>
+                <button type="submit" class="btn btn-outline-success" style="width: 100%">Save</button>
             </form>
             {% else %}
-            <p style="text-align: center; font-size: large"><a href="{% url 'login' %}">Log in</a> to access project creation</p>
+            <p class="text-center mt-5" style="font-size: 25px"><a href="{% url 'login' %}">Log in</a> to access project creation.</p>
             {% endif %}
         </div>
     </div>
