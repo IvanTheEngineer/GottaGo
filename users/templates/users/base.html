@@ -7,7 +7,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'home' %}">Travel PMA</a>
+            <a class="navbar-brand" href="{% url 'home' %}">got2go</a>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
@@ -40,9 +40,12 @@
         </div>
     </nav>
 
-    {% block navbar_and_footer %}
-    {% endblock %}
-    <footer class="bg-light fixed-bottom">
+    <main class="flex-grow-1 d-flex flex-column container text-center">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="bg-light">
         <div class="container text-dark text-center">
             This website was made by group B-25 for CS3240
         </div>

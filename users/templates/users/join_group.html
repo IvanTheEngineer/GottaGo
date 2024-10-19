@@ -1,27 +1,32 @@
 {% extends "users/base.html" %}
-{% block navbar_and_footer %}
+{% load bootstrap5 %}
 {% load custom_filters %}
 {% load static %}
+
 {% block content %}
-{% if user.is_authenticated %}
-<body>
-    <h2>Join Group</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Submit</button>
-    </form>
-</body>
-{% if success_message %}
-<div class="alert alert-success">{{ success_message }}</div>
-{% endif %}
+<div class="group-form rounded-2 shadow-sm p-4 py-5 bg-white">
+    {% if user.is_authenticated %}
+        <h2 class="mb-4 fs-3 fw-bold text-center">Join Group</h2>
+        <form method="post" class="needs-validation" novalidate>
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            <button type="submit" class="btn btn-outline-info mt-3">Submit</button>
+        </form>
 
-{% if error_message %}
-<div class="alert alert-danger">{{ error_message }}</div>
-{% endif %}
+        {% if success_message %}
+            <div class="alert alert-success mt-3" role="alert">
+                {{ success_message }}
+            </div>
+        {% endif %}
 
-{% else %}
-    <p>Log in to join groups</p>
-{% endif %}
+        {% if error_message %}
+            <div class="alert alert-danger mt-3" role="alert">
+                {{ error_message }}
+            </div>
+        {% endif %}
+
+    {% else %}
+        <p class="alert alert-warning">Log in to join groups</p>
+    {% endif %}
+</div>
 {% endblock content %}
-{% endblock %}

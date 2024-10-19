@@ -4,8 +4,8 @@
 {% load static %}
 {% block content %}
 
-<div>
-    <h1 class="text-center mb-3">Your Travel Plans:</h1>
+<div class="plans-form rounded-2 shadow-sm p-4 py-5 bg-white">
+    <h1 class="text-center mb-3 fs-3 fw-bold">Travel Plans</h1>
     {% if user.is_authenticated %}
         {% if travel_plans%}
             <div class="list-group">
@@ -57,10 +57,10 @@
             {% endfor %}
             </div>
         {% else %}
-            <p class="text-center mt-5" style="font-size: 25px">No plans are available, create one <a href="{% url 'project_creator' %}">here</a>.</p>
+            <p class="text-center mt-2 fs-5 text-paragraph">No plans are available, create one <a href="{% url 'project_creator' %}">here</a>.</p>
         {% endif %}
     {% else %}
-        <p class="text-center mt-5" style="font-size: 25px"><a href="{% url 'login' %}">Log in</a> to access projects</p>
+        <p class="text-center mt-5 fs-4"><a href="{% url 'login' %}">Log in</a> to access projects</p>
     {% endif %}
 </div>
 
