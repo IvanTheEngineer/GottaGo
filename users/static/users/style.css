@@ -1,12 +1,36 @@
 body {
     background: linear-gradient(to bottom right, powderblue, mediumpurple);
     font-family: Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .btn {
     align-self: center;
     border-radius: 50px;
-    background-color: ghostwhite;
-    font-size: 20px;
+    /* background-color: ghostwhite; */
+    font-size: 16px;
     font-family: Arial, sans-serif;
+}
+
+.group-form, .project-creator-form, .profile-form {
+    max-width: 36rem;
+    margin: 4rem auto;
+    width: 100%;
+    text-align: left;
+}
+
+.plans-form {
+    margin: 4rem auto;
+    width: 100%;
+    text-align: left;
+}
+
+.text-paragraph {
+    color: #9ea6af;
+}
+
+.text-label {
+    color: #83878a;
 }

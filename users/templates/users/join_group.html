@@ -1,0 +1,36 @@
+{% extends "users/base.html" %}
+{% load bootstrap5 %}
+{% load custom_filters %}
+{% load static %}
+
+{% block content %}
+<head>
+    <title>Join Group</title>
+</head>
+
+<div class="group-form rounded-2 shadow-sm p-4 py-5 bg-white">
+    {% if user.is_authenticated %}
+        <h1 class="mb-4 fs-3 fw-bold text-center">Join Group</h1>
+        <form method="post" class="needs-validation" novalidate>
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            <button type="submit" class="btn btn-success mt-3" style="width: 100%">Join Group</button>
+        </form>
+
+        {% if success_message %}
+            <div class="alert alert-success mt-3" role="alert">
+                {{ success_message }}
+            </div>
+        {% endif %}
+
+        {% if error_message %}
+            <div class="alert alert-danger mt-3" role="alert">
+                {{ error_message }}
+            </div>
+        {% endif %}
+
+    {% else %}
+        <p class="alert alert-warning">Log in to join groups</p>
+    {% endif %}
+</div>
+{% endblock content %}

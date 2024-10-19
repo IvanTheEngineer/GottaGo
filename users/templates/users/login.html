@@ -1,15 +1,13 @@
 {% extends "users/base.html" %}
 {% load bootstrap5 %}
 {% load socialaccount %}
-{% block navbar_and_footer %}
 {% block content %}
-    <div class="d-flex justify-content-center align-items-center min-vh-100">
+    <div class="d-flex flex-grow-1 justify-content-center align-items-center">
         <div class="text-center">
-            <h1 class="mb-3">Log In</h1>
+            <h1 class="mb-3 fw-semibold fs-2">Begin Your Journey</h1>
             <button class="btn btn-outline-info btn-lg" onclick="window.location.href='{% provider_login_url 'google' %}?next=/profile/'">
                 <i class="fab fa-google"></i> Login with Google
             </button>
         </div>
     </div>
 {% endblock content %}
-{% endblock %}
