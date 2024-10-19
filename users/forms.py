@@ -25,37 +25,44 @@ class PlanForm(forms.ModelForm):
             'txt_upload_file', 
             'pdf_upload_file',
         ]
+        labels = {
+            'jpg_upload_file': 'Upload an image for the trip',
+            'txt_upload_file': 'Upload a text file with trip details',
+            'pdf_upload_file': 'Upload a PDF document',
+        }
         widgets = {
             'plan_name': forms.TextInput(attrs={
                 'class': 'form-control',
                 'id': 'exampleFormControlInput1',
-                'placeholder': ''
+                'placeholder': 'Enter your plan name'
             }),
             'group_size': forms.NumberInput(attrs={
                 'class': 'form-control',
                 'id': 'typeNumber',
                 'min': 1,
-                'max': 20
+                'max': 20,
+                'placeholder': 'Number of people'
             }),
             'trip_description': forms.Textarea(attrs={
                 'class': 'form-control',
                 'id': 'exampleFormControlTextarea1',
-                'rows': 3
+                'rows': 3,
+                'placeholder': 'Details about the trip'
             }),
             'jpg_upload_file': forms.ClearableFileInput(attrs={
                 'class': 'form-control',
                 'id': 'jpg_upload_file',
-                'accept': '.jpg'
+                'accept': '.jpg',
             }),
             'txt_upload_file': forms.ClearableFileInput(attrs={
                 'class': 'form-control',
                 'id': 'txt_upload_file',
-                'accept': '.txt'
+                'accept': '.txt',
             }),
             'pdf_upload_file': forms.ClearableFileInput(attrs={
                 'class': 'form-control',
                 'id': 'pdf_upload_file',
-                'accept': '.pdf'
+                'accept': '.pdf',
             }),
         }
 
@@ -72,7 +79,7 @@ class PlanForm(forms.ModelForm):
         travel_plan.save()
 
         if user is not None:
-                travel_plan.users.add(user)  # Add the user to the many-to-many relationship
+            travel_plan.users.add(user)  # Add the user to the many-to-many relationship
 
         return travel_plan
     
