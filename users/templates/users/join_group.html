@@ -4,13 +4,17 @@
 {% load static %}
 
 {% block content %}
+<head>
+    <title>Join Group</title>
+</head>
+
 <div class="group-form rounded-2 shadow-sm p-4 py-5 bg-white">
     {% if user.is_authenticated %}
-        <h2 class="mb-4 fs-3 fw-bold text-center">Join Group</h2>
+        <h1 class="mb-4 fs-3 fw-bold text-center">Join Group</h1>
         <form method="post" class="needs-validation" novalidate>
             {% csrf_token %}
             {% bootstrap_form form %}
-            <button type="submit" class="btn btn-outline-info mt-3">Submit</button>
+            <button type="submit" class="btn btn-success mt-3" style="width: 100%">Join Group</button>
         </form>
 
         {% if success_message %}

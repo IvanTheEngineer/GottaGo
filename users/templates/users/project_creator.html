@@ -1,26 +1,23 @@
 {% extends "users/base.html" %}
-{% block navbar_and_footer %}
+{% load bootstrap5 %}
 {% load custom_filters %}
 {% load static %}
 
+{% block content %}
 <head>
-    <title>Create Plan</title>
+    <title>Create a New Travel Plan</title>
 </head>
 
-<body>
-    <div class="container" style="display: flex; justify-content: center; align-items: center">
-        <div class= "form" style="background-color: lightgrey; border-color: #006b1b; padding: 20px; border-radius: 30px; width: 100%; justify-content: center; align-items: center">
-            <h1 style="text-align: center">Create a New Travel Plan</h1>
-            {% if user.is_authenticated %}
-            <form method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit" class="btn btn-outline-success" style="width: 100%">Save</button>
-            </form>
-            {% else %}
-            <p class="text-center mt-5" style="font-size: 25px"><a href="{% url 'login' %}">Log in</a> to access project creation.</p>
-            {% endif %}
-        </div>
-    </div>
-</body>
+<div class="project-creator-form rounded-2 shadow-sm p-4 py-5 bg-white">
+    <h1 class="mb-4 fs-3 fw-bold text-center">Create a New Travel Plan</h1>
+    {% if user.is_authenticated %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button type="submit" class="btn btn-success" style="width: 100%">Create Plan</button>
+    </form>
+    {% else %}
+    <p class="text-center mt-5" style="font-size: 25px"><a href="{% url 'login' %}">Log in</a> to access project creation.</p>
+    {% endif %}
+</div>
 {% endblock %}

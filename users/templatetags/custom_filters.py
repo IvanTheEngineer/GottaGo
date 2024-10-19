@@ -11,3 +11,9 @@ def display_name(user):
     if user.get_full_name():
         return user.get_full_name()
     return user.username
+
+@register.filter
+def display_role(user):
+    if has_group(user, "PMA"):
+        return "PMA"
+    return "Regular"
