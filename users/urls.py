@@ -13,4 +13,5 @@ urlpatterns = [
     path('project_creator/', views.project_creation, name='project_creator'),
     path('plans/', views.user_plans_view, name='plans'),
     path('join_group/', views.join_group, name='join_group'),
+    path('download/', views.download_file, name='download_file'),
 ]
