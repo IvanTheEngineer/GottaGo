@@ -33,6 +33,9 @@
                                 <iframe src="{{ plan.txt_upload_file.url }}" style="border: #dddddd; box-shadow: 0 0 10px darkmagenta"></iframe>
                             </div>
                             <div>
+                                <a href="{% url 'download_file' %}?txturl={{ plan.txt_upload_file.url}}&filename={{ plan.txt_upload_file }}" class="btn btn-primary">Download</a>
+                            </div>
+                            <div>
                                 <a href="{{ plan.txt_upload_file.url }}" target="_blank" class="btn btn-outline-primary">
                                         View Text File
                                     </a>

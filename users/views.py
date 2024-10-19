@@ -18,6 +18,8 @@ from django.contrib.auth.decorators import login_required
 from .forms import PlanForm, JoinGroupForm
 from django.views import generic
 from .models import TravelPlan
+from django.http import FileResponse
+import requests
 
 
 @login_required
@@ -92,3 +94,10 @@ def join_group(request):
         return render(request, 'users/join_group.html', context)
     else:
         return render(request, 'users/join_group.html')
+    
+def download_file(request):
+    file_url = request.GET.get('txturl')
+    file_name = request.GET.get('filename')
+    response = requests.get(file_url, stream=True)
+    response.raise_for_status()
+    return FileResponse(response.raw, as_attachment=True, filename=file_name)
