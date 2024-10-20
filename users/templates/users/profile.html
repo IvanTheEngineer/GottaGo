@@ -1,25 +1,20 @@
 {% extends "users/base.html" %}
-{% block navbar_and_footer %}
 {% load custom_filters %}
+
+{% block content %}
 <head>
     <title>User Profile</title>
 </head>
 
-<body>
-    <h1>User Profile</h1>
+<div class="profile-form rounded-2 shadow-sm p-4 py-5 bg-white">
+    <h1 class="mb-4 fs-3 fw-bold text-center">User Profile</h1>
     {% if user.is_authenticated %}
-        <p>Username: {{ user.username }}</p>
-        <p>Email: {{ user.email }}</p>
-        <p>First Name: {{ user.first_name }}</p>
-        <p>Last Name: {{ user.last_name }}</p>
-        {% if user|has_group:"PMA" %}
-            <p>You are a PMA user</p>
-        {% else %}
-            <p>You are a regular user</p>
-        {% endif %}
+        <p class="mb-2"><span class="text-label">Username:</span> {{ user.username }}</p>
+        <p class="mb-2"><span class="text-label">Email:</span> {{ user.email }}</p>
+        <p class="mb-2"><span class="text-label">Name:</span> {{ user.first_name }} {{ user.last_name }}</p>
+        <p class="mb-2"><span class="text-label">Role:</span> {{ user|display_role }}</p>
     {% endif %}
-    
-</body>
+</div>
 
-<a type="button" href="{% url 'home' %}" >Home</a>
-{% endblock %}
+<a type="button" href="{% url 'home' %}"  >Home</a>
+{% endblock content %}
