@@ -20,7 +20,7 @@ from django.views import generic
 from .models import TravelPlan
 from django.http import FileResponse
 import requests
-
+import boto3
 
 @login_required
 def profile(request):
@@ -66,12 +66,10 @@ def project_creation(request):
         return render(request, 'users/project_creator.html', {'form': form})
     else:
         return render(request, 'users/project_creator.html')
-    
 def user_plans_view(request):
     if request.user.is_authenticated:
         # Get all plans the user is in
         travel_plans = request.user.plans.all()
-        
         return render(request, 'users/plans.html', {'travel_plans': travel_plans})
     else:
         return render(request, 'users/plans.html')

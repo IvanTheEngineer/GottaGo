@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .models import TravelPlan
+from models import TravelPlan, Destination
 import uuid
 
 class UserLoginForm(AuthenticationForm):
@@ -82,6 +82,64 @@ class PlanForm(forms.ModelForm):
             travel_plan.users.add(user)  # Add the user to the many-to-many relationship
 
         return travel_plan
-    
+ class DestinationForm(forms.Form):
+     class Meta:
+         model = Destination
+         fields = [
+             'destination_name',
+             'destination_description',
+             'jpg_upload_file',
+             'txt_upload_file',
+             'pdf_upload_file',
+         ]
+         labels = {
+             'jpg_upload_file': 'Upload an image for the destination',
+             'txt_upload_file': 'Upload a text file with destination details',
+             'pdf_upload_file': 'Upload a PDF document',
+         }
+         widgets = {
+             'destination_name': forms.TextInput(attrs={
+                 'class': 'form-control',
+                 'id': 'exampleFormControlInput1',
+                 'placeholder': 'Enter your destination name'
+             }),
+             'destination_description': forms.Textarea(attrs={
+                 'class': 'form-control',
+                 'id': 'exampleFormControlTextarea1',
+                 'rows': 3,
+                 'placeholder': 'Details about the destination'
+             }),
+             'jpg_upload_file': forms.ClearableFileInput(attrs={
+                 'class': 'form-control',
+                 'id': 'jpg_upload_file',
+                 'accept': '.jpg',
+             }),
+             'txt_upload_file': forms.ClearableFileInput(attrs={
+                 'class': 'form-control',
+                 'id': 'txt_upload_file',
+                 'accept': '.txt',
+             }),
+             'pdf_upload_file': forms.ClearableFileInput(attrs={
+                 'class': 'form-control',
+                 'id': 'pdf_upload_file',
+                 'accept': '.pdf',
+             }),
+         }
+
+     def save(self, commit=True, user=None):
+         destination = super().save(commit=False)
+
+         if user is not None:
+             destination.user = user  # Set the user field
+
+        #Todo: Set the travel_plan
+
+         destination.save()
+
+         if user is not None:
+             destination.users.add(user)  # Add the user to the many-to-many relationship
+
+         return destination
 class JoinGroupForm(forms.Form):
     group_code = forms.CharField(max_length=64, label='Group Code')
+
