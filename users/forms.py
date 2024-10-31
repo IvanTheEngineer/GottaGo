@@ -130,9 +130,11 @@ class DestinationForm(forms.ModelForm):
             }),
         }
 
-    def save(self, commit=True, user=None):
+    def save(self, commit=True, travel_plan=None, user=None):
         destination = super().save(commit=False)
 
+        if travel_plan is not None:
+            destination.travel_plan = travel_plan
         if user is not None:
             destination.user = user  # Set the user field
 

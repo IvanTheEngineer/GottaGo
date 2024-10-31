@@ -22,7 +22,7 @@ class TravelPlan(models.Model):
 
 
 class Destination(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     users = models.ManyToManyField(User, related_name='destinations')
     travel_plan = models.ForeignKey(TravelPlan, on_delete=models.CASCADE, related_name='destinations')
     destination_name = models.CharField(

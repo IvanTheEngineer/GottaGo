@@ -74,7 +74,7 @@ def destination_creation(request):
         if request.method == 'POST':
             form = DestinationForm(request.POST, request.FILES)
             if form.is_valid():
-                plan = form.save(commit=False)
+                plan = form.save(commit=False, user=request.user)
                 print(request.user)
                 plan.user = request.user
                 plan.save()
