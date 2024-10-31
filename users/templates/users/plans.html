@@ -77,7 +77,7 @@
                             {% endfor %}
                         </div>
                     {% else %}
-                        <p class="text-center mt-2 fs-5 text-paragraph">No destinations are available, create one <a href="{% url 'destination_creator' %}">here</a>.</p>
+                        <p class="text-center mt-2 fs-5 text-paragraph">No destinations are available, create one <a href="{% url 'destination_creator' plan.id %}">here</a>.</p>
                     {% endif %}
 
 {#                    <div class="mt-3">#}
@@ -110,11 +110,11 @@
 {#                            <p>No PDF file uploaded.</p>#}
 {#                        {% endif %}#}
 {#                    </div>#}
-                    <div>
-                        <a href="{% url 'destination_creator' %}" type="button" class="btn btn-outline-success">Add New Destination</a>
-
-                        <button type="button" class="btn btn-outline-danger">Delete Destination</button>
-                    </div>
+{#                    <div>#}
+{#                        <a href="{% url 'destination_creator' %}" type="button" class="btn btn-outline-success">Add New Destination</a>#}
+{##}
+{#                        <button type="button" class="btn btn-outline-danger">Delete Destination</button>#}
+{#                    </div>#}
                 </div>
             {% endfor %}
             </div>

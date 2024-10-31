@@ -1,6 +1,6 @@
 from logging.config import valid_ident
 from typing import Protocol
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, authenticate, get_user_model
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -69,14 +69,17 @@ def project_creation(request):
         return render(request, 'users/project_creator.html')
 
 
-def destination_creation(request):
+def destination_creation(request, plan_id):
     if request.user.is_authenticated:
+        travel_plan = get_object_or_404(TravelPlan, id=plan_id, users=request.user)
         if request.method == 'POST':
             form = DestinationForm(request.POST, request.FILES)
             if form.is_valid():
-                plan = form.save(commit=False, user=request.user)
+                plan = form.save(commit=False, travel_plan=travel_plan, user=request.user)
+                # If this doesn't work, create a destination form object.
                 print(request.user)
                 plan.user = request.user
+                plan.travel_plan = travel_plan
                 plan.save()
                 return redirect('home')
         else:
