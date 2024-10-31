@@ -28,56 +28,60 @@
                     {% if destinations %}
                         <div class="list-group">
                             {% for destination in destinations %}
-                                <div class = "list-group-item mb-3" style="background-color: paleturquoise; border-radius: 20px; width: 60%; box-shadow: 0 0 3px; align-self: center; text-align: center">
-                                    <h4 class="mb-2">{{ destination.destination_name }}</h4>
-                                    <p style="font-size: 20px"><strong>Description:</strong> {{ destination.destination_description }} </p>
+                                {% if destination.travel_plan.id == plan.id %}
+                                    <div class = "list-group-item mb-3" style="background-color: paleturquoise; border-radius: 20px; width: 60%; box-shadow: 0 0 3px; align-self: center; text-align: center">
+                                        <h4 class="mb-2">{{ destination.destination_name }}</h4>
+                                        <p style="font-size: 20px"><strong>Description:</strong> {{ destination.destination_description }} </p>
 
-                                    <div class="mt-3">
-                                        <p style="font-size: 20px"><strong>Images:</strong></p>
-                                        {% if destination.jpg_upload_file %}
-                                            <img src="{{ destination.jpg_upload_file.url }}" width="300" height="300"
-                                                 class="rounded" alt="{{ destination.destination_name }} image"/>
-                                        {% else %}
-                                            <p>No images uploaded.</p>
-                                        {% endif %}
+                                        <div class="mt-3">
+                                            <p style="font-size: 20px"><strong>Images:</strong></p>
+                                            {% if destination.jpg_upload_file %}
+                                                <img src="{{ destination.jpg_upload_file.url }}" width="300" height="300"
+                                                     class="rounded" alt="{{ destination.destination_name }} image"/>
+                                            {% else %}
+                                                <p>No images uploaded.</p>
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="mt-3">
+                                            <p style="font-size: 20px"><strong>Text Files:</strong></p>
+                                            {% if destination.txt_upload_file %}
+                                                <div style="text-align: center">
+                                                    <iframe src="{{ destination.txt_upload_file.url }}" style="border: #dddddd; box-shadow: 0 0 10px darkmagenta"></iframe>
+                                                </div>
+                                                <div>
+                                                    <a href="{% url 'download_file' %}?txturl={{ destination.txt_upload_file.url}}&filename={{ destination.txt_upload_file }}" class="btn btn-primary">Download</a>
+                                                </div>
+                                                <div>
+                                                    <a href="{{ destination.txt_upload_file.url }}" target="_blank" class="btn btn-outline-primary">
+                                                            View Text File
+                                                        </a>
+                                                </div>
+                                            {% else %}
+                                                <p>No text file uploaded.</p>
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="mt-3" style="width: 100%; height: 110vh; overflow: hidden">
+                                            <p style="font-size: 20px"><strong>PDF Files:</strong></p>
+                                            {% if destination.pdf_upload_file %}
+                                                <iframe class="fa-file-pdf-o" src="{{ destination.pdf_upload_file.url }}" width="100%" height="100%" loading="lazy" style="border: #dddddd"></iframe>
+                                                <a href="{{ destination.pdf_upload_file.url }}" target="_blank" class="btn btn-outline-primary">
+                                                    View PDF File
+                                                </a>
+                                            {% else %}
+                                                <p>No PDF file uploaded.</p>
+                                            {% endif %}
+                                        </div>
+
                                     </div>
-
-                                    <div class="mt-3">
-                                        <p style="font-size: 20px"><strong>Text Files:</strong></p>
-                                        {% if destination.txt_upload_file %}
-                                            <div style="text-align: center">
-                                                <iframe src="{{ destination.txt_upload_file.url }}" style="border: #dddddd; box-shadow: 0 0 10px darkmagenta"></iframe>
-                                            </div>
-                                            <div>
-                                                <a href="{% url 'download_file' %}?txturl={{ destination.txt_upload_file.url}}&filename={{ destination.txt_upload_file }}" class="btn btn-primary">Download</a>
-                                            </div>
-                                            <div>
-                                                <a href="{{ destination.txt_upload_file.url }}" target="_blank" class="btn btn-outline-primary">
-                                                        View Text File
-                                                    </a>
-                                            </div>
-                                        {% else %}
-                                            <p>No text file uploaded.</p>
-                                        {% endif %}
-                                    </div>
-
-                                    <div class="mt-3" style="width: 100%; height: 110vh; overflow: hidden">
-                                        <p style="font-size: 20px"><strong>PDF Files:</strong></p>
-                                        {% if destination.pdf_upload_file %}
-                                            <iframe class="fa-file-pdf-o" src="{{ destination.pdf_upload_file.url }}" width="100%" height="100%" loading="lazy" style="border: #dddddd"></iframe>
-                                            <a href="{{ destination.pdf_upload_file.url }}" target="_blank" class="btn btn-outline-primary">
-                                                View PDF File
-                                            </a>
-                                        {% else %}
-                                            <p>No PDF file uploaded.</p>
-                                        {% endif %}
-                                    </div>
-
-                                </div>
+                                {% endif %}
                             {% endfor %}
+                            <p class="text-center mt-2 fs-5 text-paragraph">Add a destination <a href="{% url 'destination_creator' plan.id %}">here</a>.</p>
+
                         </div>
-                    {% else %}
-                        <p class="text-center mt-2 fs-5 text-paragraph">No destinations are available, create one <a href="{% url 'destination_creator' plan.id %}">here</a>.</p>
+{#                    {% else %}#}
+{#                        <p class="text-center mt-2 fs-5 text-paragraph">No destinations are available, create one <a href="{% url 'destination_creator' plan.id %}">here</a>.</p>#}
                     {% endif %}
 
 {#                    <div class="mt-3">#}

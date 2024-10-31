@@ -94,6 +94,10 @@ def user_plans_view(request):
         # Get all plans the user is in
         travel_plans = request.user.plans.all()
         destinations = request.user.destinations.all()
+        for plan in travel_plans:
+            print(plan.id)
+        # return render(request, 'users/plans.html', {'travel_plans': travel_plans})
+
         return render(request, 'users/plans.html', {'travel_plans': travel_plans, 'destinations': destinations})
     else:
         return render(request, 'users/plans.html')
