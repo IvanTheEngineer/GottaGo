@@ -93,7 +93,8 @@ def user_plans_view(request):
     if request.user.is_authenticated:
         # Get all plans the user is in
         travel_plans = request.user.plans.all()
-        return render(request, 'users/plans.html', {'travel_plans': travel_plans})
+        destinations = request.user.destinations.all()
+        return render(request, 'users/plans.html', {'travel_plans': travel_plans, 'destinations': destinations})
     else:
         return render(request, 'users/plans.html')
 
