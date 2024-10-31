@@ -5,19 +5,19 @@
 
 {% block content %}
 <head>
-    <title>Create a New Sub Plan</title>
+    <title>Create a New Destination</title>
 </head>
 
 <div class="project-creator-form rounded-2 shadow-sm p-4 py-5 bg-white">
-    <h1 class="mb-4 fs-3 fw-bold text-center">Create a New Travel Plan</h1>
+    <h1 class="mb-4 fs-3 fw-bold text-center">Create a New Destination</h1>
     {% if user.is_authenticated %}
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {% bootstrap_form form %}
-        <button type="submit" class="btn btn-success" style="width: 100%">Create Plan</button>
+        <button type="submit" class="btn btn-success" style="width: 100%">Create Destination</button>
     </form>
     {% else %}
-    <p class="text-center mt-5" style="font-size: 25px"><a href="{% url 'login' %}">Log in</a> to access project creation.</p>
+    <p class="text-center mt-5" style="font-size: 25px"><a href="{% url 'login' %}">Log in</a> to access destination creation.</p>
     {% endif %}
 </div>
 {% endblock %}

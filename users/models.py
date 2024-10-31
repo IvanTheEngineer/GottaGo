@@ -16,12 +16,14 @@ class TravelPlan(models.Model):
     group_size = models.IntegerField()
     trip_description = models.TextField()
     jpg_upload_file = models.FileField(upload_to='uploads/main_plan_jpgs/', blank=True, null=True)
-    txt_upload_file = models.FileField(upload_to='uploads/txts/', blank=True, null=True)
-    pdf_upload_file = models.FileField(upload_to='uploads/pdfs/', blank=True, null=True)
+    # txt_upload_file = models.FileField(upload_to='uploads/txts/', blank=True, null=True)
+    # pdf_upload_file = models.FileField(upload_to='uploads/pdfs/', blank=True, null=True)
     primary_group_code = models.CharField(max_length=100)
 
 
 class Destination(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    users = models.ManyToManyField(User, related_name='destinations')
     travel_plan = models.ForeignKey(TravelPlan, on_delete=models.CASCADE, related_name='destinations')
     destination_name = models.CharField(
         max_length=100,
@@ -32,5 +34,5 @@ class Destination(models.Model):
     txt_upload_file = models.FileField(upload_to='uploads/destinations_txts/', blank=True, null=True)
     pdf_upload_file = models.FileField(upload_to='uploads/destination_pdfs/', blank=True, null=True)
 
-    def __str__(self):
-        return self.plan_name
+    # def __str__(self):
+    #     return self.plan_name

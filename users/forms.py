@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from models import TravelPlan, Destination
+from .models import TravelPlan, Destination
 import uuid
 
 
@@ -24,13 +24,13 @@ class PlanForm(forms.ModelForm):
             'group_size',
             'trip_description',
             'jpg_upload_file',
-            'txt_upload_file',
-            'pdf_upload_file',
+            # 'txt_upload_file',
+            # 'pdf_upload_file',
         ]
         labels = {
             'jpg_upload_file': 'Upload an image for the trip',
-            'txt_upload_file': 'Upload a text file with trip details',
-            'pdf_upload_file': 'Upload a PDF document',
+            # 'txt_upload_file': 'Upload a text file with trip details',
+            # 'pdf_upload_file': 'Upload a PDF document',
         }
         widgets = {
             'plan_name': forms.TextInput(attrs={
@@ -56,16 +56,16 @@ class PlanForm(forms.ModelForm):
                 'id': 'jpg_upload_file',
                 'accept': '.jpg',
             }),
-            'txt_upload_file': forms.ClearableFileInput(attrs={
-                'class': 'form-control',
-                'id': 'txt_upload_file',
-                'accept': '.txt',
-            }),
-            'pdf_upload_file': forms.ClearableFileInput(attrs={
-                'class': 'form-control',
-                'id': 'pdf_upload_file',
-                'accept': '.pdf',
-            }),
+            # 'txt_upload_file': forms.ClearableFileInput(attrs={
+            #     'class': 'form-control',
+            #     'id': 'txt_upload_file',
+            #     'accept': '.txt',
+            # }),
+            # 'pdf_upload_file': forms.ClearableFileInput(attrs={
+            #     'class': 'form-control',
+            #     'id': 'pdf_upload_file',
+            #     'accept': '.pdf',
+            # }),
         }
 
     def save(self, commit=True, user=None):
@@ -86,7 +86,7 @@ class PlanForm(forms.ModelForm):
         return travel_plan
 
 
-class DestinationForm(forms.Form):
+class DestinationForm(forms.ModelForm):
     class Meta:
         model = Destination
         fields = [
@@ -130,19 +130,18 @@ class DestinationForm(forms.Form):
             }),
         }
 
-    def save(self, commit=True, travel_plan=None):
+    def save(self, commit=True, user=None):
         destination = super().save(commit=False)
 
-        # if user is not None:
-        #     destination.user = user  # Set the user field
+        if user is not None:
+            destination.user = user  # Set the user field
 
         # Todo: Set the travel_plan
 
-        if travel_plan is not None:
-            destination.travel_plan = travel_plan
+        destination.save()
 
-        # if user is not None:
-        #     destination.users.add(user)  # Add the user to the many-to-many relationship
+        if user is not None:
+            destination.users.add(user)
 
         return destination
 

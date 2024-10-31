@@ -15,12 +15,13 @@ from django.db.models.query_utils import Q
 from .forms import UserLoginForm
 from .decorators import user_not_authenticated
 from django.contrib.auth.decorators import login_required
-from .forms import PlanForm, JoinGroupForm
+from .forms import PlanForm, JoinGroupForm, DestinationForm
 from django.views import generic
-from .models import TravelPlan
+from .models import TravelPlan, Destination
 from django.http import FileResponse
 import requests
 import boto3
+
 
 @login_required
 def profile(request):
@@ -66,6 +67,25 @@ def project_creation(request):
         return render(request, 'users/project_creator.html', {'form': form})
     else:
         return render(request, 'users/project_creator.html')
+
+
+def destination_creation(request):
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            form = DestinationForm(request.POST, request.FILES)
+            if form.is_valid():
+                plan = form.save(commit=False)
+                print(request.user)
+                plan.user = request.user
+                plan.save()
+                return redirect('home')
+        else:
+            form = DestinationForm()
+        return render(request, 'users/destination_creator.html', {'form': form})
+    else:
+        return render(request, 'users/destination_creator.html')
+
+
 def user_plans_view(request):
     if request.user.is_authenticated:
         # Get all plans the user is in
@@ -73,6 +93,15 @@ def user_plans_view(request):
         return render(request, 'users/plans.html', {'travel_plans': travel_plans})
     else:
         return render(request, 'users/plans.html')
+
+
+def plan_destinations_view(request):
+    if request.user.is_authenticated:
+        destinations = request.user.destinations.all()
+        return render(request, 'users/plans.html', {'destinations': destinations})
+    else:
+        return render(request, 'users/plans.html')
+
 
 def join_group(request):
     if request.user.is_authenticated:
@@ -92,7 +121,8 @@ def join_group(request):
         return render(request, 'users/join_group.html', context)
     else:
         return render(request, 'users/join_group.html')
-    
+
+
 def download_file(request):
     file_url = request.GET.get('txturl')
     file_name = request.GET.get('filename')
