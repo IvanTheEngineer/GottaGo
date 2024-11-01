@@ -61,7 +61,7 @@ def project_creation(request):
                 plan.user = request.user
                 plan.save()
                 # print(f"File uploaded to S3: {plan.jpg_upload_file.url}")
-                return redirect('home')
+                return redirect('plans')
         else:
             form = PlanForm()
         return render(request, 'users/project_creator.html', {'form': form})
@@ -81,7 +81,7 @@ def destination_creation(request, plan_id):
                 plan.user = request.user
                 plan.travel_plan = travel_plan
                 plan.save()
-                return redirect('home')
+                return redirect('detail', travel_plan.primary_group_code)
         else:
             form = DestinationForm()
         return render(request, 'users/destination_creator.html', {'form': form})
@@ -130,10 +130,21 @@ def join_group(request):
     else:
         return render(request, 'users/join_group.html')
 
-
 def download_file(request):
     file_url = request.GET.get('txturl')
     file_name = request.GET.get('filename')
     response = requests.get(file_url, stream=True)
     response.raise_for_status()
     return FileResponse(response.raw, as_attachment=True, filename=file_name)
+
+class DetailView(generic.DetailView):
+    model = TravelPlan
+    template_name = "users/detail.html"
+    context_object_name = 'travelplan'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['destinations'] = Destination.objects.filter(travel_plan=self.object)
+        return context
+    def get_object(self):
+        group_code = self.kwargs.get("pk")
+        return get_object_or_404(TravelPlan, primary_group_code=group_code)
