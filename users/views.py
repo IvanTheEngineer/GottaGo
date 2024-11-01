@@ -88,6 +88,11 @@ def destination_creation(request, plan_id):
     else:
         return render(request, 'users/destination_creator.html')
 
+def delete_travel_plan(request):
+    id = request.GET.get('id')
+    travel_plan = get_object_or_404(TravelPlan, id=id)
+    travel_plan.delete()
+    return redirect('plans')
 
 def user_plans_view(request):
     if request.user.is_authenticated:
@@ -110,6 +115,11 @@ def plan_destinations_view(request):
     else:
         return render(request, 'users/plans.html')
 
+def leave_plan(request):
+    id = request.GET.get('id')
+    travel_plan = get_object_or_404(TravelPlan, id=id)
+    travel_plan.users.remove(request.user)
+    return redirect('plans')
 
 def join_group(request):
     if request.user.is_authenticated:

@@ -20,7 +20,12 @@
                             <img src="{% static '/images/no_image.jpg' %}" style="width: 100px; height: 100px; margin-right: 10px;"
                             class="rounded" alt="no image"/>
                         {% endif %}
-                        <p class="text-center mt-2 fs-5 text-paragraph"><a href="{% url 'detail' plan.primary_group_code %}">{{ plan.plan_name }}</a> - Group Code: {{plan.primary_group_code}}</p>
+                        <p style = "margin-right: 200px" class="text-center mt-2 fs-5 text-paragraph"><a href="{% url 'detail' plan.primary_group_code %}">{{ plan.plan_name }}</a> - Group Code: {{plan.primary_group_code}}</p>
+                        {% if plan.user == user %}
+                        <a href="{% url 'delete_travel_plan' %}?id={{ plan.id}}" class="btn btn-primary">Delete Plan</a>
+                        {% else %}
+                        <a href="{% url 'leave_travel_plan' %}?id={{ plan.id}}" class="btn btn-primary">Leave Plan</a>
+                        {% endif %}
             </div>
             {% endfor %}
             </div>
