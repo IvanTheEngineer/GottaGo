@@ -15,6 +15,7 @@
         {% csrf_token %}
         {% bootstrap_form form %}
         <button type="submit" class="btn btn-success" style="width: 100%">Create Plan</button>
+        <a href="{% url 'plans' %}" style="width: 100%; margin-top: 10px;" class="btn btn-danger">Cancel</a>
     </form>
     {% else %}
     <p class="text-center mt-5" style="font-size: 25px"><a href="{% url 'login' %}">Log in</a> to access project creation.</p>

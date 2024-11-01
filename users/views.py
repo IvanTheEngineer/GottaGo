@@ -84,7 +84,7 @@ def destination_creation(request, plan_id):
                 return redirect('detail', travel_plan.primary_group_code)
         else:
             form = DestinationForm()
-        return render(request, 'users/destination_creator.html', {'form': form})
+        return render(request, 'users/destination_creator.html', {'form': form, 'primary_group_code': travel_plan.primary_group_code})
     else:
         return render(request, 'users/destination_creator.html')
 
