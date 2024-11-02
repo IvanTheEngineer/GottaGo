@@ -145,8 +145,6 @@ AWS_ACCESS_KEY_ID='os.environ.get('AWS_ACCESS_KEY')'
 AWS_SECRET_ACCESS_KEY='os.environ.get('AWS_SECRET_KEY')' 
 AWS_STORAGE_BUCKET_NAME='cs3240-fall-2024-group-b-25-bucket'
 
-
-
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 # Prevents file overwrites even if you upload the same file
 AWS_S3_FILE_OVERWRITE = False
@@ -206,6 +204,4 @@ WHITENOISE_KEEP_ONLY_HASHED_FILES = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
-if os.environ.get('GITHUB_ACTIONS') != 'true': 
-    import django_heroku
-    django_heroku.settings(locals(), staticfiles=False)
+django_heroku.settings(locals(), staticfiles=False)
