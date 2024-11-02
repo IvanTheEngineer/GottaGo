@@ -104,6 +104,14 @@ def delete_travel_plan(request):
     messages.success(request, 'Successfully deleted the plan.')
     return redirect('plans')
 
+def all_plans_view(request):
+    if not is_pma_admin(request.user):
+        return redirect('plans')
+    all_travel_plans = TravelPlan.objects.all().prefetch_related('users')
+    print(f"Plans found: {all_travel_plans.count()}")
+    context = {'all_travel_plans': all_travel_plans }
+    return render(request, 'users/all_plans.html', context)
+
 def user_plans_view(request):
     if request.user.is_authenticated:
         # Get all plans the user is in
@@ -116,7 +124,6 @@ def user_plans_view(request):
         return render(request, 'users/plans.html', {'travel_plans': travel_plans, 'destinations': destinations})
     else:
         return render(request, 'users/plans.html')
-
 
 def plan_destinations_view(request):
     if request.user.is_authenticated:
