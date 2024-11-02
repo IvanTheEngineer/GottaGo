@@ -75,12 +75,16 @@ def project_creation(request):
 
 def destination_creation(request, plan_id):
     if request.user.is_authenticated:
+        if is_pma_admin(request.user):
+            travel_plan = get_object_or_404(TravelPlan, id=plan_id)
+            form = DestinationForm(request.POST or None, request.FILES or None)
+            if request.method == 'POST':
+                form.add_error(None, 'PMA administrators are not able to create destinations.')
+            return render(request, 'users/destination_creator.html', {'form': form, 'primary_group_code': travel_plan.primary_group_code})
         travel_plan = get_object_or_404(TravelPlan, id=plan_id, users=request.user)
         if request.method == 'POST':
             form = DestinationForm(request.POST, request.FILES)
-            if is_pma_admin(request.user):
-                form.add_error(None, 'PMA administrators are not able to create destinations.')
-            elif form.is_valid():
+            if form.is_valid():
                 plan = form.save(commit=False, travel_plan=travel_plan, user=request.user)
                 # If this doesn't work, create a destination form object.
                 print(request.user)
@@ -102,6 +106,8 @@ def delete_travel_plan(request):
         return redirect('plans')
     travel_plan.delete()
     messages.success(request, 'Successfully deleted the plan.')
+    if is_pma_admin(request.user):
+        return redirect('all_plans')
     return redirect('plans')
 
 def all_plans_view(request):

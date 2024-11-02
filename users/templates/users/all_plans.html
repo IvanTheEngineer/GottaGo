@@ -24,7 +24,6 @@
                              class="rounded" alt="no image"/>
                     {% endif %}
 
-                    <!-- Display sub-destination images -->
                     <div class="flex-container ms-0">
                         <div class="sub-destinations d-flex flex-wrap">
                             {% for destination in plan.destinations.all %}
@@ -35,9 +34,12 @@
                             {% endfor %}
                         </div>
                     </div>
+                    <div class="ms-auto d-flex align-items-center">
+                        <a href="{% url 'delete_travel_plan' %}?id={{ plan.id}}" class="btn btn-danger">Delete Plan</a>
+                    </div>
                 </div>
 
-                <div class="flex-container ms-0">
+                <div class="flex-container">
                     <h5>Users in this plan:</h5>
                     <ul>
                         {% for user in plan.users.all %}
