@@ -12,7 +12,7 @@
             <div class="list-group">
             {% for plan in travel_plans %}
 
-            <div style="display: flex; align-items: center; justify-content: center; padding-bottom: 20px;">
+            <div style="display: flex; align-items: start; justify-content: start; padding-bottom: 20px;">
                         {% if plan.jpg_upload_file %}
                         <img src="{{ plan.jpg_upload_file.url }}" style="width: 100px; height: 100px; margin-right: 10px;"
                                  class="rounded" alt="{{ plan.plan_name }} image"/>
@@ -22,9 +22,19 @@
                         {% endif %}
                         <p style = "margin-right: 200px" class="text-center mt-2 fs-5 text-paragraph"><a href="{% url 'detail' plan.primary_group_code %}">{{ plan.plan_name }}</a> - Group Code: {{plan.primary_group_code}}</p>
                         {% if plan.user == user %}
-                        <a href="{% url 'delete_travel_plan' %}?id={{ plan.id}}" class="btn btn-primary">Delete Plan</a>
+                            {% if destinations %}
+                                {% for destination in destinations|slice:"0:3" %}
+                                    {% if destination.travel_plan.id == plan.id %}
+                                        {% if destination.jpg_upload_file %}
+                                            <img src="{{ destination.jpg_upload_file.url }}" style="width: 100px; height: 100px; margin-right: 10px;"
+                                            class="rounded" alt="{{ plan.plan_name }} image"/>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        <a href="{% url 'delete_travel_plan' %}?id={{ plan.id}}" class="btn btn-primary ms-auto">Delete Plan</a>
                         {% else %}
-                        <a href="{% url 'leave_travel_plan' %}?id={{ plan.id}}" class="btn btn-primary">Leave Plan</a>
+                        <a href="{% url 'leave_travel_plan' %}?id={{ plan.id}}" class="btn btn-primary ms-auto">Leave Plan</a>
                         {% endif %}
             </div>
             {% endfor %}
