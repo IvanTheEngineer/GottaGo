@@ -38,6 +38,8 @@ def custom_logout(request):
     logout(request)
     return redirect('home')
 
+def is_pma_admin(user):
+    return user.groups.filter(name='PMA').exists()
 
 def home(request):
     user = request.user
@@ -55,7 +57,9 @@ def project_creation(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
             form = PlanForm(request.POST, request.FILES)
-            if form.is_valid():
+            if is_pma_admin(request.user):
+                form.add_error(None, 'PMA administrators are not able to create a project.')
+            elif form.is_valid():
                 plan = form.save(commit=False, user=request.user)
                 print(request.user)
                 plan.user = request.user
@@ -74,7 +78,9 @@ def destination_creation(request, plan_id):
         travel_plan = get_object_or_404(TravelPlan, id=plan_id, users=request.user)
         if request.method == 'POST':
             form = DestinationForm(request.POST, request.FILES)
-            if form.is_valid():
+            if is_pma_admin(request.user):
+                form.add_error(None, 'PMA administrators are not able to create destinations.')
+            elif form.is_valid():
                 plan = form.save(commit=False, travel_plan=travel_plan, user=request.user)
                 # If this doesn't work, create a destination form object.
                 print(request.user)
@@ -91,7 +97,11 @@ def destination_creation(request, plan_id):
 def delete_travel_plan(request):
     id = request.GET.get('id')
     travel_plan = get_object_or_404(TravelPlan, id=id)
+    if request.user != travel_plan.user and not is_pma_admin(request.user):
+        messages.error(request, 'You do not have permission to delete this plan.')
+        return redirect('plans')
     travel_plan.delete()
+    messages.success(request, 'Successfully deleted the plan.')
     return redirect('plans')
 
 def user_plans_view(request):
@@ -126,7 +136,9 @@ def join_group(request):
         context = {'form': JoinGroupForm()}
         if request.method == 'POST':
             form = JoinGroupForm(request.POST)
-            if form.is_valid():
+            if is_pma_admin(request.user):
+                context['error_message'] = 'PMA administrators are not able to join a group.'
+            elif form.is_valid():
                 group_code = form.cleaned_data['group_code']
                 try:
                     travelPlan = TravelPlan.objects.get(primary_group_code=group_code)
