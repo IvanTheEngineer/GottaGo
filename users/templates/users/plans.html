@@ -32,9 +32,9 @@
                                     {% endif %}
                                 {% endfor %}
                             {% endif %}
-                        <a href="{% url 'delete_travel_plan' %}?id={{ plan.id}}" class="btn btn-primary ms-auto">Delete Plan</a>
+                        <a href="{% url 'delete_travel_plan' %}?id={{ plan.id}}" class="btn btn-danger ms-auto">Delete Plan</a>
                         {% else %}
-                        <a href="{% url 'leave_travel_plan' %}?id={{ plan.id}}" class="btn btn-primary ms-auto">Leave Plan</a>
+                        <a href="{% url 'leave_travel_plan' %}?id={{ plan.id}}" class="btn btn-danger ms-auto">Leave Plan</a>
                         {% endif %}
             </div>
             {% endfor %}
