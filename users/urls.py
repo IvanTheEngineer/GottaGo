@@ -12,6 +12,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('project_creator/', views.project_creation, name='project_creator'),
     path('destination_creator/<int:plan_id>', views.destination_creation, name='destination_creator'),
+    path('all_plans/', views.all_plans_view, name='all_plans'),
     path('plans/', views.user_plans_view, name='plans'),
     path('join_group/', views.join_group, name='join_group'),
     path('download/', views.download_file, name='download_file'),
