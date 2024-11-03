@@ -17,8 +17,14 @@
         <!-- Destination Details -->
         <div class="mb-4">
             <h4>Destination Details</h4>
-            {{ form.destination_name }}
-            {{ form.destination_description }}
+            <div class="mb-3">
+                {{ form.destination_name.label_tag }}
+                {{ form.destination_name }} 
+            </div>
+            <div class="mb-3">
+                {{ form.destination_description.label_tag }}
+                {{ form.destination_description }}
+            </div>
         </div>
 
         <!-- Image Upload and Metadata -->

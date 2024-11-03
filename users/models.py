@@ -49,6 +49,8 @@ class TravelPlan(models.Model):
     primary_group_code = models.CharField(max_length=100)
 
     jpg_metadata = GenericRelation(FileMetadata, related_query_name='travel_plan_jpg')
+    txt_metadata = GenericRelation(FileMetadata, related_query_name='travel_plan_txt')
+    pdf_metadata = GenericRelation(FileMetadata, related_query_name='travel_plan_pdf')
 
 
 class Destination(models.Model):

@@ -209,42 +209,59 @@ class PlanForm(forms.ModelForm):
             travel_plan.user = user  # Set the user field
 
         travel_plan.save()
-
+        
         if user is not None:
-            travel_plan.users.add(user)  # Add the user to the many-to-many relationship
+            travel_plan.users.add(user)
 
-        if commit:
-            travel_plan.save()
-            
-            # Save metadata for each uploaded file
-            if travel_plan.jpg_upload_file:
-                FileMetadata.objects.create(
-                    content_object=travel_plan,
-                    file_title=self.cleaned_data['jpg_file_title'],
-                    description=self.cleaned_data['jpg_description'],
-                    keywords=self.cleaned_data['jpg_keywords']
-                )
-            
-            if travel_plan.txt_upload_file:
-                FileMetadata.objects.create(
-                    content_object=travel_plan,
-                    file_title=self.cleaned_data['txt_file_title'],
-                    description=self.cleaned_data['txt_description'],
-                    keywords=self.cleaned_data['txt_keywords']
-                )
-                
-            if travel_plan.pdf_upload_file:
-                FileMetadata.objects.create(
-                    content_object=travel_plan,
-                    file_title=self.cleaned_data['pdf_file_title'],
-                    description=self.cleaned_data['pdf_description'],
-                    keywords=self.cleaned_data['pdf_keywords']
-                )
+        # Save metadata for each uploaded file
+        if travel_plan.jpg_upload_file and self.cleaned_data.get('jpg_file_title'):
+            metadata = FileMetadata.objects.create(
+                content_object=travel_plan,
+                file_title=self.cleaned_data['jpg_file_title'],
+                description=self.cleaned_data['jpg_description'] or '',
+                keywords=self.cleaned_data['jpg_keywords'] or ''
+            )
+            # Explicitly save the metadata
+            metadata.save()
+        
+        if travel_plan.txt_upload_file and self.cleaned_data.get('txt_file_title'):
+            metadata = FileMetadata.objects.create(
+                content_object=travel_plan,
+                file_title=self.cleaned_data['txt_file_title'],
+                description=self.cleaned_data['txt_description'] or '',
+                keywords=self.cleaned_data['txt_keywords'] or ''
+            )
+            metadata.save()
+        
+        if travel_plan.pdf_upload_file and self.cleaned_data.get('pdf_file_title'):
+            metadata = FileMetadata.objects.create(
+                content_object=travel_plan,
+                file_title=self.cleaned_data['pdf_file_title'],
+                description=self.cleaned_data['pdf_description'] or '',
+                keywords=self.cleaned_data['pdf_keywords'] or ''
+            )
+            metadata.save()
 
         return travel_plan
 
 
 class DestinationForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Set custom labels for metadata fields
+        self.fields['jpg_file_title'].label = "Image Title"
+        self.fields['jpg_description'].label = "Image Description"
+        self.fields['jpg_keywords'].label = "Image Keywords (comma-separated)"
+        
+        self.fields['pdf_file_title'].label = "PDF Title"
+        self.fields['pdf_description'].label = "PDF Description"
+        self.fields['pdf_keywords'].label = "PDF Keywords (comma-separated)"
+        
+        self.fields['txt_file_title'].label = "Text File Title"
+        self.fields['txt_description'].label = "Text File Description"
+        self.fields['txt_keywords'].label = "Text File Keywords (comma-separated)"
+        
     # Add metadata fields for each file type
     jpg_file_title = forms.CharField(
         max_length=255,
@@ -374,42 +391,41 @@ class DestinationForm(forms.ModelForm):
         if travel_plan is not None:
             destination.travel_plan = travel_plan
         if user is not None:
-            destination.user = user  # Set the user field
+            destination.user = user
 
-        # Todo: Set the travel_plan
-
+        # Save the destination first
         destination.save()
 
         if user is not None:
             destination.users.add(user)
 
-        if commit:
-            destination.save()
-            
-            # Save metadata for each uploaded file
-            if destination.jpg_upload_file:
-                FileMetadata.objects.create(
-                    content_object=destination,
-                    file_title=self.cleaned_data['jpg_file_title'],
-                    description=self.cleaned_data['jpg_description'],
-                    keywords=self.cleaned_data['jpg_keywords']
-                )
-            
-            if destination.txt_upload_file:
-                FileMetadata.objects.create(
-                    content_object=destination,
-                    file_title=self.cleaned_data['txt_file_title'],
-                    description=self.cleaned_data['txt_description'],
-                    keywords=self.cleaned_data['txt_keywords']
-                )
-                
-            if destination.pdf_upload_file:
-                FileMetadata.objects.create(
-                    content_object=destination,
-                    file_title=self.cleaned_data['pdf_file_title'],
-                    description=self.cleaned_data['pdf_description'],
-                    keywords=self.cleaned_data['pdf_keywords']
-                )
+        # Save metadata for each uploaded file
+        if destination.jpg_upload_file and self.cleaned_data.get('jpg_file_title'):
+            metadata = FileMetadata.objects.create(
+                content_object=destination,
+                file_title=self.cleaned_data['jpg_file_title'],
+                description=self.cleaned_data['jpg_description'] or '',
+                keywords=self.cleaned_data['jpg_keywords'] or ''
+            )
+            metadata.save()
+        
+        if destination.txt_upload_file and self.cleaned_data.get('txt_file_title'):
+            metadata = FileMetadata.objects.create(
+                content_object=destination,
+                file_title=self.cleaned_data['txt_file_title'],
+                description=self.cleaned_data['txt_description'] or '',
+                keywords=self.cleaned_data['txt_keywords'] or ''
+            )
+            metadata.save()
+        
+        if destination.pdf_upload_file and self.cleaned_data.get('pdf_file_title'):
+            metadata = FileMetadata.objects.create(
+                content_object=destination,
+                file_title=self.cleaned_data['pdf_file_title'],
+                description=self.cleaned_data['pdf_description'] or '',
+                keywords=self.cleaned_data['pdf_keywords'] or ''
+            )
+            metadata.save()
 
         return destination
 

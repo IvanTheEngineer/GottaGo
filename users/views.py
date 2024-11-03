@@ -176,10 +176,22 @@ class DetailView(generic.DetailView):
     model = TravelPlan
     template_name = "users/detail.html"
     context_object_name = 'travelplan'
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['destinations'] = Destination.objects.filter(travel_plan=self.object)
+        
+        # Add debug output
+        travel_plan = self.object
+        if travel_plan.jpg_upload_file:
+            metadata = travel_plan.jpg_metadata.all()
+            print(f"Found {metadata.count()} metadata entries for travel plan {travel_plan.id}")
+            if metadata:
+                print(f"Metadata title: {metadata[0].file_title}")
+                print(f"Metadata description: {metadata[0].description}")
+        
         return context
+        
     def get_object(self):
         group_code = self.kwargs.get("pk")
         return get_object_or_404(TravelPlan, primary_group_code=group_code)
