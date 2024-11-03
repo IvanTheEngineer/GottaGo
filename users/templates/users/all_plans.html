@@ -1,0 +1,60 @@
+{% extends "users/base.html" %}
+{% block navbar_and_footer %}
+{% load custom_filters %}
+{% load static %}
+{% block content %}
+
+<div class="plans-form rounded-2 shadow-sm p-4 py-5 bg-white">
+    <h1 class="text-center mb-3 fs-3 fw-bold">All Travel Plans</h1>
+    {% if all_travel_plans %}
+        <div class="list-group">
+            {% for plan in all_travel_plans %}
+                <p style="margin-right: 200px" class="text-left mt-2 fs-5 text-paragraph">
+                    <a href="{% url 'detail' plan.primary_group_code %}">
+                        <span class="fw-bold">{{ plan.plan_name }}</span>
+                    </a> - Group Code: {{ plan.primary_group_code }}
+                </p>
+
+                <div style="display: flex; align-items: start; justify-content: start; padding-bottom: 20px;">
+                    {% if plan.jpg_upload_file %}
+                        <img src="{{ plan.jpg_upload_file.url }}" style="width: 200px; height: 200px; margin-right: 20px;"
+                             class="rounded" alt="{{ plan.plan_name }} image"/>
+                    {% else %}
+                        <img src="{% static '/images/no_image.jpg' %}" style="width: 100px; height: 100px; margin-right: 10px;"
+                             class="rounded" alt="no image"/>
+                    {% endif %}
+
+                    <div class="flex-container ms-0">
+                        <div class="sub-destinations d-flex flex-wrap">
+                            {% for destination in plan.destinations.all %}
+                                {% if destination.jpg_upload_file %}
+                                    <img src="{{ destination.jpg_upload_file.url }}" style="width: 100px; height: 100px; margin-right: 10px;"
+                                         class="rounded" alt="{{ destination.destination_name }} image"/>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="ms-auto d-flex align-items-center">
+                        <a href="{% url 'delete_travel_plan' %}?id={{ plan.id}}" class="btn btn-danger">Delete Plan</a>
+                    </div>
+                </div>
+
+                <div class="flex-container">
+                    <h5>Users in this plan:</h5>
+                    <ul>
+                        {% for user in plan.users.all %}
+                            <li>{{ user.username }} ({{ user.email }})</li>
+                        {% empty %}
+                            <p>No users in this plan.</p>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-center mt-2 fs-5 text-paragraph">No travel plans are available.</p>
+    {% endif %}
+</div>
+
+{% endblock content %}
+{% endblock %}
