@@ -6,7 +6,34 @@ from django.core.validators import MinLengthValidator, MaxLengthValidator
 import os
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.conf import settings
+import boto3
 
+def delete_s3_file(file_path):
+    """Helper function to delete a file from S3"""
+    if not file_path:
+        return
+    
+    try:
+        # Get the relative path from the FileField
+        key = str(file_path)
+        
+        # Initialize S3 client
+        s3_client = boto3.client(
+            's3',
+            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+            region_name=settings.AWS_S3_REGION_NAME
+        )
+        
+        # Delete the file
+        s3_client.delete_object(
+            Bucket=settings.AWS_STORAGE_BUCKET_NAME,
+            Key=key
+        )
+        print(f"Successfully deleted file: {key} from bucket: {settings.AWS_STORAGE_BUCKET_NAME}")
+    except Exception as e:
+        print(f"Error deleting file from S3: {str(e)}")
 
 class FileMetadata(models.Model):
     """
@@ -35,6 +62,7 @@ class FileMetadata(models.Model):
 
 
 class TravelPlan(models.Model):
+    """Model for a travel plan"""
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     users = models.ManyToManyField(User, related_name='plans')
     plan_name = models.CharField(
@@ -52,8 +80,21 @@ class TravelPlan(models.Model):
     txt_metadata = GenericRelation(FileMetadata, related_query_name='travel_plan_txt')
     pdf_metadata = GenericRelation(FileMetadata, related_query_name='travel_plan_pdf')
 
+    def delete(self, *args, **kwargs):
+        # Delete files from S3 before deleting the model instance
+        if self.jpg_upload_file:
+            delete_s3_file(self.jpg_upload_file.name)
+        if self.txt_upload_file:
+            delete_s3_file(self.txt_upload_file.name)
+        if self.pdf_upload_file:
+            delete_s3_file(self.pdf_upload_file.name)
+            
+        # Delete the model instance
+        super().delete(*args, **kwargs)
+
 
 class Destination(models.Model):
+    """Model for a destination"""
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     users = models.ManyToManyField(User, related_name='destinations')
     travel_plan = models.ForeignKey(TravelPlan, on_delete=models.CASCADE, related_name='destinations')
@@ -73,4 +114,16 @@ class Destination(models.Model):
 
     # def __str__(self):
     #     return self.plan_name
+
+    def delete(self, *args, **kwargs):
+        # Delete files from S3 before deleting the model instance
+        if self.jpg_upload_file:
+            delete_s3_file(self.jpg_upload_file.name)
+        if self.txt_upload_file:
+            delete_s3_file(self.txt_upload_file.name)
+        if self.pdf_upload_file:
+            delete_s3_file(self.pdf_upload_file.name)
+            
+        # Delete the model instance
+        super().delete(*args, **kwargs)
 
