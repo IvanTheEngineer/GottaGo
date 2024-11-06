@@ -3,11 +3,12 @@
 {% load custom_filters %}
 {% load static %}
 {% block content %}
+<div style="margin-top: 10px;" class="rounded-2 p-0 py-2 bg-white">
   <h2>Received Requests</h2>
   {% if invites %}
     <ul>
       {% for invite in invites %}
-      <div style="display: flex; align-items: start; justify-content: start; padding-bottom: 20px;">
+      <div class="rounded-2 shadow p-4 py-2 bg-white" style="display: flex; align-items: start; justify-content: start; margin-bottom: 10px; margin-right: 3%;">
         <strong>{{ invite.requested_by.username }}</strong> &nbsp;has requested to join:&nbsp; <strong>{{ invite.travel_plan.plan_name }}</strong>&nbsp; ({{ invite.travel_plan.primary_group_code }})<br>
         <div style=" margin-left: 50%;">
           <a href="{% url 'decline_invite' %}?id={{invite.id}}" class="btn btn-danger ms-auto" >Decline</a>
@@ -19,5 +20,6 @@
   {% else %}
     <p>No join requests received.</p>
   {% endif %}
+  </div>
 {% endblock %}
 {% endblock %}
