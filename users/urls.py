@@ -19,6 +19,9 @@ urlpatterns = [
     path('deleteplan/', views.delete_travel_plan, name='delete_travel_plan'),
     path('leaveplan/', views.leave_plan, name='leave_travel_plan'),
     path("plans/<str:pk>/", views.DetailView.as_view(), name="detail"),
+    path("joinrequests/", views.joinrequests, name='joinrequests'),
+    path('accept_invite/', views.accept_invite, name='accept_invite'),
+    path('decline_invite/', views.decline_invite, name='decline_invite'),
 ]
 
 # Look into regular expressions, adding a component to that to include the travel plan id in that

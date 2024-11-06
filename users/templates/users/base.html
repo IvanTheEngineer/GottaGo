@@ -28,6 +28,11 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'join_group' %}">Join Group</a>
                     </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'joinrequests' %}">Requests {{user|num_invites}}</a>
+                        </li>
+                    {% endif %}
                     {% if user|has_group:"PMA" %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'all_plans' %}">View All Plans</a>

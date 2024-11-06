@@ -127,3 +127,13 @@ class Destination(models.Model):
         # Delete the model instance
         super().delete(*args, **kwargs)
 
+class Invite(models.Model):
+   travel_plan = models.ForeignKey(TravelPlan, on_delete=models.CASCADE, related_name='invites')
+   requested_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_invites')
+   requested_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_invites')
+  
+   class Meta:
+       unique_together = ('travel_plan', 'requested_by', 'requested_to')
+       indexes = [
+           models.Index(fields=['travel_plan', 'requested_by', 'requested_to']),
+       ]

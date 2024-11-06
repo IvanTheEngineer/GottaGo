@@ -17,7 +17,7 @@ from .decorators import user_not_authenticated
 from django.contrib.auth.decorators import login_required
 from .forms import PlanForm, JoinGroupForm, DestinationForm
 from django.views import generic
-from .models import TravelPlan, Destination
+from .models import TravelPlan, Destination, Invite
 from django.http import FileResponse
 import requests
 import boto3
@@ -145,25 +145,50 @@ def leave_plan(request):
     return redirect('plans')
 
 def join_group(request):
-    if request.user.is_authenticated:
-        context = {'form': JoinGroupForm()}
-        if request.method == 'POST':
-            form = JoinGroupForm(request.POST)
-            if is_pma_admin(request.user):
-                context['error_message'] = 'PMA administrators are not able to join a group.'
-            elif form.is_valid():
-                group_code = form.cleaned_data['group_code']
-                try:
-                    travelPlan = TravelPlan.objects.get(primary_group_code=group_code)
-                    travelPlan.users.add(request.user)
-                    context['success_message'] = 'Successfully joined the group!'
-                except TravelPlan.DoesNotExist:
-                    context['error_message'] = 'Invalid group code. Please try again.'
-        else:
-            pass
-        return render(request, 'users/join_group.html', context)
-    else:
-        return render(request, 'users/join_group.html')
+   if request.user.is_authenticated:
+       context = {'form': JoinGroupForm()}
+       if request.method == 'POST':
+           form = JoinGroupForm(request.POST)
+           if is_pma_admin(request.user):
+               context['error_message'] = 'PMA administrators are not able to join a group.'
+           elif form.is_valid():
+               group_code = form.cleaned_data['group_code']
+               try:
+                    travel_plan = get_object_or_404(TravelPlan, primary_group_code=group_code)
+                    if not request.user == travel_plan.user and not request.user in travel_plan.users.all():
+                        existing_invite = Invite.objects.filter(travel_plan=travel_plan, requested_by=request.user).exists()
+                        if existing_invite:
+                            context['error_message'] = 'You have already sent a join request for this plan.'
+                        else:
+                            Invite.objects.create(travel_plan=travel_plan, requested_by=request.user, requested_to=travel_plan.user)
+                            context['success_message'] = 'Successfully sent a join request!'
+                    else:
+                        context['error_message'] = 'You cannot join a plan you are already in.'
+               except TravelPlan.DoesNotExist:
+                   context['error_message'] = 'Invalid group code. Please try again.'
+       else:
+           pass
+       return render(request, 'users/join_group.html', context)
+   else:
+       return render(request, 'users/join_group.html')
+   
+def joinrequests(request):
+    invites = Invite.objects.filter(requested_to=request.user)
+    return render(request, 'users/requests.html', {'invites': invites})
+
+def accept_invite(request):
+    id = request.GET.get('id')
+    invite = get_object_or_404(Invite, id=id)
+    travel_plan = invite.travel_plan
+    travel_plan.users.add(invite.requested_by)
+    invite.delete()
+    return redirect('joinrequests')
+
+def decline_invite(request):
+    id = request.GET.get('id')
+    invite = get_object_or_404(Invite, id=id)
+    invite.delete()
+    return redirect('joinrequests')
 
 def download_file(request):
     file_url = request.GET.get('txturl')

@@ -1,0 +1,23 @@
+{% extends "users/base.html" %}
+{% block navbar_and_footer %}
+{% load custom_filters %}
+{% load static %}
+{% block content %}
+  <h2>Received Invites</h2>
+  {% if invites %}
+    <ul>
+      {% for invite in invites %}
+      <div style="display: flex; align-items: start; justify-content: start; padding-bottom: 20px;">
+        <strong>{{ invite.requested_by.username }}</strong> &nbsp;has requested to join:&nbsp; <strong>{{ invite.travel_plan.plan_name }}</strong>&nbsp; ({{ invite.travel_plan.primary_group_code }})<br>
+        <div style=" margin-left: 50%;">
+          <a href="{% url 'decline_invite' %}?id={{invite.id}}" class="btn btn-danger ms-auto" >Decline</a>
+          <a href="{% url 'accept_invite' %}?id={{invite.id}}" class="btn btn-success ms-auto" >Accept</a>
+        </div>
+      </div>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No invites received.</p>
+  {% endif %}
+{% endblock %}
+{% endblock %}
