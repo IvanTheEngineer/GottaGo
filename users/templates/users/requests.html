@@ -3,7 +3,7 @@
 {% load custom_filters %}
 {% load static %}
 {% block content %}
-  <h2>Received Invites</h2>
+  <h2>Received Requests</h2>
   {% if invites %}
     <ul>
       {% for invite in invites %}
@@ -17,7 +17,7 @@
       {% endfor %}
     </ul>
   {% else %}
-    <p>No invites received.</p>
+    <p>No join requests received.</p>
   {% endif %}
 {% endblock %}
 {% endblock %}
