@@ -118,6 +118,13 @@ def all_plans_view(request):
     context = {'all_travel_plans': all_travel_plans }
     return render(request, 'users/all_plans.html', context)
 
+@user_not_authenticated
+def explore_plans_view(request):
+    explore_travel_plans = TravelPlan.objects.all()
+    context = {'explore_travel_plans': explore_travel_plans }
+    return render(request, 'users/explore_plans.html', context)
+
+
 def user_plans_view(request):
     if request.user.is_authenticated:
         # Get all plans the user is in

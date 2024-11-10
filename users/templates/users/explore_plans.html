@@ -1,0 +1,30 @@
+{% extends "users/base.html" %}
+{% block navbar_and_footer %}
+{% load custom_filters %}
+{% load static %}
+{% block content %}
+
+<div class="plans-form rounded-2 shadow-sm p-4 py-5 bg-white">
+    <h1 class="text-center mb-3 fs-3 fw-bold">Explore All Travel Plans</h1>
+    {% if explore_travel_plans %}
+        <div class="list-group">
+            {% for plan in explore_travel_plans %}
+                <div class="list-group-item mb-3 p-3 border rounded shadow-sm">
+                    <h3 class="mb-1">{{ plan.plan_name }}</h3>
+                    <p class="text-muted mb-1">Created by: <strong>{{ plan.user.username }}</strong></p>
+                    <p class="text-muted mb-1">Group Code: <strong>{{ plan.primary_group_code }}</strong></p>
+                    <p class="text-muted mb-1">Plan Description: <strong>{{ plan.trip_description }}</strong></p>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="text-center">
+            <a href="{% url 'login' %}" class="btn btn-primary">Login for more details!</a>
+        </div>
+        <p class="text-center mt-2 text-paragraph"> To join any specific plans, login and enter the desired group code. Then wait until the plan owner accepts your join request!</p>
+    {% else %}
+        <p class="text-center mt-2 fs-5 text-paragraph">No travel plans are available.</p>
+    {% endif %}
+</div>
+
+{% endblock content %}
+{% endblock %}

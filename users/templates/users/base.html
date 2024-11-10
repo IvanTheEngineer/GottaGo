@@ -19,6 +19,11 @@
                             <a class="nav-link" href="#">Welcome, Guest!</a>
                         {% endif %}
                     </li>
+                    {% if not user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'explore_plans' %}">Explore Plans</a>
+                        </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'project_creator' %}">Create a Travel Plan</a>
                     </li>
