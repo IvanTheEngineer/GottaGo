@@ -22,6 +22,8 @@ from django.http import FileResponse
 import requests
 import boto3
 
+from django.core.paginator import Paginator
+
 
 @login_required
 def profile(request):
@@ -38,8 +40,10 @@ def custom_logout(request):
     logout(request)
     return redirect('home')
 
+
 def is_pma_admin(user):
     return user.groups.filter(name='PMA').exists()
+
 
 def home(request):
     user = request.user
@@ -80,7 +84,8 @@ def destination_creation(request, plan_id):
             form = DestinationForm(request.POST or None, request.FILES or None)
             if request.method == 'POST':
                 form.add_error(None, 'PMA administrators are not able to create destinations.')
-            return render(request, 'users/destination_creator.html', {'form': form, 'primary_group_code': travel_plan.primary_group_code})
+            return render(request, 'users/destination_creator.html',
+                          {'form': form, 'primary_group_code': travel_plan.primary_group_code})
         travel_plan = get_object_or_404(TravelPlan, id=plan_id, users=request.user)
         if request.method == 'POST':
             form = DestinationForm(request.POST, request.FILES)
@@ -94,9 +99,11 @@ def destination_creation(request, plan_id):
                 return redirect('detail', travel_plan.primary_group_code)
         else:
             form = DestinationForm()
-        return render(request, 'users/destination_creator.html', {'form': form, 'primary_group_code': travel_plan.primary_group_code})
+        return render(request, 'users/destination_creator.html',
+                      {'form': form, 'primary_group_code': travel_plan.primary_group_code})
     else:
         return render(request, 'users/destination_creator.html')
+
 
 def delete_travel_plan(request):
     id = request.GET.get('id')
@@ -110,18 +117,20 @@ def delete_travel_plan(request):
         return redirect('all_plans')
     return redirect('plans')
 
+
 def all_plans_view(request):
     if not is_pma_admin(request.user):
         return redirect('plans')
     all_travel_plans = TravelPlan.objects.all().prefetch_related('users')
     print(f"Plans found: {all_travel_plans.count()}")
-    context = {'all_travel_plans': all_travel_plans }
+    context = {'all_travel_plans': all_travel_plans}
     return render(request, 'users/all_plans.html', context)
+
 
 @user_not_authenticated
 def explore_plans_view(request):
     explore_travel_plans = TravelPlan.objects.all()
-    context = {'explore_travel_plans': explore_travel_plans }
+    context = {'explore_travel_plans': explore_travel_plans}
     return render(request, 'users/explore_plans.html', context)
 
 
@@ -138,6 +147,7 @@ def user_plans_view(request):
     else:
         return render(request, 'users/plans.html')
 
+
 def plan_destinations_view(request):
     if request.user.is_authenticated:
         destinations = request.user.destinations.all()
@@ -145,43 +155,49 @@ def plan_destinations_view(request):
     else:
         return render(request, 'users/plans.html')
 
+
 def leave_plan(request):
     id = request.GET.get('id')
     travel_plan = get_object_or_404(TravelPlan, id=id)
     travel_plan.users.remove(request.user)
     return redirect('plans')
 
+
 def join_group(request):
-   if request.user.is_authenticated:
-       context = {'form': JoinGroupForm()}
-       if request.method == 'POST':
-           form = JoinGroupForm(request.POST)
-           if is_pma_admin(request.user):
-               context['error_message'] = 'PMA administrators are not able to join a group.'
-           elif form.is_valid():
-               group_code = form.cleaned_data['group_code']
-               try:
+    if request.user.is_authenticated:
+        context = {'form': JoinGroupForm()}
+        if request.method == 'POST':
+            form = JoinGroupForm(request.POST)
+            if is_pma_admin(request.user):
+                context['error_message'] = 'PMA administrators are not able to join a group.'
+            elif form.is_valid():
+                group_code = form.cleaned_data['group_code']
+                try:
                     travel_plan = get_object_or_404(TravelPlan, primary_group_code=group_code)
                     if not request.user == travel_plan.user and not request.user in travel_plan.users.all():
-                        existing_invite = Invite.objects.filter(travel_plan=travel_plan, requested_by=request.user).exists()
+                        existing_invite = Invite.objects.filter(travel_plan=travel_plan,
+                                                                requested_by=request.user).exists()
                         if existing_invite:
                             context['error_message'] = 'You have already sent a join request for this plan.'
                         else:
-                            Invite.objects.create(travel_plan=travel_plan, requested_by=request.user, requested_to=travel_plan.user)
+                            Invite.objects.create(travel_plan=travel_plan, requested_by=request.user,
+                                                  requested_to=travel_plan.user)
                             context['success_message'] = 'Successfully sent a join request!'
                     else:
                         context['error_message'] = 'You cannot join a plan you are already in.'
-               except TravelPlan.DoesNotExist:
-                   context['error_message'] = 'Invalid group code. Please try again.'
-       else:
-           pass
-       return render(request, 'users/join_group.html', context)
-   else:
-       return render(request, 'users/join_group.html')
-   
+                except TravelPlan.DoesNotExist:
+                    context['error_message'] = 'Invalid group code. Please try again.'
+        else:
+            pass
+        return render(request, 'users/join_group.html', context)
+    else:
+        return render(request, 'users/join_group.html')
+
+
 def joinrequests(request):
     invites = Invite.objects.filter(requested_to=request.user)
     return render(request, 'users/requests.html', {'invites': invites})
+
 
 def accept_invite(request):
     id = request.GET.get('id')
@@ -191,11 +207,13 @@ def accept_invite(request):
     invite.delete()
     return redirect('joinrequests')
 
+
 def decline_invite(request):
     id = request.GET.get('id')
     invite = get_object_or_404(Invite, id=id)
     invite.delete()
     return redirect('joinrequests')
+
 
 def download_file(request):
     file_url = request.GET.get('txturl')
@@ -204,26 +222,33 @@ def download_file(request):
     response.raise_for_status()
     return FileResponse(response.raw, as_attachment=True, filename=file_name)
 
+
 class DetailView(generic.DetailView):
     model = TravelPlan
     template_name = "users/detail.html"
     context_object_name = 'travelplan'
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['destinations'] = Destination.objects.filter(travel_plan=self.object)
-        
+
         # Add debug output
         travel_plan = self.object
+        destinations = Destination.objects.filter(travel_plan=travel_plan)
+        paginator = Paginator(destinations, 1)
+        page_number = self.request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        context['page_obj'] = page_obj
         if travel_plan.jpg_upload_file:
             metadata = travel_plan.jpg_metadata.all()
             print(f"Found {metadata.count()} metadata entries for travel plan {travel_plan.id}")
             if metadata:
                 print(f"Metadata title: {metadata[0].file_title}")
                 print(f"Metadata description: {metadata[0].description}")
-        
+
         return context
-        
+
     def get_object(self):
         group_code = self.kwargs.get("pk")
         return get_object_or_404(TravelPlan, primary_group_code=group_code)
