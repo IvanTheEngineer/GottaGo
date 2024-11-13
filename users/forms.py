@@ -202,8 +202,9 @@ class PlanForm(forms.ModelForm):
         travel_plan = super().save(commit=False)
 
         # Generate a unique group code
-        unique_code = str(uuid.uuid4())[:8]  # Generate an 8-character unique code
-        travel_plan.primary_group_code = unique_code
+        if not travel_plan.primary_group_code:
+            unique_code = str(uuid.uuid4())[:8]  # Generate an 8-character unique code
+            travel_plan.primary_group_code = unique_code
 
         if user is not None:
             travel_plan.user = user  # Set the user field

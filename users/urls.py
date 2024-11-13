@@ -11,7 +11,7 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
     path('admin/', admin.site.urls),
     path('project_creator/', views.project_creation, name='project_creator'),
-    path('destination_creator/<int:plan_id>', views.destination_creation, name='destination_creator'),
+    path('destination_creator/<str:primary_group_code>', views.destination_creation, name='destination_creator'),
     path('all_plans/', views.all_plans_view, name='all_plans'),
     path('explore_plans/', views.explore_plans_view, name='explore_plans'),
     path('plans/', views.user_plans_view, name='plans'),
@@ -24,6 +24,7 @@ urlpatterns = [
     path('accept_invite/', views.accept_invite, name='accept_invite'),
     path('decline_invite/', views.decline_invite, name='decline_invite'),
     path("plans/<str:primary_group_code>/edit", views.TravelPlanUpdateView.as_view(), name="edit"),
+    path("plans/<str:primary_group_code>/edit_destination/<int:id>", views.DestinationUpdateView.as_view(), name="edit_destination"),
 ]
 
 # Look into regular expressions, adding a component to that to include the travel plan id in that

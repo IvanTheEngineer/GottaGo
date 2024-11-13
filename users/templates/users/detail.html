@@ -38,7 +38,7 @@
             <p>No images uploaded.</p>
             {% endif %}
         </div>
-        <a style="margin-bottom: 10px;" href="{% url 'edit' travelplan.primary_group_code %}" class="btn btn-primary">Edit</a>
+        <a style="margin-bottom: 10px; margin-top: 10px;" href="{% url 'edit' travelplan.primary_group_code %}" class="btn btn-primary">Edit</a>
         {% if travelplan.destinations %}
         <div class = "list-group">
             {% for destination in page_obj %}
@@ -118,6 +118,7 @@
                             {% endif %}
                         </div>
                 </div>
+                <a style="margin-bottom: 10px; margin-top: 10px;" href="{% url 'edit_destination' primary_group_code=destination.travel_plan.primary_group_code id=destination.id %}" class="btn btn-primary">Edit</a>
             </div>
             {% endfor %}
         </div>
@@ -231,7 +232,7 @@
 {#    {% endif %}#}
 
     <div class="card-footer py-3">
-        <a class="text-center mt-2 fs-5 text-paragraph text-body" href="{% url 'destination_creator' travelplan.id %}">Add a destination</a>
+        <a class="text-center mt-2 fs-5 text-paragraph text-body" href="{% url 'destination_creator' travelplan.primary_group_code %}">Add a destination</a>
     </div>
 </div>
 

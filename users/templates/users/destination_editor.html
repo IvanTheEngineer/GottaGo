@@ -1,0 +1,133 @@
+{% extends "users/base.html" %}
+{% load bootstrap5 %}
+{% load custom_filters %}
+{% load static %}
+
+{% block content %}
+<head>
+    <title>Edit Destination</title>
+</head>
+
+<div class="destination-creator-form rounded-2 shadow-sm p-4 py-5 bg-white">
+    <h1 class="mb-4 fs-3 fw-bold text-center">Edit Destination</h1>
+    {% if user.is_authenticated %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <!-- Destination Details -->
+        <div class="mb-4">
+            <h4>Destination Details</h4>
+            <div class="mb-3">
+                {{ form.destination_name.label_tag }}
+                {{ form.destination_name }} 
+            </div>
+            <div class="mb-3">
+                {{ form.destination_description.label_tag }}
+                {{ form.destination_description }}
+            </div>
+        </div>
+
+        <!-- Image Upload and Metadata -->
+        <div class="mb-4">
+            <h4>Image Upload</h4>
+            {{ form.jpg_upload_file }}
+            
+            <div class="file-metadata-section mt-3" id="jpgMetadata" style="display: none;">
+                <h5>Image Metadata</h5>
+                <div class="mb-3">
+                    {{ form.jpg_file_title.label_tag }}
+                    {{ form.jpg_file_title }}
+                </div>
+                <div class="mb-3">
+                    {{ form.jpg_description.label_tag }}
+                    {{ form.jpg_description }}
+                </div>
+                <div class="mb-3">
+                    {{ form.jpg_keywords.label_tag }}
+                    {{ form.jpg_keywords }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Text File Upload and Metadata -->
+        <div class="mb-4">
+            <h4>Text File Upload</h4>
+            {{ form.txt_upload_file }}
+            
+            <div class="file-metadata-section mt-3" id="txtMetadata" style="display: none;">
+                <h5>Text File Metadata</h5>
+                <div class="mb-3">
+                    {{ form.txt_file_title.label_tag }}
+                    {{ form.txt_file_title }}
+                </div>
+                <div class="mb-3">
+                    {{ form.txt_description.label_tag }}
+                    {{ form.txt_description }}
+                </div>
+                <div class="mb-3">
+                    {{ form.txt_keywords.label_tag }}
+                    {{ form.txt_keywords }}
+                </div>
+            </div>
+        </div>
+
+        <!-- PDF Upload and Metadata -->
+        <div class="mb-4">
+            <h4>PDF Upload</h4>
+            {{ form.pdf_upload_file }}
+            
+            <div class="file-metadata-section mt-3" id="pdfMetadata" style="display: none;">
+                <h5>PDF Metadata</h5>
+                <div class="mb-3">
+                    {{ form.pdf_file_title.label_tag }}
+                    {{ form.pdf_file_title }}
+                </div>
+                <div class="mb-3">
+                    {{ form.pdf_description.label_tag }}
+                    {{ form.pdf_description }}
+                </div>
+                <div class="mb-3">
+                    {{ form.pdf_keywords.label_tag }}
+                    {{ form.pdf_keywords }}
+                </div>
+            </div>
+        </div>
+        
+        <button type="submit" class="btn btn-success" style="width: 100%">Save Destination</button>
+        <a href="{% url 'detail' primary_group_code %}" style="width: 100%; margin-top: 10px;" class="btn btn-danger">Cancel</a>
+    </form>
+    {% else %}
+    <p class="text-center mt-5" style="font-size: 25px"><a href="{% url 'login' %}">Log in</a> to edit destinations.</p>
+    {% endif %}
+</div>
+
+<script>
+// Show/hide metadata sections when files are selected
+document.getElementById('jpg_upload_file').addEventListener('change', function() {
+    const metadataSection = document.getElementById('jpgMetadata');
+    if (this.files.length > 0) {
+        metadataSection.style.display = 'block';
+    } else {
+        metadataSection.style.display = 'none';
+    }
+});
+
+document.getElementById('txt_upload_file').addEventListener('change', function() {
+    const metadataSection = document.getElementById('txtMetadata');
+    if (this.files.length > 0) {
+        metadataSection.style.display = 'block';
+    } else {
+        metadataSection.style.display = 'none';
+    }
+});
+
+document.getElementById('pdf_upload_file').addEventListener('change', function() {
+    const metadataSection = document.getElementById('pdfMetadata');
+    if (this.files.length > 0) {
+        metadataSection.style.display = 'block';
+    } else {
+        metadataSection.style.display = 'none';
+    }
+});
+</script>
+{% endblock %}

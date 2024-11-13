@@ -92,16 +92,16 @@ class TravelPlanUpdateView(generic.UpdateView):
         context['primary_group_code'] = self.object.primary_group_code
         return context
 
-def destination_creation(request, plan_id):
+def destination_creation(request, primary_group_code):
     if request.user.is_authenticated:
         if is_pma_admin(request.user):
-            travel_plan = get_object_or_404(TravelPlan, id=plan_id)
+            travel_plan = get_object_or_404(TravelPlan, primary_group_code=primary_group_code)
             form = DestinationForm(request.POST or None, request.FILES or None)
             if request.method == 'POST':
                 form.add_error(None, 'PMA administrators are not able to create destinations.')
             return render(request, 'users/destination_creator.html',
                           {'form': form, 'primary_group_code': travel_plan.primary_group_code})
-        travel_plan = get_object_or_404(TravelPlan, id=plan_id, users=request.user)
+        travel_plan = get_object_or_404(TravelPlan, primary_group_code=primary_group_code, users=request.user)
         if request.method == 'POST':
             form = DestinationForm(request.POST, request.FILES)
             if form.is_valid():
@@ -119,6 +119,20 @@ def destination_creation(request, plan_id):
     else:
         return render(request, 'users/destination_creator.html')
 
+class DestinationUpdateView(generic.UpdateView):
+    model = Destination
+    form_class = DestinationForm
+    template_name = 'users/destination_editor.html'
+    def get_object(self, queryset=None):
+        id = self.kwargs.get("id")
+        return get_object_or_404(Destination, id=id)
+    def get_success_url(self):
+        primary_group_code = self.object.travel_plan.primary_group_code
+        return reverse_lazy('detail', kwargs={'primary_group_code': primary_group_code})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['primary_group_code'] = self.kwargs.get("primary_group_code")
+        return context
 
 def delete_travel_plan(request):
     id = request.GET.get('id')
