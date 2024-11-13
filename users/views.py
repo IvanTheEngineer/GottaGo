@@ -16,6 +16,7 @@ from .forms import UserLoginForm
 from .decorators import user_not_authenticated
 from django.contrib.auth.decorators import login_required
 from .forms import PlanForm, JoinGroupForm, DestinationForm
+from django.urls import reverse_lazy, reverse
 from django.views import generic
 from .models import TravelPlan, Destination, Invite
 from django.http import FileResponse
@@ -76,6 +77,16 @@ def project_creation(request):
     else:
         return render(request, 'users/project_creator.html')
 
+class TravelPlanUpdateView(generic.UpdateView):
+    model = TravelPlan
+    form_class = PlanForm
+    template_name = 'users/project_editor.html'
+    def get_object(self, queryset=None):
+        group_code = self.kwargs.get("primary_group_code")
+        return get_object_or_404(TravelPlan, primary_group_code=group_code)
+    def get_success_url(self):
+        primary_group_code = self.object.primary_group_code
+        return reverse_lazy('detail', kwargs={'primary_group_code': primary_group_code})
 
 def destination_creation(request, plan_id):
     if request.user.is_authenticated:
@@ -132,7 +143,6 @@ def explore_plans_view(request):
     explore_travel_plans = TravelPlan.objects.all()
     context = {'explore_travel_plans': explore_travel_plans}
     return render(request, 'users/explore_plans.html', context)
-
 
 def user_plans_view(request):
     if request.user.is_authenticated:
@@ -250,5 +260,5 @@ class DetailView(generic.DetailView):
         return context
 
     def get_object(self):
-        group_code = self.kwargs.get("pk")
+        group_code = self.kwargs.get("primary_group_code")
         return get_object_or_404(TravelPlan, primary_group_code=group_code)

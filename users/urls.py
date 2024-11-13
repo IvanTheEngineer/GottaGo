@@ -19,10 +19,11 @@ urlpatterns = [
     path('download/', views.download_file, name='download_file'),
     path('deleteplan/', views.delete_travel_plan, name='delete_travel_plan'),
     path('leaveplan/', views.leave_plan, name='leave_travel_plan'),
-    path("plans/<str:pk>/", views.DetailView.as_view(), name="detail"),
+    path("plans/<str:primary_group_code>/", views.DetailView.as_view(), name="detail"),
     path("joinrequests/", views.joinrequests, name='joinrequests'),
     path('accept_invite/', views.accept_invite, name='accept_invite'),
     path('decline_invite/', views.decline_invite, name='decline_invite'),
+    path("plans/<str:primary_group_code>/edit", views.TravelPlanUpdateView.as_view(), name="edit"),
 ]
 
 # Look into regular expressions, adding a component to that to include the travel plan id in that

@@ -38,6 +38,7 @@
             <p>No images uploaded.</p>
             {% endif %}
         </div>
+        <a style="margin-bottom: 10px;" href="{% url 'edit' travelplan.primary_group_code %}" class="btn btn-primary">Edit</a>
         {% if travelplan.destinations %}
         <div class = "list-group">
             {% for destination in page_obj %}
