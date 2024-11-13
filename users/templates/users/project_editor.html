@@ -96,7 +96,7 @@
         </div>
         
         <button type="submit" class="btn btn-success" style="width: 100%">Save Plan</button>
-        <a href="{% url 'plans' %}" style="width: 100%; margin-top: 10px;" class="btn btn-danger">Cancel</a>
+        <a href="{% url 'detail' primary_group_code %}" style="width: 100%; margin-top: 10px;" class="btn btn-danger">Cancel</a>
     </form>
     {% else %}
     <p class="text-center mt-5" style="font-size: 25px"><a href="{% url 'login' %}">Log in</a> to access project editing.</p>
