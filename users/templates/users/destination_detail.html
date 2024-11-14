@@ -45,24 +45,24 @@
                             {% else %}
                                 <p>No images uploaded for destination</p>
                             {% endif %}
-                            {% if destination.jpg_metadata.all.0 %}
-                            {% with metadata=destination.jpg_metadata.all.0 %}
-                            <div style="text-align: center">
-                                <p class="text-paragraph">
-                                    <strong>Title:</strong> {{ metadata.file_title }}
-                                </p>
-                                <p class="text-paragraph">
-                                    <strong>Description:</strong> {{ metadata.description }}
-                                </p>
-                                <p class="text-paragraph">
-                                    <strong>Keywords:</strong> {{ metadata.keywords }}
-                                </p>
-                                <p class="text-paragraph">
-                                    <strong>Uploaded:</strong> {{ metadata.upload_timestamp|date:"F j, Y" }}
-                                </p>
-                            </div>
-                            {% endwith %}
-                            {% endif %}
+{#                            {% if destination.jpg_metadata.all.0 %}#}
+{#                            {% with metadata=destination.jpg_metadata.all.0 %}#}
+{#                            <div style="text-align: center">#}
+{#                                <p class="text-paragraph">#}
+{#                                    <strong>Title:</strong> {{ metadata.file_title }}#}
+{#                                </p>#}
+{#                                <p class="text-paragraph">#}
+{#                                    <strong>Description:</strong> {{ metadata.description }}#}
+{#                                </p>#}
+{#                                <p class="text-paragraph">#}
+{#                                    <strong>Keywords:</strong> {{ metadata.keywords }}#}
+{#                                </p>#}
+{#                                <p class="text-paragraph">#}
+{#                                    <strong>Uploaded:</strong> {{ metadata.upload_timestamp|date:"F j, Y" }}#}
+{#                                </p>#}
+{#                            </div>#}
+{#                            {% endwith %}#}
+{#                            {% endif %}#}
                         </div>
                         <div>
                             <p style="font-size: 20px"><strong>Text Files:</strong></p>

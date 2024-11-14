@@ -27,6 +27,11 @@ body {
     text-align: left;
 }
 
+.destinations-form{
+    margin: 4rem auto;
+    width: 100%;
+}
+
 .text-paragraph {
     color: #9ea6af;
 }

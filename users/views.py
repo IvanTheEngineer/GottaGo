@@ -77,20 +77,25 @@ def project_creation(request):
     else:
         return render(request, 'users/project_creator.html')
 
+
 class TravelPlanUpdateView(generic.UpdateView):
     model = TravelPlan
     form_class = PlanForm
     template_name = 'users/project_editor.html'
+
     def get_object(self, queryset=None):
         group_code = self.kwargs.get("primary_group_code")
         return get_object_or_404(TravelPlan, primary_group_code=group_code)
+
     def get_success_url(self):
         primary_group_code = self.object.primary_group_code
         return reverse_lazy('detail', kwargs={'primary_group_code': primary_group_code})
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['primary_group_code'] = self.object.primary_group_code
         return context
+
 
 def destination_creation(request, primary_group_code):
     if request.user.is_authenticated:
@@ -119,20 +124,25 @@ def destination_creation(request, primary_group_code):
     else:
         return render(request, 'users/destination_creator.html')
 
+
 class DestinationUpdateView(generic.UpdateView):
     model = Destination
     form_class = DestinationForm
     template_name = 'users/destination_editor.html'
+
     def get_object(self, queryset=None):
         id = self.kwargs.get("id")
         return get_object_or_404(Destination, id=id)
+
     def get_success_url(self):
         primary_group_code = self.object.travel_plan.primary_group_code
         return reverse_lazy('detail', kwargs={'primary_group_code': primary_group_code})
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['primary_group_code'] = self.kwargs.get("primary_group_code")
         return context
+
 
 def delete_travel_plan(request):
     id = request.GET.get('id')
@@ -161,6 +171,7 @@ def explore_plans_view(request):
     explore_travel_plans = TravelPlan.objects.all()
     context = {'explore_travel_plans': explore_travel_plans}
     return render(request, 'users/explore_plans.html', context)
+
 
 def user_plans_view(request):
     if request.user.is_authenticated:
@@ -263,7 +274,38 @@ class DetailView(generic.DetailView):
         # Add debug output
         travel_plan = self.object
         destinations = Destination.objects.filter(travel_plan=travel_plan)
-        paginator = Paginator(destinations, 1)
+        paginator = Paginator(destinations, 2)
+        page_number = self.request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        context['page_obj'] = page_obj
+        if travel_plan.jpg_upload_file:
+            metadata = travel_plan.jpg_metadata.all()
+            print(f"Found {metadata.count()} metadata entries for travel plan {travel_plan.id}")
+            if metadata:
+                print(f"Metadata title: {metadata[0].file_title}")
+                print(f"Metadata description: {metadata[0].description}")
+
+        return context
+
+    def get_object(self):
+        group_code = self.kwargs.get("primary_group_code")
+        return get_object_or_404(TravelPlan, primary_group_code=group_code)
+
+
+class DestinationView(generic.DetailView):
+    model = TravelPlan
+    template_name = "users/destination_detail.html"
+    context_object_name = 'travelplan'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['destinations'] = Destination.objects.filter(travel_plan=self.object)
+
+        # Add debug output
+        travel_plan = self.object
+        destinations = Destination.objects.filter(travel_plan=travel_plan)
+        paginator = Paginator(destinations, 2)
         page_number = self.request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 
