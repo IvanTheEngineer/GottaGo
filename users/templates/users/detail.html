@@ -45,7 +45,7 @@
 {#            <div class = "list-group-item mb-3" style="background-color: paleturquoise; border-radius: 20px; width: 70%; box-shaodw: 0 0 3px; align-self: center; text-align: center">#}
 {#                <h4 class="mb-2">{{ destination.destination_name }}</h4>#}
 {#                <p style="font-size: 20px"><strong>Description:</strong> {{ destination.destination_description }} </p>#}
-                <a href="{% url 'destinations' travelplan.primary_group_code destination.destination_name %}">
+                <a href="{% url 'destinations' travelplan.primary_group_code destination.id %}">
                     <p style = "margin-right: 200px; text-align: left" class="text-left mt-2 fs-5 text-paragraph"> Destination Name: {{destination.destination_name}}</p>
                 </a>
 

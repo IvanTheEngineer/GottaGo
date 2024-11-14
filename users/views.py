@@ -294,30 +294,33 @@ class DetailView(generic.DetailView):
 
 
 class DestinationView(generic.DetailView):
-    model = TravelPlan
+    model = Destination
     template_name = "users/destination_detail.html"
-    context_object_name = 'travelplan'
+    context_object_name = 'destination'
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['destinations'] = Destination.objects.filter(travel_plan=self.object)
-
+        id = self.kwargs["id"]
+        context = {}
+        context['destination'] = Destination.objects.filter(travel_plan=self.object, id=id).first()
+        # print(destination.destination_name)
+        travelplan = context['destination'].travel_plan
         # Add debug output
-        travel_plan = self.object
-        destinations = Destination.objects.filter(travel_plan=travel_plan)
-        paginator = Paginator(destinations, 2)
-        page_number = self.request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
-
-        context['page_obj'] = page_obj
-        if travel_plan.jpg_upload_file:
-            metadata = travel_plan.jpg_metadata.all()
-            print(f"Found {metadata.count()} metadata entries for travel plan {travel_plan.id}")
-            if metadata:
-                print(f"Metadata title: {metadata[0].file_title}")
-                print(f"Metadata description: {metadata[0].description}")
-
+        # travel_plan = self.object
+        # destinations = Destination.objects.filter(travel_plan=travel_plan)
+        # paginator = Paginator(destinations, 2)
+        # page_number = self.request.GET.get('page')
+        # page_obj = paginator.get_page(page_number)
+        context['travelplan'] = travelplan
         return context
+        # context['page_obj'] = page_obj
+        # if travel_plan.jpg_upload_file:
+        #     metadata = travel_plan.jpg_metadata.all()
+        #     print(f"Found {metadata.count()} metadata entries for travel plan {travel_plan.id}")
+        #     if metadata:
+        #         print(f"Metadata title: {metadata[0].file_title}")
+        #         print(f"Metadata description: {metadata[0].description}")
+        #
+        # return context
 
     def get_object(self):
         group_code = self.kwargs.get("primary_group_code")
