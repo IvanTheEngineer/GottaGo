@@ -18,7 +18,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import PlanForm, JoinGroupForm, DestinationForm, CommentForm
 from django.urls import reverse_lazy, reverse
 from django.views import generic
-from .models import TravelPlan, Destination, Invite
+from .models import TravelPlan, Destination, Invite, Comment
 from django.http import FileResponse
 import requests
 import boto3
@@ -312,6 +312,13 @@ class DestinationView(generic.DetailView):
         # page_number = self.request.GET.get('page')
         # page_obj = paginator.get_page(page_number)
         context['travelplan'] = travelplan
+
+        comments = Comment.objects.filter(destination=context['destination'])
+        paginator = Paginator(comments, 3)
+        page_number = self.request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        context['page_obj'] = page_obj
         return context
         # context['page_obj'] = page_obj
         # if travel_plan.jpg_upload_file:
