@@ -15,7 +15,7 @@ from django.db.models.query_utils import Q
 from .forms import UserLoginForm
 from .decorators import user_not_authenticated
 from django.contrib.auth.decorators import login_required
-from .forms import PlanForm, JoinGroupForm, DestinationForm
+from .forms import PlanForm, JoinGroupForm, DestinationForm, CommentForm
 from django.urls import reverse_lazy, reverse
 from django.views import generic
 from .models import TravelPlan, Destination, Invite
@@ -302,6 +302,7 @@ class DestinationView(generic.DetailView):
         id = self.kwargs["id"]
         context = {}
         context['destination'] = Destination.objects.filter(travel_plan=self.object, id=id).first()
+        context['form'] = CommentForm()
         # print(destination.destination_name)
         travelplan = context['destination'].travel_plan
         # Add debug output
@@ -321,6 +322,19 @@ class DestinationView(generic.DetailView):
         #         print(f"Metadata description: {metadata[0].description}")
         #
         # return context
+
+    def post(self, request, *args, **kwargs):
+        destination_id = kwargs.get("id")
+        destination = Destination.objects.filter(travel_plan__primary_group_code=kwargs.get("primary_group_code"),
+                                                 id=destination_id).first()
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = request.user
+            comment.destination = destination
+            comment.save()
+            return redirect('destination_detail', primary_group_code=destination.travel_plan.primary_group_code,
+                            id=destination.id)
 
     def get_object(self):
         group_code = self.kwargs.get("primary_group_code")

@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .models import TravelPlan, Destination, FileMetadata
+from .models import TravelPlan, Destination, FileMetadata, Comment
 import uuid
 
 
@@ -18,6 +18,7 @@ class UserLoginForm(AuthenticationForm):
 
 class FileMetadataForm(forms.ModelForm):
     """Form for handling file metadata"""
+
     class Meta:
         model = FileMetadata
         fields = ['file_title', 'description', 'keywords']
@@ -184,16 +185,16 @@ class PlanForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
+
         # Set custom labels for metadata fields
         self.fields['jpg_file_title'].label = "Image Title"
         self.fields['jpg_description'].label = "Image Description"
         self.fields['jpg_keywords'].label = "Image Keywords (comma-separated)"
-        
+
         self.fields['pdf_file_title'].label = "PDF Title"
         self.fields['pdf_description'].label = "PDF Description"
         self.fields['pdf_keywords'].label = "PDF Keywords (comma-separated)"
-        
+
         self.fields['txt_file_title'].label = "Text File Title"
         self.fields['txt_description'].label = "Text File Description"
         self.fields['txt_keywords'].label = "Text File Keywords (comma-separated)"
@@ -210,7 +211,7 @@ class PlanForm(forms.ModelForm):
             travel_plan.user = user  # Set the user field
 
         travel_plan.save()
-        
+
         if user is not None:
             travel_plan.users.add(user)
 
@@ -224,7 +225,7 @@ class PlanForm(forms.ModelForm):
             )
             # Explicitly save the metadata
             metadata.save()
-        
+
         if travel_plan.txt_upload_file and self.cleaned_data.get('txt_file_title'):
             metadata = FileMetadata.objects.create(
                 content_object=travel_plan,
@@ -233,7 +234,7 @@ class PlanForm(forms.ModelForm):
                 keywords=self.cleaned_data['txt_keywords'] or ''
             )
             metadata.save()
-        
+
         if travel_plan.pdf_upload_file and self.cleaned_data.get('pdf_file_title'):
             metadata = FileMetadata.objects.create(
                 content_object=travel_plan,
@@ -249,20 +250,20 @@ class PlanForm(forms.ModelForm):
 class DestinationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
+
         # Set custom labels for metadata fields
         self.fields['jpg_file_title'].label = "Image Title"
         self.fields['jpg_description'].label = "Image Description"
         self.fields['jpg_keywords'].label = "Image Keywords (comma-separated)"
-        
+
         self.fields['pdf_file_title'].label = "PDF Title"
         self.fields['pdf_description'].label = "PDF Description"
         self.fields['pdf_keywords'].label = "PDF Keywords (comma-separated)"
-        
+
         self.fields['txt_file_title'].label = "Text File Title"
         self.fields['txt_description'].label = "Text File Description"
         self.fields['txt_keywords'].label = "Text File Keywords (comma-separated)"
-        
+
     # Add metadata fields for each file type
     jpg_file_title = forms.CharField(
         max_length=255,
@@ -409,7 +410,7 @@ class DestinationForm(forms.ModelForm):
                 keywords=self.cleaned_data['jpg_keywords'] or ''
             )
             metadata.save()
-        
+
         if destination.txt_upload_file and self.cleaned_data.get('txt_file_title'):
             metadata = FileMetadata.objects.create(
                 content_object=destination,
@@ -418,7 +419,7 @@ class DestinationForm(forms.ModelForm):
                 keywords=self.cleaned_data['txt_keywords'] or ''
             )
             metadata.save()
-        
+
         if destination.pdf_upload_file and self.cleaned_data.get('pdf_file_title'):
             metadata = FileMetadata.objects.create(
                 content_object=destination,
@@ -433,3 +434,15 @@ class DestinationForm(forms.ModelForm):
 
 class JoinGroupForm(forms.Form):
     group_code = forms.CharField(max_length=64, label='Group Code')
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['commentText']
+        widgets = {
+            'commentText': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Add a comment!'
+            })
+        }

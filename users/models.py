@@ -9,15 +9,16 @@ from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelatio
 from django.conf import settings
 import boto3
 
+
 def delete_s3_file(file_path):
     """Helper function to delete a file from S3"""
     if not file_path:
         return
-    
+
     try:
         # Get the relative path from the FileField
         key = str(file_path)
-        
+
         # Initialize S3 client
         s3_client = boto3.client(
             's3',
@@ -25,7 +26,7 @@ def delete_s3_file(file_path):
             aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
             region_name=settings.AWS_S3_REGION_NAME
         )
-        
+
         # Delete the file
         s3_client.delete_object(
             Bucket=settings.AWS_STORAGE_BUCKET_NAME,
@@ -34,6 +35,7 @@ def delete_s3_file(file_path):
         print(f"Successfully deleted file: {key} from bucket: {settings.AWS_STORAGE_BUCKET_NAME}")
     except Exception as e:
         print(f"Error deleting file from S3: {str(e)}")
+
 
 class FileMetadata(models.Model):
     """
@@ -46,12 +48,12 @@ class FileMetadata(models.Model):
     upload_timestamp = models.DateTimeField(default=timezone.now)
     description = models.TextField()
     keywords = models.CharField(max_length=500, help_text="Comma-separated keywords")
-    
+
     # Generic foreign key to associate with any file field
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
-    
+
     def __str__(self):
         return self.file_title
 
@@ -88,7 +90,7 @@ class TravelPlan(models.Model):
             delete_s3_file(self.txt_upload_file.name)
         if self.pdf_upload_file:
             delete_s3_file(self.pdf_upload_file.name)
-            
+
         # Delete the model instance
         super().delete(*args, **kwargs)
 
@@ -123,17 +125,25 @@ class Destination(models.Model):
             delete_s3_file(self.txt_upload_file.name)
         if self.pdf_upload_file:
             delete_s3_file(self.pdf_upload_file.name)
-            
+
         # Delete the model instance
         super().delete(*args, **kwargs)
 
+
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    destination = models.ForeignKey(Destination, on_delete=models.CASCADE, related_name='comments')
+    commentText = models.TextField()
+    upload_timestamp = models.DateTimeField(default=timezone.now)
+
+
 class Invite(models.Model):
-   travel_plan = models.ForeignKey(TravelPlan, on_delete=models.CASCADE, related_name='invites')
-   requested_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_invites')
-   requested_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_invites')
-  
-   class Meta:
-       unique_together = ('travel_plan', 'requested_by', 'requested_to')
-       indexes = [
-           models.Index(fields=['travel_plan', 'requested_by', 'requested_to']),
-       ]
+    travel_plan = models.ForeignKey(TravelPlan, on_delete=models.CASCADE, related_name='invites')
+    requested_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_invites')
+    requested_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_invites')
+
+    class Meta:
+        unique_together = ('travel_plan', 'requested_by', 'requested_to')
+        indexes = [
+            models.Index(fields=['travel_plan', 'requested_by', 'requested_to']),
+        ]

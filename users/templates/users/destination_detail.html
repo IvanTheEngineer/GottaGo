@@ -99,7 +99,31 @@
                                 <p>No PDF file uploaded.</p>
                                 {% endif %}
                             </div>
-                    </div>
+                        </div>
+                        <div>
+                            <h4>Comments: </h4>
+                                {% if destination.comments %}
+                                    {% for comment in destination.comments.all %}
+                                        <div>
+                                            <strong>{{ comment.user.email }}</strong>: {{ comment.commentText }} | {{ comment.upload_timestamp|date:"F j, Y"  }}
+                                        </div>
+
+                                    {% endfor %}
+                                {% else %}
+                                    <p>No comments posted</p>
+                                {% endif %}
+                                {% if user.is_authenticated %}
+                                    <form method="post" class="mt-4">
+                                        {% csrf_token %}
+                                        {{ form.as_p }}
+                                        <button type = "submit" class="btn btn-primary">
+                                            Submit Comment
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <p> <a href="{% url 'login' %}"> Login </a> to comment</p>
+                                {% endif %}
+                        </div>
                 {% endif %}
 
 
