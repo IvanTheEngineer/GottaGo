@@ -3,6 +3,8 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import TravelPlan, Destination, FileMetadata, Comment
 import uuid
 
+class DateInput(forms.DateInput):
+    input_type = 'date'
 
 class UserLoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
@@ -110,6 +112,8 @@ class PlanForm(forms.ModelForm):
             'placeholder': 'Enter keywords separated by commas'
         })
     )
+    start_date = forms.DateField(widget=DateInput(attrs={'id': 'start_date'}))
+    end_date = forms.DateField(widget=DateInput(attrs={'id': 'end_date'}))
 
     class Meta:
         model = TravelPlan
@@ -129,6 +133,8 @@ class PlanForm(forms.ModelForm):
             'pdf_file_title',
             'pdf_description',
             'pdf_keywords',
+            'start_date',
+            'end_date',
         ]
         labels = {
             'plan_name': 'Plan Name',
@@ -146,6 +152,8 @@ class PlanForm(forms.ModelForm):
             'pdf_file_title': 'PDF Title',
             'pdf_description': 'PDF Description',
             'pdf_keywords': 'PDF Keywords (comma-separated)',
+            'start_date': 'Enter Start Date',
+            'end_date': 'Enter End Date',
         }
         widgets = {
             'plan_name': forms.TextInput(attrs={
@@ -198,6 +206,16 @@ class PlanForm(forms.ModelForm):
         self.fields['txt_file_title'].label = "Text File Title"
         self.fields['txt_description'].label = "Text File Description"
         self.fields['txt_keywords'].label = "Text File Keywords (comma-separated)"
+
+    def clean(self):
+        cleaned_data = super().clean()
+        start_date = cleaned_data.get("start_date")
+        end_date = cleaned_data.get("end_date")
+
+        if start_date and end_date and end_date < start_date:
+            self.add_error('end_date', "End date must be greater than or equal to the start date.")
+
+        return cleaned_data
 
     def save(self, commit=True, user=None):
         travel_plan = super().save(commit=False)

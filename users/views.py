@@ -124,7 +124,7 @@ def destination_creation(request, primary_group_code):
     else:
         return render(request, 'users/destination_creator.html')
 
-
+# <a style="margin-bottom: 10px; margin-top: 10px;" href="{% url 'edit_destination' primary_group_code=destination.travel_plan.primary_group_code id=destination.id %}" class="btn btn-primary">Edit</a>
 class DestinationUpdateView(generic.UpdateView):
     model = Destination
     form_class = DestinationForm

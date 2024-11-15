@@ -81,6 +81,8 @@ class TravelPlan(models.Model):
     jpg_metadata = GenericRelation(FileMetadata, related_query_name='travel_plan_jpg')
     txt_metadata = GenericRelation(FileMetadata, related_query_name='travel_plan_txt')
     pdf_metadata = GenericRelation(FileMetadata, related_query_name='travel_plan_pdf')
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
 
     def delete(self, *args, **kwargs):
         # Delete files from S3 before deleting the model instance
