@@ -136,7 +136,7 @@ class DestinationUpdateView(generic.UpdateView):
 
     def get_success_url(self):
         primary_group_code = self.object.travel_plan.primary_group_code
-        return reverse_lazy('detail', kwargs={'primary_group_code': primary_group_code})
+        return reverse_lazy('destination_detail', kwargs={'primary_group_code': primary_group_code, 'id': self.object.id})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

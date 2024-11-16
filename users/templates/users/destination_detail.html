@@ -6,7 +6,10 @@
 <div style="padding-top: 20px;"></div>
 <div class="mb-3 card mx-auto" style="width: 80%; text-align: center">
     <div class="card-body">
-        <h3 class="mb-2">Destination page test | {{ travelplan.plan_name }} </h3>
+        <div style="text-align: left">
+            <a style="text-align: left;" class="btn btn-primary" href="{% url 'detail' travelplan.primary_group_code %}"> Back</a> 
+        </div>
+    <!--<h3 class="mb-2">Destination page test | {{ travelplan.plan_name }} </h3>
         <p style="font-size: 20px"><strong>Group Code:</strong> {{ travelplan.primary_group_code }} </p>
         <p style="font-size: 20px"><strong>Group Size:</strong> {{ travelplan.group_size }} </p>
         <p style="font-size: 20px"><strong>Description:</strong> {{ travelplan.trip_description }} </p>
@@ -19,12 +22,12 @@
             {% else %}
             <p>No images uploaded.</p>
             {% endif %}
-        </div>
+        </div> -->
         {% if destination %}
 
                 {% if destination.travel_plan.id == travelplan.id %}
 
-                    <h4 class="mb-2">{{ destination.destination_name }}</h4>
+                    <h1 class="mb-2">{{ destination.destination_name }}</h1>
                     <p style="font-size: 20px"><strong>Description:</strong> {{ destination.destination_description }} </p>
 
 
@@ -100,14 +103,15 @@
                                 {% endif %}
                             </div>
                         </div>
+                        <a style="margin-bottom: 10px; margin-top: 10px;" href="{% url 'edit_destination' primary_group_code=destination.travel_plan.primary_group_code id=destination.id %}" class="btn btn-primary">Edit</a>
                         <div>
                             <h4>Comments: </h4>
                                 {% if destination.comments %}
+
                                     {% for comment in page_obj %}
-                                        <div>
+                                        <div style="text-align: left; margin-left: 5%; margin-right: 5%">
                                             <strong>{{ comment.user.email }}</strong>: {{ comment.commentText }} | {{ comment.upload_timestamp|date:"F j, Y"  }}
                                         </div>
-
                                     {% endfor %}
                                     <div class="pagination" style="justify-content: center">
                                         <span class="step-links">
