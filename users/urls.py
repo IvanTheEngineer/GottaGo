@@ -18,6 +18,7 @@ urlpatterns = [
     path('join_group/', views.join_group, name='join_group'),
     path('download/', views.download_file, name='download_file'),
     path('deleteplan/', views.delete_travel_plan, name='delete_travel_plan'),
+    path('deletedestination/', views.delete_destination, name='delete_destination'),
     path('leaveplan/', views.leave_plan, name='leave_travel_plan'),
     path("plans/<str:primary_group_code>/", views.DetailView.as_view(), name="detail"),
     path("plans/<str:primary_group_code>/destination/<str:id>/", views.DestinationView.as_view(), name="destinations"),

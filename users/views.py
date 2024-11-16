@@ -145,6 +145,7 @@ class DestinationUpdateView(generic.UpdateView):
 
 
 def delete_travel_plan(request):
+    print("WTF")
     id = request.GET.get('id')
     travel_plan = get_object_or_404(TravelPlan, id=id)
     if request.user != travel_plan.user and not is_pma_admin(request.user):
@@ -155,6 +156,15 @@ def delete_travel_plan(request):
     if is_pma_admin(request.user):
         return redirect('all_plans')
     return redirect('plans')
+
+def delete_destination(request):
+    id = request.GET.get('id')
+    destination = get_object_or_404(Destination, id=id)
+    destination.delete()
+    messages.success(request, 'Successfully deleted the destination.')
+    if is_pma_admin(request.user):
+        return redirect('all_plans')
+    return redirect('detail', destination.travel_plan.primary_group_code)
 
 
 def all_plans_view(request):

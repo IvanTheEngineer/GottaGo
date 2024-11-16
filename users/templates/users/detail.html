@@ -49,20 +49,18 @@
 {#            <div class = "list-group-item mb-3" style="background-color: paleturquoise; border-radius: 20px; width: 70%; box-shaodw: 0 0 3px; align-self: center; text-align: center">#}
 {#                <h4 class="mb-2">{{ destination.destination_name }}</h4>#}
 {#                <p style="font-size: 20px"><strong>Description:</strong> {{ destination.destination_description }} </p>#}
+                
                 <a href="{% url 'destinations' travelplan.primary_group_code destination.id %}">
-                    <p style = "margin-right: 200px; text-align: left" class="text-left mt-2 fs-5 text-paragraph"> Destination Name: {{destination.destination_name}}</p>
+                    <p style = "text-align: left" class="text-left mt-2 fs-5 text-paragraph"> Destination Name: {{destination.destination_name}}</p>
                 </a>
+            
+
+                <div style = "display: flex; align-items: start; justify-content: left; padding-bottom: 20px;">
 
 
 
-
-
-                <div style = "display: flex; align-items: start; justify-content: start; padding-bottom: 20px;">
-
-
-
-                    <div style="display: flex; gap: 20px; align-items: start; justify-content: center">
-                        <div>
+                    <div style="display: flex; gap: 10px; align-items: start; justify-content: center">
+                        
 
 {#                            <p style="font-size: 20px"><strong>Images:</strong></p>#}
                             {% if destination.jpg_upload_file %}
@@ -71,6 +69,7 @@
                             {% else %}
                                 <p>No images uploaded for destination</p>
                             {% endif %}
+
 {#                            {% if destination.jpg_metadata.all.0 %}#}
 {#                            {% with metadata=destination.jpg_metadata.all.0 %}#}
 {#                            <div style="text-align: center">#}
@@ -89,7 +88,7 @@
 {#                            </div>#}
 {#                            {% endwith %}#}
 {#                            {% endif %}#}
-                        </div>
+
 {#                        <div>#}
 {#                            <p style="font-size: 20px"><strong>Text Files:</strong></p>#}
 {#                            {% if destination.txt_upload_file %}#}
@@ -111,6 +110,8 @@
 {#                            {% endif %}#}
 {#                        </div>#}
                     </div>
+                    <a  style = "text-align: right" href="{% url 'delete_destination' %}?id={{destination.id}}" class="btn btn-danger">Delete Destination</a>
+
 {#                        <div>#}
 {#                            <p style="font-size: 20px"><strong>PDF Files:</strong></p>#}
 {#                            {% if destination.pdf_upload_file %}#}
