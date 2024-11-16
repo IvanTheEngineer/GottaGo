@@ -1,17 +1,85 @@
 {% extends "users/base.html" %}
 {% load bootstrap5 %}
 {% bootstrap_css %}
+{% load custom_filters %}
+{% load static %}
+
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Got To Go - Home</title>
+    <title>GottaGo - Home</title>
+{#    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">#}
+{#    <link rel="stylesheet" href="{% static 'node_modules/bootstrap-icons/font/bootstrap-icons.svg' %}">#}
+{#    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.min.css">#}
+{#    <link rel="stylesheet" href="{% static 'node_modules/bootstrap-icons/font/bootstrap-icons.min.css' %}">#}
 </head>
 
 {% block content %}
-    <h1 class="display-4 fw-semibold pt-5">GottaGo</h1>
-    <p class="lead">The Best Travel Planner</p>
+    <div class="text-center pt-1">
+        <div class="d-flex justify-content-center align-items-center mb-3">
+            <h1 class="display-4 fw-semibold  pt-5 me-2">GottaGo</h1>
+            <img src="{% static 'images/gottago_logo.png' %}" alt="GottaGo Logo" class="img-fluid" style="max-width: 150px; height: auto">
+        </div>
+        <p class="lead fw-light fs-4 align-left"; style="margin-top: -1rem"> The Best Travel Planner</p>
+        <div class="container mt-5 mb-5">
+            <p class="fs-5">Welcome to GottaGo! Your best bet for all your travel planning needs.</p>
+            <p class="fs-5">Here, you can plan your travels with friends or family. You are able to create, join, and manage plans through our group system, and comment across your joined plans as needed. For each plan you are able to add subdestinations, optimizing your travel route as you see fit! </p>
+        </div>
+
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-md-4 mb-4 mt-5">
+{#                    <a href="{% url 'profile' %}" class="text-dark">#}
+                        <h5 class="fw-bold" >Profile</h5>
+{#                        <i class="bi bi-person-circle" style="font-size: 3rem; color: black;"></i>#}
+                        <p class="mt-2">View and edit your user profile.</p>
+                        <a href="{% url 'profile' %}" class="btn btn-primary">View Profile</a>
+{#                    </a>#}
+                </div>
+
+                <div class="col-md-4 mb-4 mt-5">
+{#                    <a href="{% url 'plans' %}" class="text-dark">#}
+                        <h5 class="fw-bold">Travel Plans</h5>
+{#                        <i class="bi bi bi-suitcase-fill" style="font-size: 3rem; color: blue;"></i>#}
+                        <p class="mt-2">View, create, and manage your travel plans.</p>
+                        <a href="{% url 'plans' %}" class="btn btn-success">View Plans</a>
+{#                    </a>#}
+                </div>
+
+                <div class="col-md-4 mb-4 mt-5">
+{#                    <a href="{% url 'project_creator' %}" class="text-dark">#}
+                        <h5 class="fw-bold">Create Travel Plan</h5>
+{#                        <i class="bi bi-folder-plus" style="font-size: 3rem; color: mediumspringgreen;"></i>#}
+                        <p class="mt-2">Create new travel plans and set destinations.</p>
+{#                    </a>#}
+                        <a href="{% url 'project_creator' %}" class="btn btn-success">Create Plan</a>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-4 mt-2">
+{#                    <a href="{% url 'joinrequests' %}" class="text-dark">#}
+                        <h5 class="fw-bold">Requests</h5>
+{#                        <i class="bi bi-envelope-open-fill" style="font-size: 3rem; color: purple;"></i>#}
+                        <p class="mt-2">Manage group join requests received.</p>
+{#                    </a>#}
+                        <a href="{% url 'joinrequests' %}" class="btn btn-secondary">View Requests</a>
+                </div>
+
+                <div class="col-md-6 mb-4 mt-2">
+{#                    <a href="{% url 'join_group' %}" class="text-decoration-none text-dark">#}
+                        <h5 class="fw-bold">Join Groups</h5>
+{#                        <i class="bi bi-people-fill" style="font-size: 3rem; color: lightcoral;"></i>#}
+                        <p class="mt-2">Join travel groups to collaborate with others.</p>
+{#                    </a>#}
+                        <a href="{% url 'join_group' %}" class="btn btn-secondary">Join Group</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
 
 </html>
