@@ -4,8 +4,11 @@
 {% load static %}
 {% block content %}
 {#<div style="padding-top: 20px;"></div>#}
-<div class="destinations-form rounded-2 shadow-sm p-4 py-5 bg-white">
+<div class="destinations-form rounded-2 shadow-sm px-4 pb-5 bg-white">
     <div class="card-body">
+        <div style="display: flex; gap: 10px; align-items: flex-end; justify-content: flex-end; width: 100%;">
+            <a style="margin-bottom: 10px; margin-top: 10px;" href="{% url 'edit' travelplan.primary_group_code %}" class="btn btn-primary">Edit</a>
+        </div>
         <h1 class="mb-2">{{ travelplan.plan_name }} </h1>
         <p style="font-size: 20px"><strong>Group Code:</strong> {{ travelplan.primary_group_code }} </p>
         <p style="font-size: 20px"><strong>Group Size:</strong> {{ travelplan.group_size }} </p>
@@ -42,7 +45,6 @@
             <p>No images uploaded.</p>
             {% endif %}
         </div>
-        <a style="margin-bottom: 10px; margin-top: 10px;" href="{% url 'edit' travelplan.primary_group_code %}" class="btn btn-primary">Edit</a>
         {% if travelplan.destinations %}
         <div class = "list-group">
             {% for destination in page_obj %}
@@ -110,8 +112,9 @@
 {#                            {% endif %}#}
 {#                        </div>#}
                     </div>
-                    <a  style = "text-align: right" href="{% url 'delete_destination' %}?id={{destination.id}}" class="btn btn-danger">Delete</a>
-
+                    <div style="display: flex; gap: 10px; align-items: flex-end; justify-content: flex-end; width: 100%;">
+                        <a  style = "text-align: right" href="{% url 'delete_destination' %}?id={{destination.id}}" class="btn btn-danger">Delete</a>
+                    </div>
 {#                        <div>#}
 {#                            <p style="font-size: 20px"><strong>PDF Files:</strong></p>#}
 {#                            {% if destination.pdf_upload_file %}#}
