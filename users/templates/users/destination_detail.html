@@ -194,7 +194,7 @@
                                 {% if destination.comments %}
 
                                     {% for comment in page_obj %}
-                                        <div style="text-align: left; margin-left: 5%; margin-right: 5%">
+                                        <div style="text-align: center; margin-left: 5%; margin-right: 5%">
                                             <strong>{{ comment.user.email }}</strong>: {{ comment.commentText }} | {{ comment.upload_timestamp|date:"F j, Y"  }}
                                         </div>
                                     {% endfor %}
