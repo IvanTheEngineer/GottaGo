@@ -78,9 +78,27 @@ class TravelPlan(models.Model):
     pdf_upload_file = models.FileField(upload_to='uploads/pdfs/', blank=True, null=True)
     primary_group_code = models.CharField(max_length=100)
 
-    jpg_metadata = GenericRelation(FileMetadata, related_query_name='travel_plan_jpg')
-    txt_metadata = GenericRelation(FileMetadata, related_query_name='travel_plan_txt')
-    pdf_metadata = GenericRelation(FileMetadata, related_query_name='travel_plan_pdf')
+    jpg_metadata = models.OneToOneField(
+        FileMetadata,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="jpg_travel_plan"
+    )
+    txt_metadata = models.OneToOneField(
+        FileMetadata,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="txt_travel_plan"
+    )
+    pdf_metadata = models.OneToOneField(
+        FileMetadata,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="pdf_travel_plan"
+    )
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
 
@@ -111,10 +129,27 @@ class Destination(models.Model):
     txt_upload_file = models.FileField(upload_to='uploads/destinations_txts/', blank=True, null=True)
     pdf_upload_file = models.FileField(upload_to='uploads/destination_pdfs/', blank=True, null=True)
 
-    # Add GenericRelation for metadata
-    jpg_metadata = GenericRelation(FileMetadata, related_query_name='destination_jpg')
-    txt_metadata = GenericRelation(FileMetadata, related_query_name='destination_txt')
-    pdf_metadata = GenericRelation(FileMetadata, related_query_name='destination_pdf')
+    jpg_metadata = models.OneToOneField(
+        FileMetadata,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="jpg_destination"
+    )
+    txt_metadata = models.OneToOneField(
+        FileMetadata,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="txt_destination"
+    )
+    pdf_metadata = models.OneToOneField(
+        FileMetadata,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="pdf_destination"
+    )
 
     # def __str__(self):
     #     return self.plan_name

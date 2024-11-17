@@ -93,7 +93,21 @@ class TravelPlanUpdateView(generic.UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['primary_group_code'] = self.object.primary_group_code
+        travel_plan = self.get_object()
+        context['form'].initial['txt_file_title'] = travel_plan.txt_metadata.file_title if travel_plan.txt_metadata else ''
+        context['form'].initial['txt_description'] = travel_plan.txt_metadata.description if travel_plan.txt_metadata else ''
+        context['form'].initial['txt_keywords'] = travel_plan.txt_metadata.keywords if travel_plan.txt_metadata else ''
+        context['form'].initial['pdf_file_title'] = travel_plan.pdf_metadata.file_title if travel_plan.pdf_metadata else ''
+        context['form'].initial['pdf_description'] = travel_plan.pdf_metadata.description if travel_plan.pdf_metadata else ''
+        context['form'].initial['pdf_keywords'] = travel_plan.pdf_metadata.keywords if travel_plan.pdf_metadata else ''
+        context['form'].initial['jpg_file_title'] = travel_plan.jpg_metadata.file_title if travel_plan.jpg_metadata else ''
+        context['form'].initial['jpg_description'] = travel_plan.jpg_metadata.description if travel_plan.jpg_metadata else ''
+        context['form'].initial['jpg_keywords'] = travel_plan.jpg_metadata.keywords if travel_plan.jpg_metadata else ''
+        context['has_txt_metadata'] = bool(travel_plan.txt_metadata)
+        context['has_pdf_metadata'] = bool(travel_plan.pdf_metadata)
+        context['has_jpg_metadata'] = bool(travel_plan.jpg_metadata)
+        
+        context['primary_group_code'] = self.kwargs.get("primary_group_code")
         return context
 
 
@@ -140,8 +154,40 @@ class DestinationUpdateView(generic.UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        
+        # Get the destination instance
+        destination = self.get_object()
+        
+        # Pre-populate metadata for the form
+        context['form'].initial['txt_file_title'] = destination.txt_metadata.file_title if destination.txt_metadata else ''
+        context['form'].initial['txt_description'] = destination.txt_metadata.description if destination.txt_metadata else ''
+        context['form'].initial['txt_keywords'] = destination.txt_metadata.keywords if destination.txt_metadata else ''
+        context['form'].initial['pdf_file_title'] = destination.pdf_metadata.file_title if destination.pdf_metadata else ''
+        context['form'].initial['pdf_description'] = destination.pdf_metadata.description if destination.pdf_metadata else ''
+        context['form'].initial['pdf_keywords'] = destination.pdf_metadata.keywords if destination.pdf_metadata else ''
+        context['form'].initial['jpg_file_title'] = destination.jpg_metadata.file_title if destination.jpg_metadata else ''
+        context['form'].initial['jpg_description'] = destination.jpg_metadata.description if destination.jpg_metadata else ''
+        context['form'].initial['jpg_keywords'] = destination.jpg_metadata.keywords if destination.jpg_metadata else ''
+        context['has_txt_metadata'] = bool(destination.txt_metadata)
+        context['has_pdf_metadata'] = bool(destination.pdf_metadata)
+        context['has_jpg_metadata'] = bool(destination.jpg_metadata)
+        
         context['primary_group_code'] = self.kwargs.get("primary_group_code")
         return context
+
+    def get_initial(self):
+        initial = super().get_initial()
+
+        # Retrieve the destination and its metadata
+        destination = self.get_object()
+
+        # Populate metadata fields if they exist
+        if destination.txt_metadata:
+            initial['txt_file_title'] = destination.txt_metadata.file_title
+            initial['txt_description'] = destination.txt_metadata.description
+            initial['txt_keywords'] = destination.txt_metadata.keywords
+
+        return initial
 
 
 def delete_travel_plan(request):
@@ -289,12 +335,6 @@ class DetailView(generic.DetailView):
         page_obj = paginator.get_page(page_number)
 
         context['page_obj'] = page_obj
-        if travel_plan.jpg_upload_file:
-            metadata = travel_plan.jpg_metadata.all()
-            print(f"Found {metadata.count()} metadata entries for travel plan {travel_plan.id}")
-            if metadata:
-                print(f"Metadata title: {metadata[0].file_title}")
-                print(f"Metadata description: {metadata[0].description}")
 
         return context
 
