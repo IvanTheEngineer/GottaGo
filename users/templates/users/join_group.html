@@ -8,9 +8,10 @@
     <title>Join Group</title>
 </head>
 
-<div class="group-form rounded-2 shadow-sm p-4 py-5 bg-white">
+<div class="join-group rounded-2 shadow-sm p-4 py-5 bg-white">
+    <h1 class="mb-4 fs-3 fw-bold text-center">Join Group</h1>
     {% if user.is_authenticated %}
-        <h1 class="mb-4 fs-3 fw-bold text-center">Join Group</h1>
+
         <form method="post" class="needs-validation" novalidate>
             {% csrf_token %}
             {% bootstrap_form form %}
@@ -30,7 +31,7 @@
         {% endif %}
 
     {% else %}
-        <p class="alert alert-warning">Log in to join groups</p>
+        <p class="text-center mt-5" style="font-size: 25px"><a href="{% url 'login' %}">Log in</a> to join groups.</p>
     {% endif %}
 </div>
 {% endblock content %}

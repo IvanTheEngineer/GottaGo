@@ -14,8 +14,14 @@ body {
     font-family: Arial, sans-serif;
 }
 
-.group-form, .project-creator-form, .profile-form, .destination-creator-form {
+.group-form, .project-creator-form, .profile-form, .destination-creator-form, .join-group {
     max-width: 36rem;
+    margin: 4rem auto;
+    width: 100%;
+    text-align: left;
+}
+
+.plans-form {
     margin: 4rem auto;
     width: 100%;
     text-align: left;
