@@ -17,8 +17,11 @@
                 </div>
             {% endfor %}
         </div>
+
         <div class="text-center">
+            {% if not user.is_authenticated %}
             <a href="{% url 'login' %}" class="btn btn-primary">Login for more details!</a>
+            {% endif %}
         </div>
         <p class="text-center mt-2 text-paragraph"> To join any specific plans, login and enter the desired group code. Then wait until the plan owner accepts your join request!</p>
     {% else %}

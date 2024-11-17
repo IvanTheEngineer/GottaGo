@@ -13,6 +13,8 @@
         <p class="mb-2"><span class="text-label">Email:</span> {{ user.email }}</p>
         <p class="mb-2"><span class="text-label">Name:</span> {{ user.first_name }} {{ user.last_name }}</p>
         <p class="mb-2"><span class="text-label">Role:</span> {{ user|display_role }}</p>
+    {% else %}
+        <p class="text-center mt-5" style="font-size: 25px"><a href="{% url 'login' %}">Log in</a> to see your profile.</p>
     {% endif %}
 </div>
 {% endblock content %}

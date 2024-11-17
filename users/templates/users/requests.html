@@ -5,6 +5,7 @@
 {% block content %}
 <div class="requests-form rounded-2 p-4 py-5 shadow-sm bg-white">
   <h1 class="text-center mb-3 fs-3 fw-bold">Received Requests</h1>
+{% if user.is_authenticated %}
   {% if invites %}
     <ul>
       {% for invite in invites %}
@@ -21,5 +22,8 @@
   <p class="text-center mt-2 fs-5 text-paragraph">No join requests received.</p>
   {% endif %}
   </div>
+{% else %}
+  <p class="text-center mt-5" style="font-size: 25px"><a href="{% url 'login' %}">Log in</a> to see requests.</p>
+{% endif %}
 {% endblock %}
 {% endblock %}

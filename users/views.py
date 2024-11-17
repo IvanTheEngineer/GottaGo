@@ -32,15 +32,12 @@ from django.core.paginator import Paginator
 from django.db.models import Sum
 
 
-@login_required
 def profile(request):
     return render(request, 'users/profile.html')
-
 
 def custom_login(request):
     print("HERE")
     return render(request, 'users/login.html')
-
 
 @login_required
 def custom_logout(request):
@@ -228,7 +225,6 @@ def all_plans_view(request):
     return render(request, 'users/all_plans.html', context)
 
 
-@user_not_authenticated
 def explore_plans_view(request):
     explore_travel_plans = TravelPlan.objects.all()
     context = {'explore_travel_plans': explore_travel_plans}
@@ -296,9 +292,12 @@ def join_group(request):
 
 
 def joinrequests(request):
-    invites = Invite.objects.filter(requested_to=request.user)
-    return render(request, 'users/requests.html', {'invites': invites})
-
+    print(request.user)
+    if request.user.is_authenticated:
+        invites = Invite.objects.filter(requested_to=request.user)
+        return render(request, 'users/requests.html', {'invites': invites})
+    else:
+        return render(request, 'users/requests.html')
 
 def accept_invite(request):
     id = request.GET.get('id')
