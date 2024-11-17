@@ -5,11 +5,17 @@
 {% block content %}
 {#<div style="padding-top: 20px;"></div>#}
 <div class="destinations-form rounded-2 shadow-sm px-4 pb-5 bg-white">
-    <div class="card-body">
-        <div style="display: flex; gap: 10px; align-items: flex-end; justify-content: flex-end; width: 100%;">
-            <a style="margin-bottom: 10px; margin-top: 10px;" href="{% url 'edit' travelplan.primary_group_code %}" class="btn btn-primary">Edit</a>
-        </div>
 
+
+    <div class="card-body">
+        <div style = "display: flex; align-items: start; justify-content: left; padding-bottom: 20px;">
+            <div style="display: flex; gap: 10px; align-items: start; justify-content: center">
+                <a style="text-align: left;" class="btn btn-primary" href="{% url 'plans'  %}"> Back</a>
+            </div>
+            <div style="display: flex; gap: 10px; align-items: start; justify-content: flex-end; width: 100%;">
+                <a style="" href="{% url 'edit' travelplan.primary_group_code %}" class="btn btn-primary">Edit</a>
+            </div>
+        </div>
         <div class="travel-plan-banner mb-3" style="position: relative">
             {% if travelplan.jpg_upload_file %}
                 <img src="{{ travelplan.jpg_upload_file.url }}" class="img-fluid w-100" alt="{{ travelplan.plan_name }} Banner image" style="height: 200px; object-fit: cover;"/>
@@ -63,7 +69,7 @@
         <div class="text-left">
             <p style="font-size: 20px"><strong>Total Trip Budget:</strong></p>
             {% if total_plan_expenses %}
-                <p class="fs-4">${{ total_plan_expenses }}</p>
+                <p class="fs-4">${{ total_plan_expenses|floatformat:2 }}</p>
             {% else %}
                 <p>No expenses recorded for this trip</p>
             {% endif %}
