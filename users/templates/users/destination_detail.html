@@ -175,7 +175,7 @@
                         <div class="my-3">
                             <h4><strong>Expenses Summary:</strong></h4>
                             {% if total_expenses %}
-                                <p class="fs-5">Total Expenses: ${{ total_expenses }}</p>
+                                <p class="fs-5">Total Expenses: ${{ total_expenses|floatformat:2 }}</p>
                                 <a href="{% url 'destination_budget' primary_group_code=destination.travel_plan.primary_group_code id=destination.id %}" 
                                    class="btn btn-primary">
                                     View Budget Details
