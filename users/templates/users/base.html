@@ -2,6 +2,7 @@
 {% bootstrap_css %}
 {% load custom_filters %}
 {% load static %}
+{% load bootstrap_icons %}
 <link rel="stylesheet" href="{% static 'users/style.css' %}">
 
 <body>
@@ -9,6 +10,7 @@
         <div class="container-fluid">
             <a class="navbar-brand" href="{% url 'home' %}">
                 GottaGo
+                {% bs_icon 'alarm' %}
                 <img src="{% static 'images/gottago_logo.png' %}" alt="GottaGo Logo" class="img-fluid" style="max-width: 50px; height: auto">
             </a>
 

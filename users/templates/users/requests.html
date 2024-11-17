@@ -3,8 +3,8 @@
 {% load custom_filters %}
 {% load static %}
 {% block content %}
-<div style="margin-top: 4rem;" class="rounded-2 p-0 py-2 bg-white">
-  <h2>Received Requests</h2>
+<div class="requests-form rounded-2 p-4 py-5 shadow-sm bg-white">
+  <h1 class="text-center mb-3 fs-3 fw-bold">Received Requests</h1>
   {% if invites %}
     <ul>
       {% for invite in invites %}
@@ -18,7 +18,7 @@
       {% endfor %}
     </ul>
   {% else %}
-    <p>No join requests received.</p>
+  <p class="text-center mt-2 fs-5 text-paragraph">No join requests received.</p>
   {% endif %}
   </div>
 {% endblock %}

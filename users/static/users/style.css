@@ -14,28 +14,18 @@ body {
     font-family: Arial, sans-serif;
 }
 
-.group-form, .project-creator-form, .profile-form, .destination-creator-form, .join-group {
-    max-width: 36rem;
+.group-form, .project-creator-form, .profile-form, .destination-creator-form, .join-group, .plans-form, .requests-form {
+    max-width: 40rem;
     margin: 4rem auto;
     width: 100%;
     text-align: left;
 }
 
-.plans-form {
+.destinations-form {
+    max-width: 72rem;
     margin: 4rem auto;
     width: 100%;
-    text-align: left;
-}
-
-.plans-form {
-    margin: 4rem auto;
-    width: 100%;
-    text-align: left;
-}
-
-.destinations-form{
-    margin: 4rem auto;
-    width: 100%;
+    text-align: center;
 }
 
 .text-paragraph {
