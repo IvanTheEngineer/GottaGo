@@ -12,12 +12,13 @@
 
         <div class="travel-plan-banner mb-3" style="position: relative">
             {% if travelplan.jpg_upload_file %}
-                <img src="{{ travelplan.jpg_upload_file.url }}" class="img-fluid w-100" alt="{{ travelplan.plan_name }} Banner image" style="height: 200px; object-fit: cover; border-style: solid; border-color: black; opacity: 0.5"/>
+                <img src="{{ travelplan.jpg_upload_file.url }}" class="img-fluid w-100" alt="{{ travelplan.plan_name }} Banner image" style="height: 200px; object-fit: cover;"/>
             {% else %}
                 <img src="{% static '/images/no_image.jpg' %}" class="img-fluid" alt="no image" style="object-fit: cover"/>
             {% endif %}
 
-            <div class="banner-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 10px; opacity: 100%; color: black; -webkit-text-stroke: 0.2px darkorchid">
+            <div class="gradient-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: black; opacity: 50%"></div>
+            <div class="banner-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 10px; opacity: 100%; color: white; -webkit-text-stroke: 0.0px darkorchid">
                 <h1 class="mb-2">{{ travelplan.plan_name }} </h1>
                 <p style="font-size: 20px"><strong>Group Code:</strong> {{ travelplan.primary_group_code }} </p>
                 <p style="font-size: 20px"><strong>Group Size:</strong> {{ travelplan.group_size }} </p>
@@ -27,6 +28,7 @@
                     <p style="font-size: 20px"><strong>Dates: </strong> None</p>
                 {% endif %}
             </div>
+
         </div>
         <p style="font-size: 20px"><strong>Description:</strong> {{ travelplan.trip_description }} </p>
 
