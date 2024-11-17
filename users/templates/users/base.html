@@ -7,7 +7,11 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'home' %}">GottaGo</a>
+            <a class="navbar-brand" href="{% url 'home' %}">
+                GottaGo
+                <img src="{% static 'images/gottago_logo.png' %}" alt="GottaGo Logo" class="img-fluid" style="max-width: 50px; height: auto">
+            </a>
+
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
@@ -19,6 +23,11 @@
                             <a class="nav-link" href="#">Welcome, Guest!</a>
                         {% endif %}
                     </li>
+                    {% if not user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'explore_plans' %}">Explore Plans</a>
+                        </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'project_creator' %}">Create a Travel Plan</a>
                     </li>
@@ -28,6 +37,11 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'join_group' %}">Join Group</a>
                     </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'joinrequests' %}">Requests {{user|num_invites}}</a>
+                        </li>
+                    {% endif %}
                     {% if user|has_group:"PMA" %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'all_plans' %}">View All Plans</a>

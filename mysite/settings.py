@@ -37,6 +37,9 @@ ALLOWED_HOSTS = [".localhost", "127.0.0.1", "[::1]", "0.0.0.0", "travel-planner-
 
 # Application definition
 
+BS_ICONS_BASE_URL = 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/'
+
+
 INSTALLED_APPS = [
     "whitenoise.runserver_nostatic",
     'django.contrib.admin',
@@ -53,6 +56,7 @@ INSTALLED_APPS = [
     'users',
     'bootstrap5',
     'storages',
+    'django_bootstrap_icons',
 ]
 
 SITE_ID = 1
