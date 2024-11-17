@@ -417,12 +417,15 @@ def destination_budget(request, primary_group_code, id):
     expenses = Expense.objects.filter(destination=destination).order_by('-expense_date')
     total_amount = expenses.aggregate(total=Sum('amount'))['total'] or 0
     
+    formatted_total_amount = f"{total_amount:.2f}"
+
+    
     context = {
         'destination': destination,
         'travelplan': travelplan,
         'expense_form': form,
         'expenses': expenses,
-        'total_amount': total_amount
+        'total_amount': formatted_total_amount
     }
     
     return render(request, 'users/destination_budget.html', context)
