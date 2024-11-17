@@ -57,6 +57,16 @@
             <p>No images uploaded.</p>
             {% endif %}
         </div>
+
+        <div class="text-left">
+            <p style="font-size: 20px"><strong>Total Trip Budget:</strong></p>
+            {% if total_plan_expenses %}
+                <p class="fs-4">${{ total_plan_expenses|floatformat:2 }}</p>
+            {% else %}
+                <p>No expenses recorded for this trip</p>
+            {% endif %}
+        </div>
+
         {% if travelplan.destinations %}
         <div class = "list-group">
             {% for destination in page_obj %}
@@ -67,11 +77,8 @@
                 <a href="{% url 'destinations' travelplan.primary_group_code destination.id %}">
                     <p style = "text-align: left" class="text-left mt-2 fs-5 text-paragraph"> Destination Name: {{destination.destination_name}}</p>
                 </a>
-            
 
                 <div style = "display: flex; align-items: start; justify-content: left; padding-bottom: 20px;">
-
-
 
                     <div style="display: flex; gap: 10px; align-items: start; justify-content: center">
                         

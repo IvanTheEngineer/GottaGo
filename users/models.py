@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 from django.contrib import admin
-from django.core.validators import MinLengthValidator, MaxLengthValidator
+from django.core.validators import MinLengthValidator, MaxLengthValidator, MinValueValidator
 import os
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
@@ -149,3 +149,29 @@ class Invite(models.Model):
         indexes = [
             models.Index(fields=['travel_plan', 'requested_by', 'requested_to']),
         ]
+
+
+class Expense(models.Model):
+    """Model for tracking expenses for a destination"""
+    destination = models.ForeignKey(Destination, on_delete=models.CASCADE, related_name='expenses')
+    expense_name = models.CharField(
+        max_length=100,
+        validators=[MinLengthValidator(1), MaxLengthValidator(100)]
+    )
+    amount = models.DecimalField(
+        max_digits=10, 
+        decimal_places=2,
+        validators=[MinValueValidator(0)]
+    )
+    expense_date = models.DateField(default=timezone.now)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-expense_date']
+        indexes = [
+            models.Index(fields=['destination', 'expense_date']),
+        ]
+
+    def __str__(self):
+        return f"{self.expense_name} - ${self.amount}"

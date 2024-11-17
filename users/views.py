@@ -12,18 +12,24 @@ from django.core.mail import EmailMessage
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.db.models.query_utils import Q
-from .forms import UserLoginForm
+from .forms import (
+    PlanForm, 
+    JoinGroupForm, 
+    DestinationForm, 
+    CommentForm, 
+    ExpenseForm
+)
 from .decorators import user_not_authenticated
 from django.contrib.auth.decorators import login_required
-from .forms import PlanForm, JoinGroupForm, DestinationForm, CommentForm
 from django.urls import reverse_lazy, reverse
 from django.views import generic
-from .models import TravelPlan, Destination, Invite, Comment
+from .models import TravelPlan, Destination, Invite, Comment, Expense
 from django.http import FileResponse
 import requests
 import boto3
 
 from django.core.paginator import Paginator
+from django.db.models import Sum
 
 
 @login_required
@@ -281,6 +287,12 @@ class DetailView(generic.DetailView):
         context = super().get_context_data(**kwargs)
         context['destinations'] = Destination.objects.filter(travel_plan=self.object)
 
+        # Calculate total expenses for all destinations in this travel plan
+        total_plan_expenses = Expense.objects.filter(
+            destination__travel_plan=self.object
+        ).aggregate(total=Sum('amount'))['total'] or 0
+        context['total_plan_expenses'] = total_plan_expenses
+
         # Add debug output
         travel_plan = self.object
         destinations = Destination.objects.filter(travel_plan=travel_plan)
@@ -313,15 +325,12 @@ class DestinationView(generic.DetailView):
         context = {}
         context['destination'] = Destination.objects.filter(travel_plan=self.object, id=id).first()
         context['form'] = CommentForm()
-        # print(destination.destination_name)
         travelplan = context['destination'].travel_plan
-        # Add debug output
-        # travel_plan = self.object
-        # destinations = Destination.objects.filter(travel_plan=travel_plan)
-        # paginator = Paginator(destinations, 2)
-        # page_number = self.request.GET.get('page')
-        # page_obj = paginator.get_page(page_number)
         context['travelplan'] = travelplan
+
+        # Add total expenses calculation
+        total_expenses = Expense.objects.filter(destination=context['destination']).aggregate(total=Sum('amount'))['total']
+        context['total_expenses'] = total_expenses
 
         comments = Comment.objects.filter(destination=context['destination'])
         paginator = Paginator(comments, 3)
@@ -330,15 +339,6 @@ class DestinationView(generic.DetailView):
 
         context['page_obj'] = page_obj
         return context
-        # context['page_obj'] = page_obj
-        # if travel_plan.jpg_upload_file:
-        #     metadata = travel_plan.jpg_metadata.all()
-        #     print(f"Found {metadata.count()} metadata entries for travel plan {travel_plan.id}")
-        #     if metadata:
-        #         print(f"Metadata title: {metadata[0].file_title}")
-        #         print(f"Metadata description: {metadata[0].description}")
-        #
-        # return context
 
     def post(self, request, *args, **kwargs):
         destination_id = kwargs.get("id")
@@ -356,3 +356,50 @@ class DestinationView(generic.DetailView):
     def get_object(self):
         group_code = self.kwargs.get("primary_group_code")
         return get_object_or_404(TravelPlan, primary_group_code=group_code)
+
+
+def destination_budget(request, primary_group_code, id):
+    destination = get_object_or_404(Destination, id=id, travel_plan__primary_group_code=primary_group_code)
+    travelplan = destination.travel_plan
+    
+    if request.method == 'POST' and request.user.is_authenticated:
+        form = ExpenseForm(request.POST)
+        if form.is_valid():
+            expense = form.save(commit=False)
+            expense.destination = destination
+            expense.created_by = request.user
+            expense.save()
+            messages.success(request, 'Expense added successfully!')
+            return redirect('destination_budget', primary_group_code=primary_group_code, id=id)
+    else:
+        form = ExpenseForm()
+    
+    expenses = Expense.objects.filter(destination=destination).order_by('-expense_date')
+    total_amount = expenses.aggregate(total=Sum('amount'))['total'] or 0
+    
+    context = {
+        'destination': destination,
+        'travelplan': travelplan,
+        'expense_form': form,
+        'expenses': expenses,
+        'total_amount': total_amount
+    }
+    
+    return render(request, 'users/destination_budget.html', context)
+
+@login_required
+def delete_expense(request, primary_group_code, id, expense_id):
+    expense = get_object_or_404(Expense, id=expense_id)
+    
+    # Check if the user is authorized to delete this expense
+    if request.user != expense.created_by:
+        messages.error(request, 'You are not authorized to delete this expense.')
+        return redirect('destination_budget', 
+                       primary_group_code=primary_group_code,
+                       id=id)
+    
+    expense.delete()
+    messages.success(request, 'Expense deleted successfully!')
+    return redirect('destination_budget', 
+                   primary_group_code=primary_group_code,
+                   id=id)

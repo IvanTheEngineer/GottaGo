@@ -1,7 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .models import TravelPlan, Destination, FileMetadata, Comment
+from .models import TravelPlan, Destination, FileMetadata, Comment, Expense
 import uuid
+from django.core.validators import MinValueValidator
 
 class DateInput(forms.DateInput):
     input_type = 'date'
@@ -464,3 +465,36 @@ class CommentForm(forms.ModelForm):
                 'placeholder': 'Add a comment!'
             })
         }
+
+
+class ExpenseForm(forms.ModelForm):
+    """Form for creating and editing expenses"""
+    class Meta:
+        model = Expense
+        fields = ['expense_name', 'amount', 'expense_date']
+        widgets = {
+            'expense_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter expense name'
+            }),
+            'amount': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter amount',
+                'min': '0',
+                'step': '0.01'
+            }),
+            'expense_date': DateInput(attrs={
+                'class': 'form-control'
+            })
+        }
+        labels = {
+            'expense_name': 'Expense Name',
+            'amount': 'Amount ($)',
+            'expense_date': 'Date'
+        }
+
+    def clean_amount(self):
+        amount = self.cleaned_data['amount']
+        if amount < 0:
+            raise forms.ValidationError("Amount cannot be negative")
+        return amount

@@ -28,6 +28,8 @@ urlpatterns = [
     path("plans/<str:primary_group_code>/edit", views.TravelPlanUpdateView.as_view(), name="edit"),
     path("plans/<str:primary_group_code>/edit_destination/<int:id>", views.DestinationUpdateView.as_view(), name="edit_destination"),
     path("plans/<str:primary_group_code>/destination/<int:id>/", views.DestinationView.as_view(), name="destination_detail"),
+    path('plans/<str:primary_group_code>/destination/<int:id>/budget/', views.destination_budget, name='destination_budget'),
+    path('plans/<str:primary_group_code>/destination/<int:id>/expense/delete/<int:expense_id>/', views.delete_expense, name='delete_expense'),
 ]
 
 # Look into regular expressions, adding a component to that to include the travel plan id in that

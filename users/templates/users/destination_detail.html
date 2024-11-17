@@ -60,10 +60,8 @@
 
                     <div class="mt-3">
 
-
                         <div style="display: flex; gap: 20px; align-items: start; justify-content: center">
                             <div>
-
                                 
                                 {% if destination.jpg_upload_file %}
                                 <div style = "display: flex; gap: 10px; align-items: center; justify-content: center;">
@@ -170,6 +168,24 @@
                                 {% endif %}
                             </div>
                         </div>
+
+                        <div class="my-3">
+                            <h4><strong>Expenses Summary:</strong></h4>
+                            {% if total_expenses %}
+                                <p class="fs-5">Total Expenses: ${{ total_expenses }}</p>
+                                <a href="{% url 'destination_budget' primary_group_code=destination.travel_plan.primary_group_code id=destination.id %}" 
+                                   class="btn btn-primary">
+                                    View Budget Details
+                                </a>
+                            {% else %}
+                                <p>No expenses listed</p>
+                                <a href="{% url 'destination_budget' primary_group_code=destination.travel_plan.primary_group_code id=destination.id %}" 
+                                   class="btn btn-primary">
+                                    Add Expenses
+                                </a>
+                            {% endif %}
+                        </div>
+
                         <div>
                             <h4> <strong> Comments: </strong> </h4>
                                 {% if destination.comments %}
