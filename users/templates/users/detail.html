@@ -63,7 +63,7 @@
         <div class="text-left">
             <p style="font-size: 20px"><strong>Total Trip Budget:</strong></p>
             {% if total_plan_expenses %}
-                <p class="fs-4">${{ total_plan_expenses|floatformat:2 }}</p>
+                <p class="fs-4">${{ total_plan_expenses }}</p>
             {% else %}
                 <p>No expenses recorded for this trip</p>
             {% endif %}
