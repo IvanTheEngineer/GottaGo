@@ -45,7 +45,7 @@
             
             {{ form.jpg_upload_file }}
             
-            <div class="file-metadata-section mt-3" id="jpgMetadata" style="display: none;">
+            <div class="file-metadata-section mt-3" id="jpgMetadata" style="display: {% if has_jpg_metadata %}block{% else %}none{% endif %};">
                 <div class="mb-3">
                     {{ form.jpg_file_title.label_tag }}
                     {{ form.jpg_file_title }}
@@ -66,7 +66,7 @@
             <h4>PDF Upload</h4>
             {{ form.pdf_upload_file }}
             
-            <div class="file-metadata-section mt-3" id="pdfMetadata" style="display: none;">
+            <div class="file-metadata-section mt-3" id="pdfMetadata" style="display: {% if has_pdf_metadata %}block{% else %}none{% endif %};">
                 <div class="mb-3">
                     {{ form.pdf_file_title.label_tag }}
                     {{ form.pdf_file_title }}
@@ -87,7 +87,7 @@
             <h4>TXT Upload</h4>
             {{ form.txt_upload_file }}
             
-            <div class="file-metadata-section mt-3" id="txtMetadata" style="display: none;">
+            <div class="file-metadata-section mt-3" id="txtMetadata" style="display: {% if has_txt_metadata %}block{% else %}none{% endif %};">
                 <div class="mb-3">
                     {{ form.txt_file_title.label_tag }}
                     {{ form.txt_file_title }}

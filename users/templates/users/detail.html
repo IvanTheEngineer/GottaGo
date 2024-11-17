@@ -35,8 +35,8 @@
             {% if travelplan.jpg_upload_file %}
             <img src="{{ travelplan.jpg_upload_file.url }}" width="400" height="400" class="rounded"
                 alt="{{ travelplan.plan_name }} image" />
-            {% if travelplan.jpg_metadata.all.0 %}
-            {% with metadata=travelplan.jpg_metadata.all.0 %}
+            {% if travelplan.jpg_metadata %}
+            {% with metadata=travelplan.jpg_metadata %}
             <div style="text-align: center">
                 <p class="text-paragraph text-body">
                     <strong>Title:</strong> {{ metadata.file_title }}
