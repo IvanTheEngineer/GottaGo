@@ -9,7 +9,6 @@ urlpatterns = [
     path('3rdparty/login/cancelled/', views.cancel_login, name='home'),
     path('', views.home, name='home'),
     path('profile/', views.profile, name='profile'),
-    path('admin/', admin.site.urls),
     path('project_creator/', views.project_creation, name='project_creator'),
     path('destination_creator/<str:primary_group_code>', views.destination_creation, name='destination_creator'),
     path('all_plans/', views.all_plans_view, name='all_plans'),
