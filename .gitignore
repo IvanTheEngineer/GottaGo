@@ -98,12 +98,15 @@ celerybeat-schedule.*
 
 # Environments 
 .env 
-.venv 
+.venv
+.myenv
+myenv/ 
 env/ 
 venv/ 
 ENV/ 
 env.bak/ 
 venv.bak/ 
+myenv.bak/
 
 # mkdocs documentation 
 /site 
