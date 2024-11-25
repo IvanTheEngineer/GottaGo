@@ -31,7 +31,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-4e%b606a&s9#z97jc8vv@2n4z1f2jyb3__okmp-q1!1d-2!=6i'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [".localhost", "127.0.0.1", "[::1]", "0.0.0.0", "travel-planner-cs3240-b-25-7745206e8d01.herokuapp.com"]
 
