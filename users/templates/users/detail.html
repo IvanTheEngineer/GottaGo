@@ -20,7 +20,7 @@
             {% if travelplan.jpg_upload_file %}
                 <img src="{{ travelplan.jpg_upload_file.url }}" class="img-fluid w-100" alt="{{ travelplan.plan_name }} Banner image" style="height: 200px; object-fit: cover;"/>
             {% else %}
-                <img src="{% static '/images/no_image.jpg' %}" class="img-fluid" alt="no image" style="object-fit: cover"/>
+                <img src="{% static 'images/no_image.jpg' %}" class="img-fluid" alt="no image" style="object-fit: cover"/>
             {% endif %}
 
             <div class="gradient-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: black; opacity: 50%"></div>
