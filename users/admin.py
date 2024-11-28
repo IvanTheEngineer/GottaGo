@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import TravelPlan, FileMetadata, Invite
+from .models import TravelPlan, FileMetadata, Invite, Destination
 
 @admin.register(TravelPlan)
 class TravelPlanAdmin(admin.ModelAdmin):
@@ -13,3 +13,7 @@ class FileMetadataAdmin(admin.ModelAdmin):
 @admin.register(Invite)
 class InviteAdmin(admin.ModelAdmin):
    list_display = ('travel_plan', 'requested_by', 'requested_to')
+
+@admin.register(Destination)
+class DestinationAdmin(admin.ModelAdmin):
+    list_display = ('destination_description', 'jpg_upload_file', 'txt_upload_file', 'pdf_upload_file', 'location_name', 'location_address', 'latitude', 'longitude')

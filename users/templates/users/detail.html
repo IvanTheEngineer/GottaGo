@@ -4,9 +4,76 @@
 {% load static %}
 {% block content %}
 {#<div style="padding-top: 20px;"></div>#}
+<head>
+    <script>
+        async function init() {
+            await customElements.whenDefined('gmp-map');
+            const map = document.querySelector('gmp-map');
+            const markers = map.querySelectorAll('gmp-advanced-marker');
+            const bounds = new google.maps.LatLngBounds();
+            map.zoom = 4;
+
+            // fits map to markers
+            markers.forEach(marker => {
+                const position = marker.getAttribute('position');
+                const infoWindowContent = marker.getAttribute('data-info'); // Get the custom data-info attribute for the info window
+
+                if (position) {
+                    const [lat, lng] = position.split(',').map(coord => parseFloat(coord.trim()));
+                    if (!isNaN(lat) && !isNaN(lng)) {
+                        bounds.extend({ lat, lng });
+                        marker.position = { lat, lng };
+
+                        const infoWindow = new google.maps.InfoWindow({
+                            content: infoWindowContent || 'No additional info',
+                        });
+        
+                        // Attach click listener to the marker to open the info window
+                        marker.addEventListener('click', () => {
+                            infoWindow.open({
+                                anchor: marker,
+                                map: map.innerMap,
+                                shouldFocus: true,
+                            });
+                        });
+                    } else {
+                        console.error(`Invalid position: ${position}`);
+                    }
+                }
+            });
+
+            
+
+            if (markers.length === 1) {
+                const singleMarker = markers[0];
+                const [lat, lng] = singleMarker.getAttribute('position').split(',').map(coord => parseFloat(coord.trim()));
+                map.innerMap.setCenter({ lat, lng });
+                map.innerMap.setZoom(7); // Adjust zoom level as needed
+            } else if (!bounds.isEmpty()) {
+                // Fit map bounds to markers for multiple destinations
+                map.innerMap.fitBounds(bounds);
+            }
+
+            map.innerMap.setOptions({ mapTypeControl: false });
+        }
+        document.addEventListener('DOMContentLoaded', init);
+        
+    </script>
+    <script type="module" src="https://unpkg.com/@googlemaps/extended-component-library@0.6">
+    </script>
+    <style>
+        gmp-map {
+            display: block;
+            height: 400px;
+            width: 400px;
+            margin: auto;
+        }
+    </style>
+</head>
+
 <div class="destinations-form rounded-2 shadow-sm px-4 pb-5 bg-white">
-
-
+    
+      
     <div class="card-body">
         <div style = "display: flex; align-items: start; justify-content: left; padding-bottom: 20px;">
             <div style="display: flex; gap: 10px; align-items: start; justify-content: center">
@@ -65,6 +132,19 @@
             {% endif %}
         </div>
 
+        <div class="my-3">
+            <h4><strong>Destination Pins:</strong></h4>
+            <gmpx-api-loader key="{{ google_maps_api_key }}" solution-channel="GMP_GE_mapsandplacesautocomplete_v1">
+            </gmpx-api-loader>
+            <gmp-map center="40.749933,-73.98633" zoom="13" map-id="DEMO_MAP_ID">
+            {% for destination in destination_data %}
+                {% if destination.latitude and destination.longitude %}
+                <gmp-advanced-marker position="{{destination.latitude}},{{destination.longitude}}"  data-info="<strong>{{ destination.name }}</strong><br>{{ destination.address }}"></gmp-advanced-marker>
+                {% endif %}
+            {% endfor %}
+            </gmp-map>
+        </div>
+
         <div class="text-left">
             <p style="font-size: 20px"><strong>Total Trip Budget:</strong></p>
             {% if total_plan_expenses %}
@@ -73,7 +153,7 @@
                 <p>No expenses recorded for this trip</p>
             {% endif %}
         </div>
-
+    
         {% if travelplan.destinations %}
         <div class = "list-group">
             {% for destination in page_obj %}

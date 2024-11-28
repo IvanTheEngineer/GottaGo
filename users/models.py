@@ -128,6 +128,10 @@ class Destination(models.Model):
     jpg_upload_file = models.FileField(upload_to='uploads/destinations_jpgs/', blank=True, null=True)
     txt_upload_file = models.FileField(upload_to='uploads/destinations_txts/', blank=True, null=True)
     pdf_upload_file = models.FileField(upload_to='uploads/destination_pdfs/', blank=True, null=True)
+    location_name = models.CharField(max_length=255, blank=True, null=True)
+    location_address = models.TextField(blank=True, null=True)
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
 
     jpg_metadata = models.OneToOneField(
         FileMetadata,

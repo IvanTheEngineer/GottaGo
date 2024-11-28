@@ -3,6 +3,108 @@
 {% load custom_filters %}
 {% load static %}
 {% block content %}
+<head>
+    <script>
+        async function init() {
+            await customElements.whenDefined('gmp-map');
+            const map = document.querySelector('gmp-map');
+            const marker = document.querySelector('gmp-advanced-marker');
+            const placePicker = document.querySelector('gmpx-place-picker');
+    
+            map.innerMap.setOptions({ mapTypeControl: false });
+
+            var savedLocation = {{ saved_location|default:"null"|safe }}; // Rendered as a JSON object
+
+            if (savedLocation) {
+                const location = { lat: savedLocation.lat, lng: savedLocation.lng };
+
+                // Update the map center and place a marker at the saved location
+                map.center = location;
+                map.zoom = 7; // Adjust zoom level as needed
+                marker.position = location;
+
+                // Optionally display location info (e.g., in an infowindow)
+                const infowindow = new google.maps.InfoWindow({
+                    content: `<strong>${savedLocation.name}</strong><br>${savedLocation.address}`,
+                });
+                infowindow.open(map.innerMap, marker);
+            }
+    
+            placePicker.addEventListener('gmpx-placechange', () => {
+                const place = placePicker.value;
+    
+                if (!place.location) {
+                    alert(`No details available for input: '${place.name}'`);
+                    marker.position = null;
+                    return;
+                }
+                else {
+                    map.center = place.location;
+                    map.zoom = 8;
+                }
+    
+                marker.position = place.location;
+    
+                // Store the selected location for saving
+                savedLocation = {
+                    name: place.displayName,
+                    address: place.formattedAddress,
+                    lat: place.location.lat(),
+                    lng: place.location.lng()
+                };
+            });
+            
+            // Save button click event
+            document.getElementById('saveButton').addEventListener('click', () => {
+                if (savedLocation) {
+                    // Replace with your TravelPlan ID
+                    const destinationId = destination.id;
+                    fetch(`/plans/${destination.travel_plan.primary_group_code}/destination/${destinationId}/save-location/${destinationId}/`, {
+                        method: 'POST',
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': csrftoken,
+                        },
+                        body: JSON.stringify(savedLocation)
+                        
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Location saved successfully!');
+                        } else {
+                            alert(`Error: ${data.message}`);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Failed to save the location.');
+                    });
+                } else {
+                    alert('No location selected to save.');
+                }
+            });
+        }
+        document.addEventListener('DOMContentLoaded', init);
+        
+    </script>
+    <script type="module" src="https://unpkg.com/@googlemaps/extended-component-library@0.6">
+    </script>
+    <style>
+        gmp-map {
+            display: block;
+            height: 400px;
+            width: 400px;
+            margin: auto;
+        }
+      .place-picker-container {
+        padding: 20px;
+      }
+    </style>
+  </head>
+<script>
+    var csrftoken = '{{ csrf_token }}';
+</script>
 <div style="padding-top: 20px;"></div>
 <div class="mb-3 card mx-auto" style="width: 80%; text-align: center">
     <div class="card-body">
@@ -49,7 +151,17 @@
             {% endif %}
         </div> -->
         {% if destination %}
-
+            <script>
+                const destination = {
+                    id: "{{ destination.id }}",
+                    destination_name: "{{ destination.destination_name }}",
+                    destination_description: "{{ destination.destination_description }}",
+                    travel_plan: {
+                        id: "{{ destination.travel_plan.id }}",
+                        primary_group_code: "{{ destination.travel_plan.primary_group_code }}"
+                    }
+                };
+            </script>
                 {% if destination.travel_plan.id == travelplan.id %}
 
                     <h1 class="mb-2">{{ destination.destination_name }}</h1>
@@ -171,6 +283,19 @@
                                 {% endwith %}
                                 {% endif %}
                             </div>
+                        </div>
+
+                        <div class="my-3">
+                            <h4><strong>Location Pin:</strong></h4>
+                            <gmpx-api-loader key="{{ google_maps_api_key }}" solution-channel="GMP_GE_mapsandplacesautocomplete_v1">
+                            </gmpx-api-loader>
+                            <gmp-map center="40.749933,-73.98633" zoom="13" map-id="DEMO_MAP_ID">
+                              <div slot="control-block-start-inline-start" class="place-picker-container">
+                                <gmpx-place-picker placeholder="Enter an address"></gmpx-place-picker>
+                              </div>
+                              <gmp-advanced-marker></gmp-advanced-marker>
+                            </gmp-map>
+                            <button id="saveButton">Save Pin</button>
                         </div>
 
                         <div class="my-3">

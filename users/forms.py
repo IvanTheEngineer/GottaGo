@@ -330,6 +330,25 @@ class DestinationForm(forms.ModelForm):
         self.fields['txt_keywords'].label = "Text File Keywords (comma-separated)"
 
     # Add metadata fields for each file type
+    latitude = forms.FloatField(
+        required=False,
+        widget=forms.HiddenInput()
+    )
+    longitude = forms.FloatField(
+        required=False,
+        widget=forms.HiddenInput()
+    )
+    location_address = forms.CharField(
+        max_length=255,
+        required=False,
+        widget=forms.HiddenInput()
+    )
+    location_name = forms.CharField(
+        max_length=255,
+        required=False,
+        widget=forms.HiddenInput()
+    )
+
     jpg_file_title = forms.CharField(
         max_length=255,
         required=False,
@@ -419,6 +438,10 @@ class DestinationForm(forms.ModelForm):
             'pdf_file_title',
             'pdf_description',
             'pdf_keywords',
+            'latitude',
+            'longitude',
+            'location_address',
+            'location_name',
         ]
         labels = {
             'jpg_upload_file': 'Upload an image for the destination',

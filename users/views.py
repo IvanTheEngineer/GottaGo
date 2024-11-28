@@ -25,8 +25,10 @@ from django.urls import reverse_lazy, reverse
 from django.views import generic
 from .models import TravelPlan, Destination, Invite, Comment, Expense
 from django.http import FileResponse
+from django.http import JsonResponse
 import requests
 import boto3
+import json
 
 from django.core.paginator import Paginator
 from django.db.models import Sum
@@ -174,6 +176,11 @@ class DestinationUpdateView(generic.UpdateView):
         context['has_txt_metadata'] = bool(destination.txt_metadata)
         context['has_pdf_metadata'] = bool(destination.pdf_metadata)
         context['has_jpg_metadata'] = bool(destination.jpg_metadata)
+
+        context['location_name'] = destination.location_name if destination.location_name else ''
+        context['location_address'] = destination.location_address if destination.location_address else ''
+        context['latitude'] = destination.latitude if destination.latitude else ''
+        context['longitude'] = destination.longitude if destination.longitude else ''
         
         context['primary_group_code'] = self.kwargs.get("primary_group_code")
         return context
@@ -194,7 +201,6 @@ class DestinationUpdateView(generic.UpdateView):
 
 
 def delete_travel_plan(request):
-    print("WTF")
     id = request.GET.get('id')
     travel_plan = get_object_or_404(TravelPlan, id=id)
     if request.user != travel_plan.user and not is_pma_admin(request.user):
@@ -330,7 +336,18 @@ class DetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['destinations'] = Destination.objects.filter(travel_plan=self.object)
+        destinations = Destination.objects.filter(travel_plan=self.object)
+        context['destinations'] = destinations
+        destination_data = [
+            {
+                "name": destination.location_name,
+                "address": destination.location_address,
+                "latitude": destination.latitude,
+                "longitude": destination.longitude,
+            }
+            for destination in destinations if destination.latitude and destination.longitude
+        ]
+        context["destination_data"] = destination_data
 
         # Calculate total expenses for all destinations in this travel plan
         total_plan_expenses = Expense.objects.filter(
@@ -362,7 +379,8 @@ class DestinationView(generic.DetailView):
     def get_context_data(self, **kwargs):
         id = self.kwargs["id"]
         context = {}
-        context['destination'] = Destination.objects.filter(travel_plan=self.object, id=id).first()
+        destination = Destination.objects.filter(travel_plan=self.object, id=id).first()
+        context['destination'] = destination
         context['form'] = CommentForm()
         travelplan = context['destination'].travel_plan
         context['travelplan'] = travelplan
@@ -377,6 +395,16 @@ class DestinationView(generic.DetailView):
         page_obj = paginator.get_page(page_number)
 
         context['page_obj'] = page_obj
+
+        if destination.latitude and destination.longitude:
+            context['saved_location'] = {
+                'lat': destination.latitude,
+                'lng': destination.longitude,
+                'name': destination.location_name,  # Replace with your actual field for name
+                'address': destination.location_address,  # Replace with your actual field for address
+            }
+        else:
+            context['saved_location'] = None
         return context
 
     def post(self, request, *args, **kwargs):
@@ -445,3 +473,23 @@ def delete_expense(request, primary_group_code, id, expense_id):
     return redirect('destination_budget', 
                    primary_group_code=primary_group_code,
                    id=id)
+
+def save_location(request, primary_group_code, id, destination_id):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            travel_plan = get_object_or_404(TravelPlan, primary_group_code=primary_group_code)
+            destination = get_object_or_404(Destination, id=destination_id, travel_plan=travel_plan)
+
+            destination.location_name = data.get('name')
+            destination.location_address = data.get('address')
+            destination.latitude = data.get('lat')
+            destination.longitude = data.get('lng')
+            destination.save()
+
+            return JsonResponse({'success': True, 'message': 'Location saved successfully!'})
+
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)}, status=400)
+
+    return JsonResponse({'success': False, 'message': 'Invalid request method.'}, status=405)

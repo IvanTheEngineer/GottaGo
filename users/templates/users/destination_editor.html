@@ -5,6 +5,46 @@
 {% block content %}
 <head>
     <title>Edit Destination</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const placePicker = document.querySelector('gmpx-place-picker');
+            const latitudeInput = document.getElementById('latitude');
+            const longitudeInput = document.getElementById('longitude');
+            const addressInput = document.getElementById('location_address');
+            const nameInput = document.getElementById('location_name');
+            
+            // Prepopulate the place picker with existing values
+            if ({{ latitude|default:"null"|safe }} && {{ longitude|default:"null"|safe }}) {
+                const prepopulatedPlace = {
+                    location: {
+                        lat: () => parseFloat(latitudeInput.value),
+                        lng: () => parseFloat(longitudeInput.value),
+                    },
+                    displayName: nameInput.value,
+                    formattedAddress: addressInput.value,
+                };
+                placePicker.setAttribute('placeholder', addressInput.value);
+                placePicker.value = prepopulatedPlace;
+            }
+
+            placePicker.addEventListener('gmpx-placechange', () => {
+                const place = placePicker.value;
+
+                if (place && place.location) {
+                    latitudeInput.value = place.location.lat();
+                    longitudeInput.value = place.location.lng();
+                    addressInput.value = place.formattedAddress || '';
+                    nameInput.value = place.displayName || '';
+                } else {
+                    latitudeInput.value = null;
+                    longitudeInput.value = null;
+                    addressInput.value = null;
+                    nameInput.value = null;
+                }
+            });
+        });
+    </script>
+    <script type="module" src="https://unpkg.com/@googlemaps/extended-component-library@0.6"></script>
 </head>
 
 <div class="destination-creator-form rounded-2 shadow-sm p-4 py-5 bg-white">
@@ -24,6 +64,18 @@
                 {{ form.destination_description.label_tag }}
                 {{ form.destination_description }}
             </div>
+        </div>
+
+        <div class="mb-4">
+            <h4>Select Destination Location</h4>
+            <gmpx-api-loader key="{{ google_maps_api_key }}" solution-channel="GMP_GE_mapsandplacesautocomplete_v1">
+            </gmpx-api-loader>
+            <gmpx-place-picker placeholder="Enter an address"></gmpx-place-picker>
+            
+            <input type="hidden" id="latitude" name="latitude" value="{{ latitude }}">
+            <input type="hidden" id="longitude" name="longitude" value="{{ longitude }}">
+            <input type="hidden" id="location_address" name="location_address" value="{{ location_address }}">
+            <input type="hidden" id="location_name" name="location_name" value="{{ location_name }}">
         </div>
 
         <!-- Image Upload and Metadata -->
