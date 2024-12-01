@@ -172,7 +172,7 @@
 
                     <div class="mt-3">
 
-                        <div style="display: flex; gap: 20px; align-items: start; justify-content: center">
+                        <div class="mx-5" style="display: flex; gap: 20px; align-items: start; justify-content: space-between; width: auto;">
                             <div>
                                 
                                 {% if destination.jpg_upload_file %}
@@ -182,11 +182,11 @@
                                     View
                                 </a>
                                 </div>
-                                <img style="margin-bottom: 20px;" src="{{ destination.jpg_upload_file.url }}" width="150" height="150" class="rounded mt-3"
+                                <img style="margin-bottom: 20px;" src="{{ destination.jpg_upload_file.url }}" width="200" height="200" class="rounded mt-3"
                                 alt="{{ destination.destination_name }} image" />
                                 {% else %}
                                     <p style="margin: 0; font-size: 20px"><strong>Image:</strong></p>
-                                    <p>No image uploaded.</p>
+                                    <p>No file uploaded.</p>
                                 {% endif %}
                                 {% if destination.jpg_metadata %}
                                 {% with metadata=destination.jpg_metadata %}
@@ -222,7 +222,7 @@
                                 </div>
                                 {% else %}
                                 <p style="margin: 0; font-size: 20px"><strong>Text File:</strong></p>
-                                <p>No text file uploaded.</p>
+                                <p>No file uploaded.</p>
                                 {% endif %}
                                 {% if destination.txt_metadata %}
                                 {% with metadata=destination.txt_metadata %}
@@ -244,25 +244,25 @@
                                 {% endif %}
                             </div>
 
-                        </div>
+                        
                             <div>
                                 
                                 {% if destination.pdf_upload_file %}
-                                <div class="mt-3" style = "display: flex; gap: 10px; align-items: center; justify-content: center;">
-                                    <p style="margin: 0;font-size: 20px"><strong>PDF Files:</strong></p>
+                                <div style = "display: flex; gap: 10px; align-items: center; justify-content: center;">
+                                    <p style="margin: 0;font-size: 20px"><strong>PDF File:</strong></p>
                                     <a href="{{ destination.pdf_upload_file.url }}" target="_blank" class="btn btn-outline-primary">
                                         View
                                     </a>
                                     </a>
                                 </div>
                                 <div class="mt-3" style="width: 100%;">
-                                    <iframe class="fa-file-pdf-o" src="{{ destination.pdf_upload_file.url }}" width="80%" height="400px"
+                                    <iframe class="fa-file-pdf-o" src="{{ destination.pdf_upload_file.url }}" width="80%" height="300px"
                                         loading="lazy" style="border: #dddddd; margin-bottom: 20px;"></iframe>
 
                                 </div>
                                 {% else %}
-                                <p class="mt-3" style="margin: 0; font-size: 20px"><strong>PDF File:</strong></p>
-                                <p>No PDF file uploaded.</p>
+                                <p style="margin: 0; font-size: 20px"><strong>PDF File:</strong></p>
+                                <p>No file uploaded.</p>
                                 {% endif %}
                                 {% if destination.pdf_metadata %}
                                 {% with metadata=destination.pdf_metadata %}
@@ -284,8 +284,9 @@
                                 {% endif %}
                             </div>
                         </div>
-
-                        <div class="my-3">
+                    </div>
+                    <div class="mx-5" style="display: flex; gap: 20px; align-items: start; justify-content: space-between; width: auto;">
+                        <div class="my-3" style="margin-left: auto; margin-right: auto;">
                             <h4><strong>Location Pin:</strong></h4>
                             <gmpx-api-loader key="{{ google_maps_api_key }}" solution-channel="GMP_GE_mapsandplacesautocomplete_v1">
                             </gmpx-api-loader>
@@ -298,7 +299,7 @@
                             <button id="saveButton">Save Pin</button>
                         </div>
 
-                        <div class="my-3">
+                        <div class="my-3" style="margin-left: auto; margin-right: auto;">
                             <h4><strong>Expenses Summary:</strong></h4>
                             {% if total_expenses %}
                                 <p class="fs-5">Total Expenses: ${{ total_expenses|floatformat:2 }}</p>
@@ -314,7 +315,7 @@
                                 </a>
                             {% endif %}
                         </div>
-
+                    </div>
                         <div>
                             <h4> <strong> Comments: </strong> </h4>
                                 {% if destination.comments %}
@@ -347,7 +348,7 @@
                                 {% if user.is_authenticated %}
                                     <form method="post" class="mt-4">
                                         {% csrf_token %}
-                                        {{ form.as_p }}
+                                        {{ form.commentText }}
                                         <button type = "submit" class="btn btn-primary">
                                             Submit Comment
                                         </button>
