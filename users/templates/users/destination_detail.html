@@ -191,15 +191,21 @@
                                 {% if destination.jpg_metadata %}
                                 {% with metadata=destination.jpg_metadata %}
                                 <div style="text-align: left; margin-left: 20px; margin-right: 20px;" >
+                                    {% if metadata.file_title %}
                                     <p style="margin: 0;" class="text-paragraph">
                                         <strong>Title:</strong> {{ metadata.file_title }}
                                     </p>
+                                    {% endif %}
+                                    {% if metadata.description %}
                                     <p style="margin: 0;" class="text-paragraph">
                                         <strong>Description:</strong> {{ metadata.description }}
                                     </p>
+                                    {% endif %}
+                                    {% if metadata.keywords %}
                                     <p style="margin: 0;" class="text-paragraph">
                                         <strong>Keywords:</strong> {{ metadata.keywords }}
                                     </p>
+                                    {% endif %}
                                     <p style="margin: 0;" class="text-paragraph">
                                         <strong>Uploaded:</strong> {{ metadata.upload_timestamp|date:"F j, Y" }}
                                     </p>
@@ -227,15 +233,21 @@
                                 {% if destination.txt_metadata %}
                                 {% with metadata=destination.txt_metadata %}
                                 <div style="text-align: left; margin-left: 10px; margin-right: 10px;">
+                                    {% if metadata.file_title %}
                                     <p style="margin: 0;" class="text-paragraph">
                                         <strong>Title:</strong> {{ metadata.file_title }}
                                     </p>
+                                    {% endif %}
+                                    {% if metadata.description %}
                                     <p style="margin: 0;" class="text-paragraph">
                                         <strong>Description:</strong> {{ metadata.description }}
                                     </p>
+                                    {% endif %}
+                                    {% if metadata.keywords %}
                                     <p style="margin: 0;" class="text-paragraph">
                                         <strong>Keywords:</strong> {{ metadata.keywords }}
                                     </p>
+                                    {% endif %}
                                     <p style="margin: 0;" class="text-paragraph">
                                         <strong>Uploaded:</strong> {{ metadata.upload_timestamp|date:"F j, Y" }}
                                     </p>
@@ -267,15 +279,21 @@
                                 {% if destination.pdf_metadata %}
                                 {% with metadata=destination.pdf_metadata %}
                                 <div style="text-align: left; margin-left: 10%; margin-right: 10%;">
+                                    {% if metadata.file_title %}
                                     <p style="margin: 0;" class="text-paragraph">
                                         <strong>Title:</strong> {{ metadata.file_title }}
                                     </p>
+                                    {% endif %}
+                                    {% if metadata.description %}
                                     <p style="margin: 0;" class="text-paragraph">
                                         <strong>Description:</strong> {{ metadata.description }}
                                     </p>
+                                    {% endif %}
+                                    {% if metadata.keywords %}
                                     <p style="margin: 0;" class="text-paragraph">
                                         <strong>Keywords:</strong> {{ metadata.keywords }}
                                     </p>
+                                    {% endif %}
                                     <p style="margin: 0;" class="text-paragraph">
                                         <strong>Uploaded:</strong> {{ metadata.upload_timestamp|date:"F j, Y" }}
                                     </p>
