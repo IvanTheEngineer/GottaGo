@@ -250,8 +250,19 @@ def all_plans_view(request):
 
 def explore_plans_view(request):
     explore_travel_plans = TravelPlan.objects.all()
-    context = {'explore_travel_plans': explore_travel_plans}
+    paginator = Paginator(explore_travel_plans, 4)
+    page = request.GET.get('page')
+    try:
+        paginated_explore_plans = paginator.page(page)
+    except PageNotAnInteger:
+        paginated_explore_plans = paginator.page(1)
+    except EmptyPage:
+        paginated_explore_plans = paginator.page(paginator.num_pages)
+
+    context = {'explore_travel_plans': paginated_explore_plans}
+    # context = {'explore_travel_plans': explore_travel_plans}
     return render(request, 'users/explore_plans.html', context)
+
 
 
 def user_plans_view(request):

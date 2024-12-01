@@ -17,6 +17,23 @@
                 </div>
             {% endfor %}
         </div>
+        <div class="pagination" style="justify-content: center">
+            <span class="step-links">
+                {% if explore_travel_plans.has_previous %}
+                    <a href="?page=1">&laquo; first</a>
+                    <a href="?page={{ explore_travel_plans.previous_page_number }}">previous</a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ explore_travel_plans.number }} of {{ explore_travel_plans.paginator.num_pages }}.
+                </span>
+
+                {% if explore_travel_plans.has_next %}
+                    <a href="?page={{ explore_travel_plans.next_page_number }}">next</a>
+                    <a href="?page={{ explore_travel_plans.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
 
         <div class="text-center">
             {% if not user.is_authenticated %}
