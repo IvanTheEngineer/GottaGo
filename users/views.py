@@ -13,10 +13,10 @@ from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.db.models.query_utils import Q
 from .forms import (
-    PlanForm, 
-    JoinGroupForm, 
-    DestinationForm, 
-    CommentForm, 
+    PlanForm,
+    JoinGroupForm,
+    DestinationForm,
+    CommentForm,
     ExpenseForm
 )
 from .decorators import user_not_authenticated
@@ -30,16 +30,18 @@ import requests
 import boto3
 import json
 
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Sum
 
 
 def profile(request):
     return render(request, 'users/profile.html')
 
+
 def custom_login(request):
     print("HERE")
     return render(request, 'users/login.html')
+
 
 @login_required
 def custom_logout(request):
@@ -99,19 +101,25 @@ class TravelPlanUpdateView(generic.UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         travel_plan = self.get_object()
-        context['form'].initial['txt_file_title'] = travel_plan.txt_metadata.file_title if travel_plan.txt_metadata else ''
-        context['form'].initial['txt_description'] = travel_plan.txt_metadata.description if travel_plan.txt_metadata else ''
+        context['form'].initial[
+            'txt_file_title'] = travel_plan.txt_metadata.file_title if travel_plan.txt_metadata else ''
+        context['form'].initial[
+            'txt_description'] = travel_plan.txt_metadata.description if travel_plan.txt_metadata else ''
         context['form'].initial['txt_keywords'] = travel_plan.txt_metadata.keywords if travel_plan.txt_metadata else ''
-        context['form'].initial['pdf_file_title'] = travel_plan.pdf_metadata.file_title if travel_plan.pdf_metadata else ''
-        context['form'].initial['pdf_description'] = travel_plan.pdf_metadata.description if travel_plan.pdf_metadata else ''
+        context['form'].initial[
+            'pdf_file_title'] = travel_plan.pdf_metadata.file_title if travel_plan.pdf_metadata else ''
+        context['form'].initial[
+            'pdf_description'] = travel_plan.pdf_metadata.description if travel_plan.pdf_metadata else ''
         context['form'].initial['pdf_keywords'] = travel_plan.pdf_metadata.keywords if travel_plan.pdf_metadata else ''
-        context['form'].initial['jpg_file_title'] = travel_plan.jpg_metadata.file_title if travel_plan.jpg_metadata else ''
-        context['form'].initial['jpg_description'] = travel_plan.jpg_metadata.description if travel_plan.jpg_metadata else ''
+        context['form'].initial[
+            'jpg_file_title'] = travel_plan.jpg_metadata.file_title if travel_plan.jpg_metadata else ''
+        context['form'].initial[
+            'jpg_description'] = travel_plan.jpg_metadata.description if travel_plan.jpg_metadata else ''
         context['form'].initial['jpg_keywords'] = travel_plan.jpg_metadata.keywords if travel_plan.jpg_metadata else ''
         context['has_txt_metadata'] = bool(travel_plan.txt_metadata)
         context['has_pdf_metadata'] = bool(travel_plan.pdf_metadata)
         context['has_jpg_metadata'] = bool(travel_plan.jpg_metadata)
-        
+
         context['primary_group_code'] = self.kwargs.get("primary_group_code")
         return context
 
@@ -143,6 +151,7 @@ def destination_creation(request, primary_group_code):
     else:
         return render(request, 'users/destination_creator.html')
 
+
 # <a style="margin-bottom: 10px; margin-top: 10px;" href="{% url 'edit_destination' primary_group_code=destination.travel_plan.primary_group_code id=destination.id %}" class="btn btn-primary">Edit</a>
 class DestinationUpdateView(generic.UpdateView):
     model = Destination
@@ -155,23 +164,30 @@ class DestinationUpdateView(generic.UpdateView):
 
     def get_success_url(self):
         primary_group_code = self.object.travel_plan.primary_group_code
-        return reverse_lazy('destination_detail', kwargs={'primary_group_code': primary_group_code, 'id': self.object.id})
+        return reverse_lazy('destination_detail',
+                            kwargs={'primary_group_code': primary_group_code, 'id': self.object.id})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        
+
         # Get the destination instance
         destination = self.get_object()
-        
+
         # Pre-populate metadata for the form
-        context['form'].initial['txt_file_title'] = destination.txt_metadata.file_title if destination.txt_metadata else ''
-        context['form'].initial['txt_description'] = destination.txt_metadata.description if destination.txt_metadata else ''
+        context['form'].initial[
+            'txt_file_title'] = destination.txt_metadata.file_title if destination.txt_metadata else ''
+        context['form'].initial[
+            'txt_description'] = destination.txt_metadata.description if destination.txt_metadata else ''
         context['form'].initial['txt_keywords'] = destination.txt_metadata.keywords if destination.txt_metadata else ''
-        context['form'].initial['pdf_file_title'] = destination.pdf_metadata.file_title if destination.pdf_metadata else ''
-        context['form'].initial['pdf_description'] = destination.pdf_metadata.description if destination.pdf_metadata else ''
+        context['form'].initial[
+            'pdf_file_title'] = destination.pdf_metadata.file_title if destination.pdf_metadata else ''
+        context['form'].initial[
+            'pdf_description'] = destination.pdf_metadata.description if destination.pdf_metadata else ''
         context['form'].initial['pdf_keywords'] = destination.pdf_metadata.keywords if destination.pdf_metadata else ''
-        context['form'].initial['jpg_file_title'] = destination.jpg_metadata.file_title if destination.jpg_metadata else ''
-        context['form'].initial['jpg_description'] = destination.jpg_metadata.description if destination.jpg_metadata else ''
+        context['form'].initial[
+            'jpg_file_title'] = destination.jpg_metadata.file_title if destination.jpg_metadata else ''
+        context['form'].initial[
+            'jpg_description'] = destination.jpg_metadata.description if destination.jpg_metadata else ''
         context['form'].initial['jpg_keywords'] = destination.jpg_metadata.keywords if destination.jpg_metadata else ''
         context['has_txt_metadata'] = bool(destination.txt_metadata)
         context['has_pdf_metadata'] = bool(destination.pdf_metadata)
@@ -181,7 +197,7 @@ class DestinationUpdateView(generic.UpdateView):
         context['location_address'] = destination.location_address if destination.location_address else ''
         context['latitude'] = destination.latitude if destination.latitude else ''
         context['longitude'] = destination.longitude if destination.longitude else ''
-        
+
         context['primary_group_code'] = self.kwargs.get("primary_group_code")
         return context
 
@@ -211,6 +227,7 @@ def delete_travel_plan(request):
     if is_pma_admin(request.user):
         return redirect('all_plans')
     return redirect('plans')
+
 
 def delete_destination(request):
     id = request.GET.get('id')
@@ -242,11 +259,23 @@ def user_plans_view(request):
         # Get all plans the user is in
         travel_plans = request.user.plans.all()
         destinations = request.user.destinations.all()
+
+        paginator = Paginator(travel_plans, 3)
+        page = request.GET.get('page')
+        try:
+            paginated_travel_plans = paginator.page(page)
+        except PageNotAnInteger:
+            paginated_travel_plans = paginator.page(1)
+        except EmptyPage:
+            paginated_travel_plans = paginator.page(paginator.num_pages)
+
         for plan in travel_plans:
             print(plan.id)
         # return render(request, 'users/plans.html', {'travel_plans': travel_plans})
 
-        return render(request, 'users/plans.html', {'travel_plans': travel_plans, 'destinations': destinations})
+        return render(request, 'users/plans.html', {'travel_plans': paginated_travel_plans, 'destinations': destinations})
+        # return render(request, 'users/plans.html', {'travel_plans': travel_plans, 'destinations': destinations})
+
     else:
         return render(request, 'users/plans.html')
 
@@ -304,6 +333,7 @@ def joinrequests(request):
         return render(request, 'users/requests.html', {'invites': invites})
     else:
         return render(request, 'users/requests.html')
+
 
 def accept_invite(request):
     id = request.GET.get('id')
@@ -386,7 +416,8 @@ class DestinationView(generic.DetailView):
         context['travelplan'] = travelplan
 
         # Add total expenses calculation
-        total_expenses = Expense.objects.filter(destination=context['destination']).aggregate(total=Sum('amount'))['total']
+        total_expenses = Expense.objects.filter(destination=context['destination']).aggregate(total=Sum('amount'))[
+            'total']
         context['total_expenses'] = total_expenses
 
         comments = Comment.objects.filter(destination=context['destination'])
@@ -428,7 +459,7 @@ class DestinationView(generic.DetailView):
 def destination_budget(request, primary_group_code, id):
     destination = get_object_or_404(Destination, id=id, travel_plan__primary_group_code=primary_group_code)
     travelplan = destination.travel_plan
-    
+
     if request.method == 'POST' and request.user.is_authenticated:
         form = ExpenseForm(request.POST)
         if form.is_valid():
@@ -440,13 +471,12 @@ def destination_budget(request, primary_group_code, id):
             return redirect('destination_budget', primary_group_code=primary_group_code, id=id)
     else:
         form = ExpenseForm()
-    
+
     expenses = Expense.objects.filter(destination=destination).order_by('-expense_date')
     total_amount = expenses.aggregate(total=Sum('amount'))['total'] or 0
-    
+
     formatted_total_amount = f"{total_amount:.2f}"
 
-    
     context = {
         'destination': destination,
         'travelplan': travelplan,
@@ -454,25 +484,27 @@ def destination_budget(request, primary_group_code, id):
         'expenses': expenses,
         'total_amount': formatted_total_amount
     }
-    
+
     return render(request, 'users/destination_budget.html', context)
+
 
 @login_required
 def delete_expense(request, primary_group_code, id, expense_id):
     expense = get_object_or_404(Expense, id=expense_id)
-    
+
     # Check if the user is authorized to delete this expense
     if request.user != expense.created_by:
         messages.error(request, 'You are not authorized to delete this expense.')
-        return redirect('destination_budget', 
-                       primary_group_code=primary_group_code,
-                       id=id)
-    
+        return redirect('destination_budget',
+                        primary_group_code=primary_group_code,
+                        id=id)
+
     expense.delete()
     messages.success(request, 'Expense deleted successfully!')
-    return redirect('destination_budget', 
-                   primary_group_code=primary_group_code,
-                   id=id)
+    return redirect('destination_budget',
+                    primary_group_code=primary_group_code,
+                    id=id)
+
 
 def save_location(request, primary_group_code, id, destination_id):
     if request.method == 'POST':
