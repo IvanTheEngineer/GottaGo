@@ -28,11 +28,6 @@ body {
     text-align: center;
 }
 
-.required-label:after {
-    content: " *";
-    color: red;
-}
-
 .text-paragraph {
     color: #838383;
 }

@@ -7,17 +7,15 @@
   <h1 class="text-center mb-3 fs-3 fw-bold">Received Requests</h1>
 {% if user.is_authenticated %}
   {% if invites %}
-    <ul>
       {% for invite in invites %}
-      <div class="rounded-2 shadow p-4 py-2 bg-white" style="display: flex; align-items: start; justify-content: start; margin-bottom: 10px; margin-right: 3%;">
+      <div class="rounded-2 shadow p-4 py-2 bg-white" style="display: flex; align-items: start; justify-content: start; margin-bottom: 10px">
         <strong>{{ invite.requested_by.username }}</strong> &nbsp;has requested to join:&nbsp; <strong>{{ invite.travel_plan.plan_name }}</strong>&nbsp; ({{ invite.travel_plan.primary_group_code }})<br>
-        <div style=" margin-left: 50%;">
+        <div style=" margin-left: auto;">
           <a href="{% url 'decline_invite' %}?id={{invite.id}}" class="btn btn-danger ms-auto" >Decline</a>
           <a href="{% url 'accept_invite' %}?id={{invite.id}}" class="btn btn-success ms-auto" >Accept</a>
         </div>
       </div>
       {% endfor %}
-    </ul>
   {% else %}
   <p class="text-center mt-2 fs-5 text-paragraph">No join requests received.</p>
   {% endif %}

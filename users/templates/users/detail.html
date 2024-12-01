@@ -104,36 +104,44 @@
         </div>
         <p style="font-size: 20px"><strong>Description:</strong> {{ travelplan.trip_description }} </p>
 
+        <div class="mx-5" style="display: flex; gap: 20px; align-items: start; justify-content: space-between; width: auto;">
+
         <div class="mt-3">
-            <p style="font-size: 20px"><strong>Images:</strong></p>
+            <p style="font-size: 20px"><strong>Image:</strong></p>
             {% if travelplan.jpg_upload_file %}
-            <img src="{{ travelplan.jpg_upload_file.url }}" width="400" height="400" class="rounded"
+            <img style="margin-bottom: 20px;" src="{{ travelplan.jpg_upload_file.url }}" width="400" height="400" class="rounded"
                 alt="{{ travelplan.plan_name }} image" />
             {% if travelplan.jpg_metadata %}
             {% with metadata=travelplan.jpg_metadata %}
-            <div style="text-align: center">
-                <p class="text-paragraph text-body">
+            <div style="text-align: left; margin-left: 20px; margin-right: 20px;" >
+                {% if metadata.file_title %}
+                <p style="margin: 0;" class="text-paragraph">
                     <strong>Title:</strong> {{ metadata.file_title }}
                 </p>
-                <p class="text-paragraph text-body">
+                {% endif %}
+                {% if metadata.description %}
+                <p style="margin: 0;" class="text-paragraph">
                     <strong>Description:</strong> {{ metadata.description }}
                 </p>
-                <p class="text-paragraph text-body">
+                {% endif %}
+                {% if metadata.keywords %}
+                <p style="margin: 0;" class="text-paragraph">
                     <strong>Keywords:</strong> {{ metadata.keywords }}
                 </p>
-                <p class="text-paragraph text-body">
+                {% endif %}
+                <p style="margin: 0;" class="text-paragraph">
                     <strong>Uploaded:</strong> {{ metadata.upload_timestamp|date:"F j, Y" }}
                 </p>
             </div>
             {% endwith %}
             {% endif %}
             {% else %}
-            <p>No images uploaded.</p>
+            <p>No image uploaded.</p>
             {% endif %}
         </div>
 
         <div class="my-3">
-            <h4><strong>Destination Pins:</strong></h4>
+            <p style="font-size: 20px"><strong>Destination Pins:</strong></p>
             <gmpx-api-loader key="{{ google_maps_api_key }}" solution-channel="GMP_GE_mapsandplacesautocomplete_v1">
             </gmpx-api-loader>
             <gmp-map center="40.749933,-73.98633" zoom="13" map-id="DEMO_MAP_ID">
@@ -144,6 +152,7 @@
             {% endfor %}
             </gmp-map>
         </div>
+    </div>
 
         <div class="text-left">
             <p style="font-size: 20px"><strong>Total Trip Budget:</strong></p>
@@ -175,7 +184,7 @@
                                 <img src="{{ destination.jpg_upload_file.url }}" style="width: 200px; height: 200px; margin-right: 20px;"
                                  class="rounded" alt="{{ plan.plan_name }} image"/>
                             {% else %}
-                                <p>No images uploaded for destination</p>
+                                <p>No image uploaded for destination</p>
                             {% endif %}
 
 {#                            {% if destination.jpg_metadata.all.0 %}#}
