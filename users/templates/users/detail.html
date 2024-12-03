@@ -87,7 +87,7 @@
             {% if travelplan.jpg_upload_file %}
                 <img src="{{ travelplan.jpg_upload_file.url }}" class="img-fluid w-100" alt="{{ travelplan.plan_name }} Banner image" style="height: 200px; object-fit: cover;"/>
             {% else %}
-                <img src="{% static 'images/no_image.jpg' %}" class="img-fluid" alt="no image" style="object-fit: cover"/>
+                <img src="{% static 'images/no_image.jpg' %}" class="img-fluid w-100" alt="no image" style="height: 200px; object-fit: cover; display: block"/>
             {% endif %}
 
             <div class="gradient-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: black; opacity: 50%"></div>
@@ -361,6 +361,9 @@
 {#    {% endif %}#}
 
     <div class="card-footer py-3">
+        <p class="text-paragraph">
+            To delete the travel plan image, click the "Edit" button above, select the "Clear" checkbox in the form, and save the plan.
+        </p>
         <a class="text-center mt-2 fs-5 text-paragraph text-body" href="{% url 'destination_creator' travelplan.primary_group_code %}">Add a destination</a>
     </div>
 </div>
