@@ -10,6 +10,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.forms import ClearableFileInput
+from django.forms.widgets import FILE_INPUT_CONTRADICTION, CheckboxInput
 
 from .models import TravelPlan, Destination, FileMetadata, Comment, Expense
 import uuid

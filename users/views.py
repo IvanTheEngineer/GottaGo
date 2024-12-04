@@ -24,7 +24,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy, reverse
 from django.views import generic
 from .models import TravelPlan, Destination, Invite, Comment, Expense
-from django.http import FileResponse
+from django.http import FileResponse, Http404
 from django.http import JsonResponse
 import requests
 import boto3
@@ -342,7 +342,7 @@ def join_group(request):
                             context['success_message'] = 'Successfully sent a join request!'
                     else:
                         context['error_message'] = 'You cannot join a plan you are already in.'
-                except TravelPlan.DoesNotExist:
+                except Http404:
                     context['error_message'] = 'Invalid group code. Please try again.'
         else:
             pass
@@ -458,7 +458,7 @@ class DestinationView(generic.DetailView):
         context['total_expenses'] = total_expenses
 
         comments = Comment.objects.filter(destination=context['destination'])
-        paginator = Paginator(comments, 3)
+        paginator = Paginator(comments, 10)
         page_number = self.request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 

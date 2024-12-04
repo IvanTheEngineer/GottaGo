@@ -10,7 +10,7 @@
     {% if user.is_authenticated %}
         <div style="display: flex; align-items: flex-start">
             <img src="{{ user.socialaccount_set.all.0.get_avatar_url  }} " width="70" height="70" class="rounded-circle"/>
-            <h1 style="margin-left: 30px" class="mb-4 fs-3 fw-bold text-center">User Profile</h1>
+            <h1 style="margin-left: 30px" class="mb-4 fs-3 fw-bold text-center">{{ user|email_handle }}'s Profile</h1>
         </div>
 
     {% else %}
