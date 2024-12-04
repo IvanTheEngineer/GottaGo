@@ -617,6 +617,7 @@ class ExpenseForm(forms.ModelForm):
                 'class': 'form-control',
                 'placeholder': 'Enter amount',
                 'min': '0',
+                'max': '1000000',
                 'step': '0.01'
             }),
             'expense_date': DateInput(attrs={
