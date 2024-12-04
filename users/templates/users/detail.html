@@ -227,7 +227,9 @@
     {#                        </div>#}
                         </div>
                         <div style="display: flex; gap: 10px; align-items: flex-end; justify-content: flex-end; width: 100%;">
-                            <a  style = "text-align: right" href="{% url 'delete_destination' %}?id={{destination.id}}" class="btn btn-danger">Delete</a>
+                            <a  style = "text-align: right" href="{% url 'delete_destination' %}?id={{destination.id}}" class="btn btn-danger"
+                            onclick="return confirm('Are you sure you want to delete this destination?')">
+                                            Delete</a>
                         </div>
     {#                        <div>#}
     {#                            <p style="font-size: 20px"><strong>PDF Files:</strong></p>#}
@@ -366,9 +368,6 @@
 
 
     <div class="card-footer card-footer-container">
-        <p class="text-paragraph">
-            To delete the travel plan image, click the "Edit" button above, select the "Clear" checkbox in the form, and save the plan.
-        </p>
         <a class="text-center mt-2 fs-5 text-paragraph text-body" href="{% url 'destination_creator' travelplan.primary_group_code %}"><button class="btn btn-success">Add a Destination</button></a>
     </div>
 </div>
