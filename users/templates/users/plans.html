@@ -23,25 +23,25 @@
                                     class="rounded" alt="no image"/>
                                 {% endif %}
 
+                                {% if destinations %}
+                                    {% regroup destinations by travel_plan.id as destinations_for_each_plan %}
+                                        <div class="flex-container ms-0">
+                                            {% for dest in destinations_for_each_plan %}
+                                                {% if dest.grouper == plan.id %}
+                                                    {% for destination in dest.list|slice:"0:4" %}
+                                                        {% if destination.jpg_upload_file %}
+                                                            <img src="{{ destination.jpg_upload_file.url }}" style="width: 100px; height: 100px; margin-right: 10px;"
+                                                            class="rounded" alt="{{ plan.plan_name }} image"/>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                {% endif %}
                                 {% if plan.user == user %}
-                                    {% if destinations %}
-                                        {% regroup destinations by travel_plan.id as destinations_for_each_plan %}
-                                            <div class="flex-container ms-0">
-                                                {% for dest in destinations_for_each_plan %}
-                                                    {% if dest.grouper == plan.id %}
-                                                        {% for destination in dest.list|slice:"0:4" %}
-                                                            {% if destination.jpg_upload_file %}
-                                                                <img src="{{ destination.jpg_upload_file.url }}" style="width: 100px; height: 100px; margin-right: 10px;"
-                                                                class="rounded" alt="{{ plan.plan_name }} image"/>
-                                                            {% endif %}
-                                                        {% endfor %}
-                                                    {% endif %}
-                                                {% endfor %}
-                                            </div>
-                                    {% endif %}
-                                <a href="{% url 'delete_travel_plan' %}?id={{ plan.id}}" class="btn btn-danger ms-auto">Delete Plan</a>
+                                    <a href="{% url 'delete_travel_plan' %}?id={{ plan.id}}" class="btn btn-danger ms-auto">Delete Plan</a>
                                 {% else %}
-                                <a href="{% url 'leave_travel_plan' %}?id={{ plan.id}}" class="btn btn-danger ms-auto">Leave Plan</a>
+                                    <a href="{% url 'leave_travel_plan' %}?id={{ plan.id}}" class="btn btn-danger ms-auto">Leave Plan</a>
                                 {% endif %}
                     </div>
                 {% endfor %}
