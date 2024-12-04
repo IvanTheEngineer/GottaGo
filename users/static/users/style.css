@@ -40,3 +40,7 @@ body {
 .text-label {
     color: #83878a;
 }
+
+.card-footer-container {
+    padding: 1.5rem 0 !important;
+}

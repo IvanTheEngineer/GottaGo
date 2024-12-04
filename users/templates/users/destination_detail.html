@@ -182,7 +182,7 @@
                                     View
                                 </a>
                                 </div>
-                                <img style="margin-bottom: 20px;" src="{{ destination.jpg_upload_file.url }}" width="200" height="200" class="rounded mt-3"
+                                <img style="margin-bottom: 20px;" src="{{ destination.jpg_upload_file.url }}" width="200" height="200" class="rounded mt-2"
                                 alt="{{ destination.destination_name }} image" />
                                 {% else %}
                                     <p style="margin: 0; font-size: 20px"><strong>Image:</strong></p>
@@ -222,7 +222,7 @@
                                     View
                                 </a>
                                 </div>
-                                <div class="mt-3" style="text-align: center">
+                                <div class="mt-2" style="text-align: center">
                                     <iframe src="{{ destination.txt_upload_file.url }}"
                                         style="border: #dddddd; box-shadow: 0 0 10px darkmagenta; margin-bottom: 20px;"></iframe>
                                 </div>
@@ -267,7 +267,7 @@
                                     </a>
                                     </a>
                                 </div>
-                                <div class="mt-3" style="width: 100%;">
+                                <div class="mt-2" style="width: 100%;">
                                     <iframe class="fa-file-pdf-o" src="{{ destination.pdf_upload_file.url }}" width="80%" height="300px"
                                         loading="lazy" style="border: #dddddd; margin-bottom: 20px;"></iframe>
 
@@ -305,16 +305,19 @@
                     </div>
                     <div class="mx-5" style="display: flex; gap: 20px; align-items: start; justify-content: space-between; width: auto;">
                         <div class="my-3" style="margin-left: auto; margin-right: auto;">
-                            <h4><strong>Location Pin:</strong></h4>
+                            <div style = "display: flex; gap: 10px; align-items: center; justify-content: center;">
+                            <h4><strong>Location:</strong></h4>
+                            </div>
+                            <button class="btn btn-primary" id="saveButton">Save Pin</button>
                             <gmpx-api-loader key="{{ google_maps_api_key }}" solution-channel="GMP_GE_mapsandplacesautocomplete_v1">
                             </gmpx-api-loader>
-                            <gmp-map center="40.749933,-73.98633" zoom="13" map-id="DEMO_MAP_ID">
+                            <gmp-map class="rounded mt-2" center="40.749933,-73.98633" zoom="13" map-id="DEMO_MAP_ID">
                               <div slot="control-block-start-inline-start" class="place-picker-container">
                                 <gmpx-place-picker placeholder="Enter an address"></gmpx-place-picker>
                               </div>
                               <gmp-advanced-marker></gmp-advanced-marker>
                             </gmp-map>
-                            <button id="saveButton">Save Pin</button>
+                            
                         </div>
 
                         <div class="my-3" style="margin-left: auto; margin-right: auto;">
@@ -360,8 +363,8 @@
                                     <div class="pagination" style="justify-content: center">
                                         <span class="step-links">
                                             {% if page_obj.has_previous %}
-                                                <a href="?page=1">&laquo; first</a>
-                                                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                                                <a href="?page=1"><button class="btn btn-primary"></button>&laquo; First Page</button></a>
+                                                <a href="?page={{ page_obj.previous_page_number }}"><button class="btn btn-primary">Previous Page</button></a>
                                             {% endif %}
 
                                             <span class="current">
@@ -369,8 +372,8 @@
                                             </span>
 
                                             {% if page_obj.has_next %}
-                                                <a href="?page={{ page_obj.next_page_number }}">next</a>
-                                                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                                                <a href="?page={{ page_obj.next_page_number }}"><button class="btn btn-primary">Next Page</button></a>
+                                                <a href="?page={{ page_obj.paginator.num_pages }}"><button class="btn btn-primary">Last Page &raquo;</button></a>
                                             {% endif %}
                                         </span>
                                     </div>
@@ -381,7 +384,7 @@
                                     <form method="post" class="mt-4">
                                         {% csrf_token %}
                                         {{ form.commentText }}
-                                        <button type = "submit" class="btn btn-primary">
+                                        <button type = "submit" class="btn btn-primary mt-2">
                                             Submit Comment
                                         </button>
                                     </form>
