@@ -308,7 +308,7 @@
                             <div style = "display: flex; gap: 10px; align-items: center; justify-content: center;">
                             <h4><strong>Location:</strong></h4>
                             </div>
-                            <button class="btn btn-primary" id="saveButton">Save Pin</button>
+                            <button class="btn btn-success" id="saveButton">Save Pin</button>
                             <gmpx-api-loader key="{{ google_maps_api_key }}" solution-channel="GMP_GE_mapsandplacesautocomplete_v1">
                             </gmpx-api-loader>
                             <gmp-map class="rounded mt-2" center="40.749933,-73.98633" zoom="13" map-id="DEMO_MAP_ID">
@@ -363,7 +363,7 @@
                                     <div class="pagination" style="justify-content: center">
                                         <span class="step-links">
                                             {% if page_obj.has_previous %}
-                                                <a href="?page=1"><button class="btn btn-primary"></button>&laquo; First Page</button></a>
+                                                <a href="?page=1"><button class = "btn btn-primary"> First Page &laquo;</button></a>
                                                 <a href="?page={{ page_obj.previous_page_number }}"><button class="btn btn-primary">Previous Page</button></a>
                                             {% endif %}
 
@@ -384,7 +384,7 @@
                                     <form method="post" class="mt-4">
                                         {% csrf_token %}
                                         {{ form.commentText }}
-                                        <button type = "submit" class="btn btn-primary mt-2">
+                                        <button type = "submit" class="btn btn-success mt-2">
                                             Submit Comment
                                         </button>
                                     </form>
