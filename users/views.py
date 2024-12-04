@@ -90,6 +90,12 @@ class TravelPlanUpdateView(generic.UpdateView):
     form_class = PlanForm
     template_name = 'users/project_editor.html'
 
+    def dispatch(self, request, *args, **kwargs):
+        travel_plan = self.get_object()
+        if request.user not in travel_plan.users.all():
+            return redirect('home')
+        return super().dispatch(request, *args, **kwargs)
+
     def get_object(self, queryset=None):
         group_code = self.kwargs.get("primary_group_code")
         return get_object_or_404(TravelPlan, primary_group_code=group_code)
@@ -157,6 +163,12 @@ class DestinationUpdateView(generic.UpdateView):
     model = Destination
     form_class = DestinationForm
     template_name = 'users/destination_editor.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        destination = self.get_object()
+        if request.user not in destination.travel_plan.users.all():
+            return redirect('home')
+        return super().dispatch(request, *args, **kwargs)
 
     def get_object(self, queryset=None):
         id = self.kwargs.get("id")
@@ -377,6 +389,12 @@ class DetailView(generic.DetailView):
     template_name = "users/detail.html"
     context_object_name = 'travelplan'
 
+    def dispatch(self, request, *args, **kwargs):
+        travel_plan = self.get_object()
+        if request.user not in travel_plan.users.all():
+            return redirect('home')
+        return super().dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         destinations = Destination.objects.filter(travel_plan=self.object)
@@ -419,6 +437,12 @@ class DestinationView(generic.DetailView):
     template_name = "users/destination_detail.html"
     context_object_name = 'destination'
 
+    def dispatch(self, request, *args, **kwargs):
+        travel_plan = self.get_object()
+        if request.user not in travel_plan.users.all():
+            return redirect('home')
+        return super().dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         id = self.kwargs["id"]
         context = {}
@@ -444,8 +468,8 @@ class DestinationView(generic.DetailView):
             context['saved_location'] = {
                 'lat': destination.latitude,
                 'lng': destination.longitude,
-                'name': destination.location_name,  # Replace with your actual field for name
-                'address': destination.location_address,  # Replace with your actual field for address
+                'name': destination.location_name,  
+                'address': destination.location_address,  
             }
         else:
             context['saved_location'] = None
@@ -472,6 +496,9 @@ class DestinationView(generic.DetailView):
 def destination_budget(request, primary_group_code, id):
     destination = get_object_or_404(Destination, id=id, travel_plan__primary_group_code=primary_group_code)
     travelplan = destination.travel_plan
+
+    if request.user not in travelplan.users.all():
+        return redirect('home')
 
     if request.method == 'POST' and request.user.is_authenticated:
         form = ExpenseForm(request.POST)
