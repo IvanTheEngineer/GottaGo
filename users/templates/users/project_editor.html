@@ -1,3 +1,14 @@
+<!--
+/***************************************************************************************
+*  REFERENCES
+*  Title: How to Implement Django Datepicker Calender in Forms Date Field
+*  Used for: Calendar date selection in forms
+*  Author: Asim Zahid
+*  Date: Sep 9, 2021
+*  URL: https://mrasimzahid.medium.com/how-to-implement-django-datepicker-calender-in-forms-date-field-9e23479b5db
+*************************************************************************************** 
+-->
+
 {% extends "users/base.html" %}
 {% load bootstrap5 %}
 {% load custom_filters %}
@@ -48,10 +59,6 @@
                 {{ form.end_date }}
             </div>
         </div>
-
-        <p>
-            To delete a file, select the "Clear" checkbox and save the plan.
-        </p>
 
         <!-- Image Upload and Metadata -->
         <div class="mb-4">
@@ -117,7 +124,7 @@
             </div>
         </div>          -->
                     <p class="text-paragraph">
-                                To delete any files, select the "Clear" checkbox for files you want deleted, and save the plan.
+                                To delete a file, select the "Clear" checkbox for the file you want deleted and save the plan.
             </p>
         <button type="submit" class="btn btn-success" style="width: 100%">Save Plan</button>
         <a href="{% url 'detail' primary_group_code %}" style="width: 100%; margin-top: 10px;" class="btn btn-danger">Cancel</a>

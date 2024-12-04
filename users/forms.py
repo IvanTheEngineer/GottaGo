@@ -1,3 +1,12 @@
+#***************************************************************************************
+#  REFERENCES
+#  Title: How to Implement Django Datepicker Calender in Forms Date Field
+#  Used for: Calendar date selection in forms
+#  Author: Asim Zahid
+#  Date: Sep 9, 2021
+#  URL: https://mrasimzahid.medium.com/how-to-implement-django-datepicker-calender-in-forms-date-field-9e23479b5db
+#**************************************************************************************
+
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.forms import ClearableFileInput
