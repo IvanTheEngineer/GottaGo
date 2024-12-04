@@ -20,8 +20,10 @@
         <div class="pagination" style="justify-content: center">
             <span class="step-links">
                 {% if explore_travel_plans.has_previous %}
-                    <a href="?page=1">&laquo; first</a>
-                    <a href="?page={{ explore_travel_plans.previous_page_number }}">previous</a>
+                    {% if explore_travel_plans.paginator.num_pages > 2 and explore_travel_plans.number > 2 %}
+                        <a href="?page=1"><button class="btn btn-primary">&laquo; First</button></a>
+                    {% endif %}
+                    <a href="?page={{ explore_travel_plans.previous_page_number }}"><button class="btn btn-primary">Previous</button></a>
                 {% endif %}
 
                 <span class="current">
@@ -29,8 +31,10 @@
                 </span>
 
                 {% if explore_travel_plans.has_next %}
-                    <a href="?page={{ explore_travel_plans.next_page_number }}">next</a>
-                    <a href="?page={{ explore_travel_plans.paginator.num_pages }}">last &raquo;</a>
+                    <a href="?page={{ explore_travel_plans.next_page_number }}"><button class="btn btn-primary">Next</button></a>
+                    {% if explore_travel_plans.paginator.num_pages > 2 and explore_travel_plans.number < explore_travel_plans.paginator.num_pages|add:"-1" %}
+                        <a href="?page={{ explore_travel_plans.paginator.num_pages }}"><button class="btn btn-primary">Last &raquo;</button></a>
+                    {% endif %}
                 {% endif %}
             </span>
         </div>
