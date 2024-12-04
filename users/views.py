@@ -272,7 +272,7 @@ def user_plans_view(request):
         destinations = Destination.objects.filter(travel_plan__in=travel_plans)
 
         # Add an explicit ordering to the queryset
-        travel_plans = travel_plans.order_by('-created_at')  # or any other field
+        travel_plans = travel_plans.order_by('start_date')  # or any other field
         paginator = Paginator(travel_plans, 3)
         page = request.GET.get('page')
         try:
