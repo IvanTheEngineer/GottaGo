@@ -271,6 +271,8 @@ def user_plans_view(request):
         travel_plans = TravelPlan.objects.filter(Q(user=request.user) | Q(users=request.user)).distinct()
         destinations = Destination.objects.filter(travel_plan__in=travel_plans)
 
+        # Add an explicit ordering to the queryset
+        travel_plans = travel_plans.order_by('-created_at')  # or any other field
         paginator = Paginator(travel_plans, 3)
         page = request.GET.get('page')
         try:
