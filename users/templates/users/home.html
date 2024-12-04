@@ -30,7 +30,7 @@
                     <h5 class="fw-bold" >Profile</h5>
                     {% if user.is_authenticated %}
                         <div class="icon-hover">
-                            <a href="{% url 'profile' %}"> {% bs_icon 'person-circle' size="3rem" color="blue" %}</a>
+                            <a href="{% url 'profile' %}"> {% bs_icon 'person-circle' size="3rem" color="#6a5acd" %}</a>
                         </div>
                     {% else %}
                         <div class="icon-hover">
@@ -58,7 +58,7 @@
                     <h5 class="fw-bold">Create Travel Plan</h5>
                     {% if user.is_authenticated %}
                         <div class="icon-hover">
-                            <a href="{% url 'project_creator' %}"> {% bs_icon 'plus-circle-fill' size="3rem" color="green" %}</a>
+                            <a href="{% url 'project_creator' %}"> {% bs_icon 'plus-circle-fill' size="3rem" color="#00ffbb" %}</a>
                         </div>
                     {% else %}
                         <div class="icon-hover">
@@ -74,7 +74,7 @@
                     <h5 class="fw-bold">Requests</h5>
                     {% if user.is_authenticated %}
                         <div class="icon-hover">
-                            <a href="{% url 'joinrequests' %}"> {% bs_icon 'envelope-open-fill' size="3rem" color="white" %}</a>
+                            <a href="{% url 'joinrequests' %}"> {% bs_icon 'envelope-open-fill' size="3rem" color="#ffb3cb" %}</a>
                         </div>
                     {% else %}
                         <div class="icon-hover">
@@ -88,11 +88,11 @@
                     <h5 class="fw-bold">Explore All Plans</h5>
                     {% if user.is_authenticated %}
                         <div class="icon-hover">
-                            <a href="{% url 'explore_plans' %}"> {% bs_icon 'airplane-fill' size="3rem" color="purple" %}</a>
+                            <a href="{% url 'explore_plans' %}"> {% bs_icon 'airplane-fill' size="3rem" color="white" %}</a>
                         </div>
                     {% else %}
                         <div class="icon-hover">
-                            <a href="{% url 'explore_plans' %}"> {% bs_icon 'airplane-fill' size="3rem" color="green" %}</a>
+                            <a href="{% url 'explore_plans' %}"> {% bs_icon 'airplane-fill' size="3rem" color="white" %}</a>
                         </div>
                     {% endif %}
                     <p class="mt-2">View a listing of all existing travel plans.</p>
@@ -102,7 +102,7 @@
                     <h5 class="fw-bold">Join Groups</h5>
                     {% if user.is_authenticated %}
                         <div class="icon-hover">
-                            <a href="{% url 'join_group' %}"> {% bs_icon 'people-fill' size="3rem" color="orange" %}</a>
+                            <a href="{% url 'join_group' %}"> {% bs_icon 'people-fill' size="3rem" color="#87ceeb" %}</a>
                         </div>
                     {% else %}
                         <div class="icon-hover">

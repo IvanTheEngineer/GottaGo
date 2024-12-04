@@ -19,7 +19,7 @@
 
     {% if user.is_authenticated %}
     <div style="margin-top: 20px">
-        <p class="mb-2"><span class="text-label">Username:</span> {{ user.username }}</p>
+        <p class="mb-2"><span class="text-label">Username:</span> {{ user|email_handle }}</p>
         <p class="mb-2"><span class="text-label">Email:</span> {{ user.email }}</p>
         <p class="mb-2"><span class="text-label">Name:</span> {{ user.first_name }} {{ user.last_name }}</p>
         <p class="mb-2"><span class="text-label">Role:</span> {{ user|display_role }}</p>
