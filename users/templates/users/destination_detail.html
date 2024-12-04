@@ -342,8 +342,19 @@
                                 {% if destination.comments %}
 
                                     {% for comment in page_obj %}
-                                        <div style="text-align: center; margin-left: 5%; margin-right: 5%">
-                                            <strong>{{ comment.user.email }}</strong>: {{ comment.commentText }} | {{ comment.upload_timestamp|date:"F j, Y"  }}
+                                        <div style="display: flex; align-items: flex-start; text-align: left; margin: 2%;">
+                                            {# Source: https://stackoverflow.com/questions/30810028/how-to-display-image-from-google-account-django-allauth/30813465#30813465 #}
+                                            <img style="margin-bottom: 0;" src="{{ comment.user.socialaccount_set.all.0.get_avatar_url }}" width="40" height="40" class="rounded-circle"
+                                                 alt="{{ comment.user.email }} image" />
+                                            <div style="align-items: baseline">
+                                                {# https://getbootstrap.com/docs/5.0/content/typography/ #}
+                                                {# Used this for getting the date text to be smaller and muted #}
+                                                <div style="display: flex; align-items: baseline">
+                                                    <p style="padding-left: 10px; margin-bottom: 2px"><strong style="margin-right: 10px">{{ comment.user.email }}</strong></p>
+                                                    <small class="text-muted">{{ comment.upload_timestamp|date:"F j, Y"  }}</small>
+                                                </div>
+                                                <p style="padding-left: 10px">{{ comment.commentText }}</p>
+                                            </div>
                                         </div>
                                     {% endfor %}
                                     <div class="pagination" style="justify-content: center">

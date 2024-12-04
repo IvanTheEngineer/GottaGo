@@ -7,12 +7,24 @@
 </head>
 
 <div class="profile-form rounded-2 shadow-sm p-4 py-5 bg-white">
-    <h1 class="mb-4 fs-3 fw-bold text-center">User Profile</h1>
     {% if user.is_authenticated %}
+        <div style="display: flex; align-items: flex-start">
+            <img src="{{ user.socialaccount_set.all.0.get_avatar_url  }} " width="70" height="70" class="rounded-circle"/>
+            <h1 style="margin-left: 30px" class="mb-4 fs-3 fw-bold text-center">User Profile</h1>
+        </div>
+
+    {% else %}
+        <h1 class="mb-4 fs-3 fw-bold text-center">User Profile</h1>
+    {% endif %}
+
+    {% if user.is_authenticated %}
+    <div style="margin-top: 20px">
         <p class="mb-2"><span class="text-label">Username:</span> {{ user.username }}</p>
         <p class="mb-2"><span class="text-label">Email:</span> {{ user.email }}</p>
         <p class="mb-2"><span class="text-label">Name:</span> {{ user.first_name }} {{ user.last_name }}</p>
         <p class="mb-2"><span class="text-label">Role:</span> {{ user|display_role }}</p>
+    </div>
+
     {% else %}
         <p class="text-center mt-5" style="font-size: 25px"><a href="{% url 'login' %}">Log in</a> to see your profile.</p>
     {% endif %}
