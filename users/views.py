@@ -268,8 +268,8 @@ def explore_plans_view(request):
 def user_plans_view(request):
     if request.user.is_authenticated:
         # Get all plans the user is in
-        travel_plans = request.user.plans.all()
-        destinations = request.user.destinations.all()
+        travel_plans = TravelPlan.objects.filter(Q(user=request.user) | Q(users=request.user)).distinct()
+        destinations = Destination.objects.filter(travel_plan__in=travel_plans)
 
         paginator = Paginator(travel_plans, 3)
         page = request.GET.get('page')
