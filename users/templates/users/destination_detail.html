@@ -121,7 +121,6 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const container = document.querySelector("#files");
-            const container2 = document.querySelector("#files2");
             updateContainerStyle();
            
    
@@ -137,11 +136,6 @@
                 } else {
                     container.style.justifyContent = "space-between";
                 }
-                if (container2.children.length === 1) {
-                    container2.style.justifyContent = "center";
-                } else {
-                    container2.style.justifyContent = "space-between";
-                }
             }
         });
     </script>
@@ -153,7 +147,7 @@
         gmp-map {
             display: block;
             height: 400px;
-            width: 400px;
+            width: 900px;
             margin: auto;
         }
       .place-picker-container {
@@ -242,10 +236,10 @@
                                 <div style = "display: flex; gap: 10px; align-items: center; justify-content: center;">
                                 <p style="margin: 0; font-size: 20px"><strong>Image:</strong></p>
                                 <a href="{{ destination.jpg_upload_file.url }}" target="_blank" class="btn btn-outline-primary">
-                                    View
+                                    Expanded View
                                 </a>
                                 </div>
-                                <img style="margin-bottom: 10px; max-height: 500px; max-width: 800px; width: auto; height: auto;" src="{{ destination.jpg_upload_file.url }}" class="rounded mt-2"
+                                <img style="margin-bottom: 10px; max-height: 650px; max-width: 900px; width: auto; height: auto;" src="{{ destination.jpg_upload_file.url }}" class="rounded mt-2"
                                 alt="{{ destination.destination_name }} image" />
                                
                                
@@ -282,40 +276,42 @@
                                
                         </div>
                     </div>
-                    <div class="mx-5 mt-3" id="files" style="display: flex; gap: 20px; align-items: start; justify-content: space-between; width: auto;">
-                        <div class="mb-3">
-                            <div style = "display: flex; gap: 10px; align-items: center; justify-content: center;">
-                            <p style="margin: 0;font-size: 20px"><strong>Location Pin:</strong></p> <button class="btn btn-success" id="saveButton">Save Pin</button>
-                            </div>
-                            <gmpx-api-loader key="{{ google_maps_api_key }}" solution-channel="GMP_GE_mapsandplacesautocomplete_v1">
-                            </gmpx-api-loader>
-                            <gmp-map class="rounded mt-2" center="40.749933,-73.98633" zoom="13" map-id="DEMO_MAP_ID">
-                              <div slot="control-block-start-inline-start" class="place-picker-container">
-                                <gmpx-place-picker placeholder="Enter an address"></gmpx-place-picker>
-                              </div>
-                              <gmp-advanced-marker></gmp-advanced-marker>
-                            </gmp-map>
-                           
+
+                    <div class="my-3">
+                        <div style = "display: flex; gap: 10px; align-items: center; justify-content: center;">
+                        <p style="margin: 0;font-size: 20px"><strong>Location Pin:</strong></p> <button class="btn btn-success" id="saveButton">Update Stored Pin</button>
                         </div>
- 
+                        <gmpx-api-loader key="{{ google_maps_api_key }}" solution-channel="GMP_GE_mapsandplacesautocomplete_v1">
+                        </gmpx-api-loader>
+                        <gmp-map class="rounded mt-2" center="40.749933,-73.98633" zoom="13" map-id="DEMO_MAP_ID">
+                          <div slot="control-block-start-inline-start" class="place-picker-container">
+                            <gmpx-place-picker placeholder="Enter an address"></gmpx-place-picker>
+                          </div>
+                          <gmp-advanced-marker></gmp-advanced-marker>
+                        </gmp-map>
+                       
+                    </div>
+
+                    <div class="mx-5 my-4" id="files" style="display: flex; gap: 20px; align-items: start; justify-content: space-between; width: auto;">
+            
  
                         {% if destination.pdf_upload_file %}
                                 <div>
                                 <div style = "display: flex; gap: 10px; align-items: center; justify-content: center;">
                                     <p style="margin: 0;font-size: 20px"><strong>PDF File:</strong></p>
                                     <a href="{{ destination.pdf_upload_file.url }}" target="_blank" class="btn btn-outline-primary">
-                                        View
+                                        Expanded View
                                     </a>
                                 </div>
-                                <div style="width: 100%;">
-                                    <iframe class="mt-2 fa-file-pdf-o" src="{{ destination.pdf_upload_file.url }}" width="350px" height="400px"
+                                <div style="width: 100%; height: 100%">
+                                    <iframe class="mt-2 fa-file-pdf-o" src="{{ destination.pdf_upload_file.url }}" width="450px" height="640px"
                                         loading="lazy" style="border: #dddddd; margin-bottom: 10px;"></iframe>
  
  
                                 </div>
                                 {% if destination.pdf_metadata %}
                                 {% with metadata=destination.pdf_metadata %}
-                                <div style="text-align: left; margin-left: 10%; margin-right: 10%;">
+                                <div style="text-align: left; margin-left: 10px; margin-right: 10px;">
                                     {% if metadata.file_title %}
                                     <p style="margin: 0;" class="text-paragraph">
                                         <strong>Title:</strong> {{ metadata.file_title }}
@@ -339,25 +335,20 @@
                                 {% endif %}
                             </div>
                             {% endif %}
- 
- 
-                    </div>
-                        <div>
-                            <div class="mx-5 mt-3" id="files2" style="display: flex; gap: 20px; align-items: start; justify-content: space-between; width: auto;">
- 
- 
-                                {% if destination.txt_upload_file %}
+
+
+                            {% if destination.txt_upload_file %}
                                 <div>
                                 <div style = "display: flex; gap: 10px; align-items: center; justify-content: center;">
                                 <p style="margin: 0; font-size: 20px"><strong>Text File:</strong></p>
                                 <a href="{% url 'download_file' %}?txturl={{ destination.txt_upload_file.url}}&filename={{ destination.txt_upload_file }}" class="btn btn-primary"> Download</a>
                                 <a href="{{ destination.txt_upload_file.url }}" target="_blank" class="btn btn-outline-primary">
-                                    View
+                                    Expanded View
                                 </a>
                                 </div>
-                                <div class="mt-2" style=" text-align: center">
-                                    <iframe src="{{ destination.txt_upload_file.url }}"
-                                    style=" border: #dddddd; box-shadow: 0 0 10px darkmagenta; margin-bottom: 10px;"></iframe>
+                                <div class="mt-2" style="">
+                                    <iframe src="{{ destination.txt_upload_file.url }}" width="450px" height="640px"
+                                    style="border: #dddddd; box-shadow: 0 0 10px darkmagenta; margin-bottom: 10px;"></iframe>
                                 </div>
                                 {% if destination.txt_metadata %}
                                 {% with metadata=destination.txt_metadata %}
@@ -387,10 +378,12 @@
                             {% endif %}
  
  
- 
+                    </div>
+                        <div>
+                            <div class="mx-5 my-4" style="display: flex; gap: 20px; align-items: start; justify-content: center; width: auto;">
  
                                 <div style="height: 100%; align-items: start; justify-content: start; width:350px">
-                                <h4><strong>Expenses Summary:</strong></h4>
+                                <h4><strong>Expenses Summary</strong></h4>
                                 {% if total_expenses %}
                                     <p class="fs-5">Total Expenses: ${{ total_expenses|floatformat:2 }}</p>
                                     <a href="{% url 'destination_budget' primary_group_code=destination.travel_plan.primary_group_code id=destination.id %}"
@@ -411,8 +404,10 @@
  
                                
                             </div>
+
+                        
                         <div>
-                            <h4> <strong> Comments </strong> </h4>
+                            <h4 style="text-align: left; padding-left:20px"> <strong> Comments </strong> </h4>
                                 {% if destination.comments %}
 
                                     {% for comment in page_obj %}
