@@ -71,300 +71,305 @@
     </style>
 </head>
 
-<div class="destinations-form rounded-2 shadow-sm px-4 pb-5 bg-white">
-    
-      
-    <div class="card-body">
-        <div style = "display: flex; align-items: start; justify-content: left; padding-bottom: 20px;">
-            <div style="display: flex; gap: 10px; align-items: start; justify-content: center">
-                <a style="text-align: left;" class="btn btn-primary" href="{% url 'plans'  %}"> Back</a>
+<div class="destinations-form rounded-2 shadow-sm bg-white">
+    <div class="card px-4 pb-5">
+        <div class="card-body">
+            <div style = "display: flex; align-items: start; justify-content: left; padding-bottom: 20px;">
+                <div style="display: flex; gap: 10px; align-items: start; justify-content: center">
+                    <a style="text-align: left;" class="btn btn-primary" href="{% url 'plans'  %}"> Back</a>
+                </div>
+                <div style="display: flex; gap: 10px; align-items: start; justify-content: flex-end; width: 100%;">
+                    <a style="" href="{% url 'edit' travelplan.primary_group_code %}" class="btn btn-primary">Edit</a>
+                </div>
             </div>
-            <div style="display: flex; gap: 10px; align-items: start; justify-content: flex-end; width: 100%;">
-                <a style="" href="{% url 'edit' travelplan.primary_group_code %}" class="btn btn-primary">Edit</a>
-            </div>
-        </div>
-        <div class="travel-plan-banner mb-3" style="position: relative">
-            {% if travelplan.jpg_upload_file %}
-                <img src="{{ travelplan.jpg_upload_file.url }}" class="img-fluid w-100" alt="{{ travelplan.plan_name }} Banner image" style="height: 200px; object-fit: cover;"/>
-            {% else %}
-                <div class="img-fluid w-100" alt="no image" style="height: 200px; object-fit: cover; display: block; color: white"> </div>
-            {% endif %}
-
-            <div class="gradient-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: black; opacity: 50%"></div>
-            <div class="banner-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 10px; opacity: 100%; color: white; -webkit-text-stroke: 0.0px darkorchid">
-                <h1 class="mb-2">{{ travelplan.plan_name }} </h1>
-                <p style="font-size: 20px"><strong>Group Code:</strong> {{ travelplan.primary_group_code }} </p>
-                <p style="font-size: 20px"><strong>Group Size:</strong> {{ travelplan.group_size }} </p>
-                {% if travelplan.start_date and travelplan.end_date%}
-                    <p style="font-size: 20px"><strong>Dates: </strong> {{ travelplan.start_date }} <strong> - </strong> {{ travelplan.end_date }}</p>
+            <div class="travel-plan-banner mb-3" style="position: relative">
+                {% if travelplan.jpg_upload_file %}
+                    <img src="{{ travelplan.jpg_upload_file.url }}" class="img-fluid w-100" alt="{{ travelplan.plan_name }} Banner image" style="height: 200px; object-fit: cover;"/>
                 {% else %}
-                    <p style="font-size: 20px"><strong>Dates: </strong> None</p>
+                    <div class="img-fluid w-100" alt="no image" style="height: 200px; object-fit: cover; display: block; color: white"> </div>
+                {% endif %}
+
+                <div class="gradient-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: black; opacity: 50%"></div>
+                <div class="banner-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 10px; opacity: 100%; color: white; -webkit-text-stroke: 0.0px darkorchid">
+                    <h1 class="mb-2">{{ travelplan.plan_name }} </h1>
+                    <p style="font-size: 20px"><strong>Group Code:</strong> {{ travelplan.primary_group_code }} </p>
+                    <p style="font-size: 20px"><strong>Group Size:</strong> {{ travelplan.group_size }} </p>
+                    {% if travelplan.start_date and travelplan.end_date%}
+                        <p style="font-size: 20px"><strong>Dates: </strong> {{ travelplan.start_date }} <strong> - </strong> {{ travelplan.end_date }}</p>
+                    {% else %}
+                        <p style="font-size: 20px"><strong>Dates: </strong> None</p>
+                    {% endif %}
+                </div>
+            </div>
+            <p style="font-size: 20px"><strong>Description:</strong> {{ travelplan.trip_description }} </p>
+
+            <div class="mx-5" style="display: flex; gap: 20px; align-items: start; justify-content: space-between; width: auto;">
+
+            <div class="mt-3">
+                <p style="font-size: 20px"><strong>Image:</strong></p>
+                {% if travelplan.jpg_upload_file %}
+                <img style="margin-bottom: 20px;" src="{{ travelplan.jpg_upload_file.url }}" width="400" height="400" class="rounded"
+                    alt="{{ travelplan.plan_name }} image" />
+                {% if travelplan.jpg_metadata %}
+                {% with metadata=travelplan.jpg_metadata %}
+                <div style="text-align: left; margin-left: 20px; margin-right: 20px;" >
+                    {% if metadata.file_title %}
+                    <p style="margin: 0;" class="text-paragraph">
+                        <strong>Title:</strong> {{ metadata.file_title }}
+                    </p>
+                    {% endif %}
+                    {% if metadata.description %}
+                    <p style="margin: 0;" class="text-paragraph">
+                        <strong>Description:</strong> {{ metadata.description }}
+                    </p>
+                    {% endif %}
+                    {% if metadata.keywords %}
+                    <p style="margin: 0;" class="text-paragraph">
+                        <strong>Keywords:</strong> {{ metadata.keywords }}
+                    </p>
+                    {% endif %}
+                    <p style="margin: 0;" class="text-paragraph">
+                        <strong>Uploaded:</strong> {{ metadata.upload_timestamp|date:"F j, Y" }}
+                    </p>
+                </div>
+                {% endwith %}
+                {% endif %}
+                {% else %}
+                <p>No image uploaded.</p>
                 {% endif %}
             </div>
-        </div>
-        <p style="font-size: 20px"><strong>Description:</strong> {{ travelplan.trip_description }} </p>
 
-        <div class="mx-5" style="display: flex; gap: 20px; align-items: start; justify-content: space-between; width: auto;">
-
-        <div class="mt-3">
-            <p style="font-size: 20px"><strong>Image:</strong></p>
-            {% if travelplan.jpg_upload_file %}
-            <img style="margin-bottom: 20px;" src="{{ travelplan.jpg_upload_file.url }}" width="400" height="400" class="rounded"
-                alt="{{ travelplan.plan_name }} image" />
-            {% if travelplan.jpg_metadata %}
-            {% with metadata=travelplan.jpg_metadata %}
-            <div style="text-align: left; margin-left: 20px; margin-right: 20px;" >
-                {% if metadata.file_title %}
-                <p style="margin: 0;" class="text-paragraph">
-                    <strong>Title:</strong> {{ metadata.file_title }}
-                </p>
-                {% endif %}
-                {% if metadata.description %}
-                <p style="margin: 0;" class="text-paragraph">
-                    <strong>Description:</strong> {{ metadata.description }}
-                </p>
-                {% endif %}
-                {% if metadata.keywords %}
-                <p style="margin: 0;" class="text-paragraph">
-                    <strong>Keywords:</strong> {{ metadata.keywords }}
-                </p>
-                {% endif %}
-                <p style="margin: 0;" class="text-paragraph">
-                    <strong>Uploaded:</strong> {{ metadata.upload_timestamp|date:"F j, Y" }}
-                </p>
+            <div class="my-3">
+                <p style="font-size: 20px"><strong>Destination Pins:</strong></p>
+                <gmpx-api-loader key="{{ google_maps_api_key }}" solution-channel="GMP_GE_mapsandplacesautocomplete_v1">
+                </gmpx-api-loader>
+                <gmp-map center="40.749933,-73.98633" zoom="13" map-id="DEMO_MAP_ID">
+                {% for destination in destination_data %}
+                    {% if destination.latitude and destination.longitude %}
+                    <gmp-advanced-marker position="{{destination.latitude}},{{destination.longitude}}"  data-info="<strong>{{ destination.name }}</strong><br>{{ destination.address }}"></gmp-advanced-marker>
+                    {% endif %}
+                {% endfor %}
+                </gmp-map>
             </div>
-            {% endwith %}
-            {% endif %}
-            {% else %}
-            <p>No image uploaded.</p>
-            {% endif %}
         </div>
 
-        <div class="my-3">
-            <p style="font-size: 20px"><strong>Destination Pins:</strong></p>
-            <gmpx-api-loader key="{{ google_maps_api_key }}" solution-channel="GMP_GE_mapsandplacesautocomplete_v1">
-            </gmpx-api-loader>
-            <gmp-map center="40.749933,-73.98633" zoom="13" map-id="DEMO_MAP_ID">
-            {% for destination in destination_data %}
-                {% if destination.latitude and destination.longitude %}
-                <gmp-advanced-marker position="{{destination.latitude}},{{destination.longitude}}"  data-info="<strong>{{ destination.name }}</strong><br>{{ destination.address }}"></gmp-advanced-marker>
+            <div class="text-left">
+                <p style="font-size: 20px"><strong>Total Trip Budget:</strong></p>
+                {% if total_plan_expenses %}
+                    <p class="fs-4">${{ total_plan_expenses|floatformat:2 }}</p>
+                {% else %}
+                    <p>No expenses recorded for this trip</p>
                 {% endif %}
-            {% endfor %}
-            </gmp-map>
-        </div>
+            </div>
+        
+            {% if travelplan.destinations %}
+            <div class = "list-group">
+                {% for destination in page_obj %}
+    {#            <div class = "list-group-item mb-3" style="background-color: paleturquoise; border-radius: 20px; width: 70%; box-shaodw: 0 0 3px; align-self: center; text-align: center">#}
+    {#                <h4 class="mb-2">{{ destination.destination_name }}</h4>#}
+    {#                <p style="font-size: 20px"><strong>Description:</strong> {{ destination.destination_description }} </p>#}
+                    
+                    <a href="{% url 'destinations' travelplan.primary_group_code destination.id %}">
+                        <p style = "text-align: left" class="text-left mt-2 fs-5 text-primary"> Destination Name: {{destination.destination_name}}</p>
+                    </a>
+
+                    <div style = "display: flex; align-items: start; justify-content: left; padding-bottom: 20px;">
+
+                        <div style="display: flex; gap: 10px; align-items: start; justify-content: center">
+                            
+
+    {#                            <p style="font-size: 20px"><strong>Images:</strong></p>#}
+                                {% if destination.jpg_upload_file %}
+                                    <img src="{{ destination.jpg_upload_file.url }}" style="width: 200px; height: 200px; margin-right: 20px;"
+                                    class="rounded" alt="{{ plan.plan_name }} image"/>
+                                {% else %}
+                                    <p>No image uploaded for destination</p>
+                                {% endif %}
+
+    {#                            {% if destination.jpg_metadata.all.0 %}#}
+    {#                            {% with metadata=destination.jpg_metadata.all.0 %}#}
+    {#                            <div style="text-align: center">#}
+    {#                                <p class="text-paragraph">#}
+    {#                                    <strong>Title:</strong> {{ metadata.file_title }}#}
+    {#                                </p>#}
+    {#                                <p class="text-paragraph">#}
+    {#                                    <strong>Description:</strong> {{ metadata.description }}#}
+    {#                                </p>#}
+    {#                                <p class="text-paragraph">#}
+    {#                                    <strong>Keywords:</strong> {{ metadata.keywords }}#}
+    {#                                </p>#}
+    {#                                <p class="text-paragraph">#}
+    {#                                    <strong>Uploaded:</strong> {{ metadata.upload_timestamp|date:"F j, Y" }}#}
+    {#                                </p>#}
+    {#                            </div>#}
+    {#                            {% endwith %}#}
+    {#                            {% endif %}#}
+
+    {#                        <div>#}
+    {#                            <p style="font-size: 20px"><strong>Text Files:</strong></p>#}
+    {#                            {% if destination.txt_upload_file %}#}
+    {#                            <div style="text-align: center">#}
+    {#                                <iframe src="{{ destination.txt_upload_file.url }}"#}
+    {#                                    style="border: #dddddd; box-shadow: 0 0 10px darkmagenta"></iframe>#}
+    {#                            </div>#}
+    {#                            <div>#}
+    {#                                <a href="{% url 'download_file' %}?txturl={{ destination.txt_upload_file.url}}&filename={{ destination.txt_upload_file }}"#}
+    {#                                    class="btn btn-primary">Download</a>#}
+    {#                            </div>#}
+    {#                            <div>#}
+    {#                                <a href="{{ destination.txt_upload_file.url }}" target="_blank" class="btn btn-outline-primary">#}
+    {#                                    View Text File#}
+    {#                                </a>#}
+    {#                            </div>#}
+    {#                            {% else %}#}
+    {#                            <p>No text file uploaded.</p>#}
+    {#                            {% endif %}#}
+    {#                        </div>#}
+                        </div>
+                        <div style="display: flex; gap: 10px; align-items: flex-end; justify-content: flex-end; width: 100%;">
+                            <a  style = "text-align: right" href="{% url 'delete_destination' %}?id={{destination.id}}" class="btn btn-danger">Delete</a>
+                        </div>
+    {#                        <div>#}
+    {#                            <p style="font-size: 20px"><strong>PDF Files:</strong></p>#}
+    {#                            {% if destination.pdf_upload_file %}#}
+    {#                            <div class="mt-3" style="width: 100%;">#}
+    {#                                <iframe class="fa-file-pdf-o" src="{{ destination.pdf_upload_file.url }}" width="80%" height="400px"#}
+    {#                                    loading="lazy" style="border: #dddddd"></iframe>#}
+    {##}
+    {#                            </div>#}
+    {#                            <a href="{{ destination.pdf_upload_file.url }}" target="_blank" class="btn btn-outline-primary">#}
+    {#                                    View PDF File#}
+    {#                                </a>#}
+    {#                            {% else %}#}
+    {#                            <p>No PDF file uploaded.</p>#}
+    {#                            {% endif %}#}
+    {#                        </div>#}
+
+                    </div>
+    {#                <a style="margin-bottom: 10px; margin-top: 10px;" href="{% url 'edit_destination' primary_group_code=destination.travel_plan.primary_group_code id=destination.id %}" class="btn btn-primary">Edit</a>#}
+    {#            </div>#}
+                {% endfor %}
+            </div>
+
+            <div class="pagination" style="justify-content: center">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        {% if page_obj.paginator.num_pages > 2 and page_obj.number > 2 %}
+                            <a href="?page=1"><button class="btn btn-primary">&laquo; First</button></a>
+                        {% endif %}
+                        <a href="?page={{ page_obj.previous_page_number }}"><button class="btn btn-primary">Previous</button></a>
+                    {% endif %}
+
+                    <span class="current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}"><button class="btn btn-primary">Next</button></a>
+                        {% if page_obj.paginator.num_pages > 2 and page_obj.number < page_obj.paginator.num_pages|add:"-1" %}
+                            <a href="?page={{ page_obj.paginator.num_pages }}"><button class="btn btn-primary">Last &raquo;</button></a>
+                        {% endif %}
+                    {% endif %}
+                </span>
+            </div>
+            </div>
+            {% endif %}
+
+
+    {#        <div class="list-group">#}
+    {#            {% for destination in destinations %}#}
+    {#            {% if destination.travel_plan.id == travelplan.id %}#}
+    {#            <div class="list-group-item mb-3"#}
+    {#                style="background-color: paleturquoise; border-radius: 20px; width: 60%; box-shadow: 0 0 3px; align-self: center; text-align: center">#}
+    {#                <h4 class="mb-2">{{ destination.destination_name }}</h4>#}
+    {#                <p style="font-size: 20px"><strong>Description:</strong> {{ destination.destination_description }} </p>#}
+    {##}
+    {##}
+    {##}
+    {##}
+    {#                <div class="mt-3">#}
+    {##}
+    {##}
+    {#                    <div style="display: flex; gap: 20px; align-items: start; justify-content: center">#}
+    {#                        <div>#}
+    {##}
+    {#                            <p style="font-size: 20px"><strong>Images:</strong></p>#}
+    {#                            {% if destination.jpg_upload_file %}#}
+    {#                                <img src="{{ destination.jpg_upload_file.url }}" width="150" height="150" class="rounded"#}
+    {#                            alt="{{ destination.destination_name }} image" />#}
+    {#                            {% else %}#}
+    {#                                <p>No images uploaded for destination</p>#}
+    {#                            {% endif %}#}
+    {#                            {% if destination.jpg_metadata.all.0 %}#}
+    {#                            {% with metadata=destination.jpg_metadata.all.0 %}#}
+    {#                            <div style="text-align: center">#}
+    {#                                <p class="text-paragraph">#}
+    {#                                    <strong>Title:</strong> {{ metadata.file_title }}#}
+    {#                                </p>#}
+    {#                                <p class="text-paragraph">#}
+    {#                                    <strong>Description:</strong> {{ metadata.description }}#}
+    {#                                </p>#}
+    {#                                <p class="text-paragraph">#}
+    {#                                    <strong>Keywords:</strong> {{ metadata.keywords }}#}
+    {#                                </p>#}
+    {#                                <p class="text-paragraph">#}
+    {#                                    <strong>Uploaded:</strong> {{ metadata.upload_timestamp|date:"F j, Y" }}#}
+    {#                                </p>#}
+    {#                            </div>#}
+    {#                            {% endwith %}#}
+    {#                            {% endif %}#}
+    {#                        </div>#}
+    {#                        <div>#}
+    {#                            <p style="font-size: 20px"><strong>Text Files:</strong></p>#}
+    {#                            {% if destination.txt_upload_file %}#}
+    {#                            <div style="text-align: center">#}
+    {#                                <iframe src="{{ destination.txt_upload_file.url }}"#}
+    {#                                    style="border: #dddddd; box-shadow: 0 0 10px darkmagenta"></iframe>#}
+    {#                            </div>#}
+    {#                            <div>#}
+    {#                                <a href="{% url 'download_file' %}?txturl={{ destination.txt_upload_file.url}}&filename={{ destination.txt_upload_file }}"#}
+    {#                                    class="btn btn-primary">Download</a>#}
+    {#                            </div>#}
+    {#                            <div>#}
+    {#                                <a href="{{ destination.txt_upload_file.url }}" target="_blank" class="btn btn-outline-primary">#}
+    {#                                    View Text File#}
+    {#                                </a>#}
+    {#                            </div>#}
+    {#                            {% else %}#}
+    {#                            <p>No text file uploaded.</p>#}
+    {#                            {% endif %}#}
+    {#                        </div>#}
+    {##}
+    {#                    </div>#}
+    {#                        <div>#}
+    {#                            <p style="font-size: 20px"><strong>PDF Files:</strong></p>#}
+    {#                            {% if destination.pdf_upload_file %}#}
+    {#                            <div class="mt-3" style="width: 100%;">#}
+    {#                                <iframe class="fa-file-pdf-o" src="{{ destination.pdf_upload_file.url }}" width="80%" height="400px"#}
+    {#                                    loading="lazy" style="border: #dddddd"></iframe>#}
+    {#                                <a href="{{ destination.pdf_upload_file.url }}" target="_blank" class="btn btn-outline-primary">#}
+    {#                                    View PDF File#}
+    {#                                </a>#}
+    {#                            </div>#}
+    {#                            {% else %}#}
+    {#                            <p>No PDF file uploaded.</p>#}
+    {#                            {% endif %}#}
+    {#                        </div>#}
+    {#                </div>#}
+    {#            </div>#}
+    {#            {% endif %}#}
+    {#            {% endfor %}#}
+    {#        </div>#}
+    {#    </div>#}
+    {#    {% endif %}#}
     </div>
 
-        <div class="text-left">
-            <p style="font-size: 20px"><strong>Total Trip Budget:</strong></p>
-            {% if total_plan_expenses %}
-                <p class="fs-4">${{ total_plan_expenses|floatformat:2 }}</p>
-            {% else %}
-                <p>No expenses recorded for this trip</p>
-            {% endif %}
-        </div>
-    
-        {% if travelplan.destinations %}
-        <div class = "list-group">
-            {% for destination in page_obj %}
-{#            <div class = "list-group-item mb-3" style="background-color: paleturquoise; border-radius: 20px; width: 70%; box-shaodw: 0 0 3px; align-self: center; text-align: center">#}
-{#                <h4 class="mb-2">{{ destination.destination_name }}</h4>#}
-{#                <p style="font-size: 20px"><strong>Description:</strong> {{ destination.destination_description }} </p>#}
-                
-                <a href="{% url 'destinations' travelplan.primary_group_code destination.id %}">
-                    <p style = "text-align: left" class="text-left mt-2 fs-5 text-paragraph"> Destination Name: {{destination.destination_name}}</p>
-                </a>
 
-                <div style = "display: flex; align-items: start; justify-content: left; padding-bottom: 20px;">
-
-                    <div style="display: flex; gap: 10px; align-items: start; justify-content: center">
-                        
-
-{#                            <p style="font-size: 20px"><strong>Images:</strong></p>#}
-                            {% if destination.jpg_upload_file %}
-                                <img src="{{ destination.jpg_upload_file.url }}" style="width: 200px; height: 200px; margin-right: 20px;"
-                                 class="rounded" alt="{{ plan.plan_name }} image"/>
-                            {% else %}
-                                <p>No image uploaded for destination</p>
-                            {% endif %}
-
-{#                            {% if destination.jpg_metadata.all.0 %}#}
-{#                            {% with metadata=destination.jpg_metadata.all.0 %}#}
-{#                            <div style="text-align: center">#}
-{#                                <p class="text-paragraph">#}
-{#                                    <strong>Title:</strong> {{ metadata.file_title }}#}
-{#                                </p>#}
-{#                                <p class="text-paragraph">#}
-{#                                    <strong>Description:</strong> {{ metadata.description }}#}
-{#                                </p>#}
-{#                                <p class="text-paragraph">#}
-{#                                    <strong>Keywords:</strong> {{ metadata.keywords }}#}
-{#                                </p>#}
-{#                                <p class="text-paragraph">#}
-{#                                    <strong>Uploaded:</strong> {{ metadata.upload_timestamp|date:"F j, Y" }}#}
-{#                                </p>#}
-{#                            </div>#}
-{#                            {% endwith %}#}
-{#                            {% endif %}#}
-
-{#                        <div>#}
-{#                            <p style="font-size: 20px"><strong>Text Files:</strong></p>#}
-{#                            {% if destination.txt_upload_file %}#}
-{#                            <div style="text-align: center">#}
-{#                                <iframe src="{{ destination.txt_upload_file.url }}"#}
-{#                                    style="border: #dddddd; box-shadow: 0 0 10px darkmagenta"></iframe>#}
-{#                            </div>#}
-{#                            <div>#}
-{#                                <a href="{% url 'download_file' %}?txturl={{ destination.txt_upload_file.url}}&filename={{ destination.txt_upload_file }}"#}
-{#                                    class="btn btn-primary">Download</a>#}
-{#                            </div>#}
-{#                            <div>#}
-{#                                <a href="{{ destination.txt_upload_file.url }}" target="_blank" class="btn btn-outline-primary">#}
-{#                                    View Text File#}
-{#                                </a>#}
-{#                            </div>#}
-{#                            {% else %}#}
-{#                            <p>No text file uploaded.</p>#}
-{#                            {% endif %}#}
-{#                        </div>#}
-                    </div>
-                    <div style="display: flex; gap: 10px; align-items: flex-end; justify-content: flex-end; width: 100%;">
-                        <a  style = "text-align: right" href="{% url 'delete_destination' %}?id={{destination.id}}" class="btn btn-danger">Delete</a>
-                    </div>
-{#                        <div>#}
-{#                            <p style="font-size: 20px"><strong>PDF Files:</strong></p>#}
-{#                            {% if destination.pdf_upload_file %}#}
-{#                            <div class="mt-3" style="width: 100%;">#}
-{#                                <iframe class="fa-file-pdf-o" src="{{ destination.pdf_upload_file.url }}" width="80%" height="400px"#}
-{#                                    loading="lazy" style="border: #dddddd"></iframe>#}
-{##}
-{#                            </div>#}
-{#                            <a href="{{ destination.pdf_upload_file.url }}" target="_blank" class="btn btn-outline-primary">#}
-{#                                    View PDF File#}
-{#                                </a>#}
-{#                            {% else %}#}
-{#                            <p>No PDF file uploaded.</p>#}
-{#                            {% endif %}#}
-{#                        </div>#}
-
-                </div>
-{#                <a style="margin-bottom: 10px; margin-top: 10px;" href="{% url 'edit_destination' primary_group_code=destination.travel_plan.primary_group_code id=destination.id %}" class="btn btn-primary">Edit</a>#}
-{#            </div>#}
-            {% endfor %}
-        </div>
-
-        <div class="pagination" style="justify-content: center">
-            <span class="step-links">
-                {% if page_obj.has_previous %}
-                    <a href="?page=1">&laquo; first</a>
-                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-                {% endif %}
-
-                <span class="current">
-                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                </span>
-
-                {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}">next</a>
-                    <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-                {% endif %}
-            </span>
-        </div>
-        </div>
-        {% endif %}
-
-
-{#        <div class="list-group">#}
-{#            {% for destination in destinations %}#}
-{#            {% if destination.travel_plan.id == travelplan.id %}#}
-{#            <div class="list-group-item mb-3"#}
-{#                style="background-color: paleturquoise; border-radius: 20px; width: 60%; box-shadow: 0 0 3px; align-self: center; text-align: center">#}
-{#                <h4 class="mb-2">{{ destination.destination_name }}</h4>#}
-{#                <p style="font-size: 20px"><strong>Description:</strong> {{ destination.destination_description }} </p>#}
-{##}
-{##}
-{##}
-{##}
-{#                <div class="mt-3">#}
-{##}
-{##}
-{#                    <div style="display: flex; gap: 20px; align-items: start; justify-content: center">#}
-{#                        <div>#}
-{##}
-{#                            <p style="font-size: 20px"><strong>Images:</strong></p>#}
-{#                            {% if destination.jpg_upload_file %}#}
-{#                                <img src="{{ destination.jpg_upload_file.url }}" width="150" height="150" class="rounded"#}
-{#                            alt="{{ destination.destination_name }} image" />#}
-{#                            {% else %}#}
-{#                                <p>No images uploaded for destination</p>#}
-{#                            {% endif %}#}
-{#                            {% if destination.jpg_metadata.all.0 %}#}
-{#                            {% with metadata=destination.jpg_metadata.all.0 %}#}
-{#                            <div style="text-align: center">#}
-{#                                <p class="text-paragraph">#}
-{#                                    <strong>Title:</strong> {{ metadata.file_title }}#}
-{#                                </p>#}
-{#                                <p class="text-paragraph">#}
-{#                                    <strong>Description:</strong> {{ metadata.description }}#}
-{#                                </p>#}
-{#                                <p class="text-paragraph">#}
-{#                                    <strong>Keywords:</strong> {{ metadata.keywords }}#}
-{#                                </p>#}
-{#                                <p class="text-paragraph">#}
-{#                                    <strong>Uploaded:</strong> {{ metadata.upload_timestamp|date:"F j, Y" }}#}
-{#                                </p>#}
-{#                            </div>#}
-{#                            {% endwith %}#}
-{#                            {% endif %}#}
-{#                        </div>#}
-{#                        <div>#}
-{#                            <p style="font-size: 20px"><strong>Text Files:</strong></p>#}
-{#                            {% if destination.txt_upload_file %}#}
-{#                            <div style="text-align: center">#}
-{#                                <iframe src="{{ destination.txt_upload_file.url }}"#}
-{#                                    style="border: #dddddd; box-shadow: 0 0 10px darkmagenta"></iframe>#}
-{#                            </div>#}
-{#                            <div>#}
-{#                                <a href="{% url 'download_file' %}?txturl={{ destination.txt_upload_file.url}}&filename={{ destination.txt_upload_file }}"#}
-{#                                    class="btn btn-primary">Download</a>#}
-{#                            </div>#}
-{#                            <div>#}
-{#                                <a href="{{ destination.txt_upload_file.url }}" target="_blank" class="btn btn-outline-primary">#}
-{#                                    View Text File#}
-{#                                </a>#}
-{#                            </div>#}
-{#                            {% else %}#}
-{#                            <p>No text file uploaded.</p>#}
-{#                            {% endif %}#}
-{#                        </div>#}
-{##}
-{#                    </div>#}
-{#                        <div>#}
-{#                            <p style="font-size: 20px"><strong>PDF Files:</strong></p>#}
-{#                            {% if destination.pdf_upload_file %}#}
-{#                            <div class="mt-3" style="width: 100%;">#}
-{#                                <iframe class="fa-file-pdf-o" src="{{ destination.pdf_upload_file.url }}" width="80%" height="400px"#}
-{#                                    loading="lazy" style="border: #dddddd"></iframe>#}
-{#                                <a href="{{ destination.pdf_upload_file.url }}" target="_blank" class="btn btn-outline-primary">#}
-{#                                    View PDF File#}
-{#                                </a>#}
-{#                            </div>#}
-{#                            {% else %}#}
-{#                            <p>No PDF file uploaded.</p>#}
-{#                            {% endif %}#}
-{#                        </div>#}
-{#                </div>#}
-{#            </div>#}
-{#            {% endif %}#}
-{#            {% endfor %}#}
-{#        </div>#}
-{#    </div>#}
-{#    {% endif %}#}
-
-    <div class="card-footer py-3">
+    <div class="card-footer card-footer-container">
         <p class="text-paragraph">
             To delete the travel plan image, click the "Edit" button above, select the "Clear" checkbox in the form, and save the plan.
         </p>
-        <a class="text-center mt-2 fs-5 text-paragraph text-body" href="{% url 'destination_creator' travelplan.primary_group_code %}">Add a destination</a>
+        <a class="text-center mt-2 fs-5 text-paragraph text-body" href="{% url 'destination_creator' travelplan.primary_group_code %}"><button class="btn btn-primary">Add a Destination</button></a>
     </div>
 </div>
 
