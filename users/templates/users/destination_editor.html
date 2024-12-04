@@ -86,7 +86,6 @@
         <div class="mb-4">
             <h4>Image Upload</h4>
             {{ form.jpg_upload_file }}
-            
             <div class="file-metadata-section mt-3" id="jpgMetadata" style="display: {% if has_jpg_metadata %}block{% else %}none{% endif %};">
                 <h5>Image Metadata</h5>
                 <div class="mb-3">
@@ -147,7 +146,9 @@
                 </div>
             </div>
         </div>
-        
+            <p class="text-paragraph">
+                                To delete any files, select the "Clear" checkbox for files you want deleted, and save the destination.
+            </p>
         <button type="submit" class="btn btn-success" style="width: 100%">Save Destination</button>
         <a href="{% url 'detail' primary_group_code %}" style="width: 100%; margin-top: 10px;" class="btn btn-danger">Cancel</a>
     </form>

@@ -227,7 +227,9 @@
     {#                        </div>#}
                         </div>
                         <div style="display: flex; gap: 10px; align-items: flex-end; justify-content: flex-end; width: 100%;">
-                            <a  style = "text-align: right" href="{% url 'delete_destination' %}?id={{destination.id}}" class="btn btn-danger">Delete</a>
+                            <a  style = "text-align: right" href="{% url 'delete_destination' %}?id={{destination.id}}" class="btn btn-danger"
+                            onclick="return confirm('Are you sure you want to delete this destination?')">
+                                            Delete</a>
                         </div>
     {#                        <div>#}
     {#                            <p style="font-size: 20px"><strong>PDF Files:</strong></p>#}
