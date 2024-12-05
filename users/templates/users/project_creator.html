@@ -21,6 +21,11 @@
 
 <div class="project-creator-form rounded-2 shadow-sm p-4 py-5 bg-white">
     <h1 class="mb-4 fs-3 fw-bold text-center">Create a New Travel Plan</h1>
+    {% if error_message %}
+        <div class="alert alert-danger mt-3" role="alert">
+            {{ error_message }}
+        </div>
+    {% endif %}
     {% if user.is_authenticated %}
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}

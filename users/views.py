@@ -66,11 +66,13 @@ def cancel_login(request):
 
 
 def project_creation(request):
+    error_message = ""
     if request.user.is_authenticated:
         if request.method == 'POST':
             form = PlanForm(request.POST, request.FILES)
             if is_pma_admin(request.user):
                 form.add_error(None, 'PMA administrators are not able to create a project.')
+                error_message = "PMA administrators are not able to create a project."
             elif form.is_valid():
                 plan = form.save(commit=False, user=request.user)
                 print(request.user)
@@ -80,7 +82,7 @@ def project_creation(request):
                 return redirect('plans')
         else:
             form = PlanForm()
-        return render(request, 'users/project_creator.html', {'form': form})
+        return render(request, 'users/project_creator.html', {'form': form, "error_message": error_message})
     else:
         return render(request, 'users/project_creator.html')
 
@@ -276,7 +278,6 @@ def explore_plans_view(request):
     return render(request, 'users/explore_plans.html', context)
 
 
-
 def user_plans_view(request):
     if request.user.is_authenticated:
         # Get all plans the user is in
@@ -298,7 +299,8 @@ def user_plans_view(request):
             print(plan.id)
         # return render(request, 'users/plans.html', {'travel_plans': travel_plans})
 
-        return render(request, 'users/plans.html', {'travel_plans': paginated_travel_plans, 'destinations': destinations})
+        return render(request, 'users/plans.html',
+                      {'travel_plans': paginated_travel_plans, 'destinations': destinations})
         # return render(request, 'users/plans.html', {'travel_plans': travel_plans, 'destinations': destinations})
 
     else:
@@ -468,8 +470,8 @@ class DestinationView(generic.DetailView):
             context['saved_location'] = {
                 'lat': destination.latitude,
                 'lng': destination.longitude,
-                'name': destination.location_name,  
-                'address': destination.location_address,  
+                'name': destination.location_name,
+                'address': destination.location_address,
             }
         else:
             context['saved_location'] = None
@@ -496,19 +498,24 @@ class DestinationView(generic.DetailView):
 def destination_budget(request, primary_group_code, id):
     destination = get_object_or_404(Destination, id=id, travel_plan__primary_group_code=primary_group_code)
     travelplan = destination.travel_plan
-
+    error_message = ""
     if request.user not in travelplan.users.all():
         return redirect('home')
 
     if request.method == 'POST' and request.user.is_authenticated:
         form = ExpenseForm(request.POST)
         if form.is_valid():
-            expense = form.save(commit=False)
-            expense.destination = destination
-            expense.created_by = request.user
-            expense.save()
-            messages.success(request, 'Expense added successfully!')
-            return redirect('destination_budget', primary_group_code=primary_group_code, id=id)
+            if is_pma_admin(request.user):
+                error_message = "PMA administrators are not able to add budget items."
+            else:
+                expense = form.save(commit=False)
+                expense.destination = destination
+                expense.created_by = request.user
+                expense.save()
+                messages.success(request, 'Expense added successfully!')
+                return redirect('destination_budget', primary_group_code=primary_group_code, id=id)
+
+
     else:
         form = ExpenseForm()
 
@@ -522,7 +529,8 @@ def destination_budget(request, primary_group_code, id):
         'travelplan': travelplan,
         'expense_form': form,
         'expenses': expenses,
-        'total_amount': formatted_total_amount
+        'total_amount': formatted_total_amount,
+        'error_message': error_message
     }
 
     return render(request, 'users/destination_budget.html', context)
