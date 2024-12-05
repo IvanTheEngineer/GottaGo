@@ -133,14 +133,17 @@ class TravelPlanUpdateView(generic.UpdateView):
 
 
 def destination_creation(request, primary_group_code):
+    error_message = ""
     if request.user.is_authenticated:
         if is_pma_admin(request.user):
             travel_plan = get_object_or_404(TravelPlan, primary_group_code=primary_group_code)
             form = DestinationForm(request.POST or None, request.FILES or None)
             if request.method == 'POST':
-                form.add_error(None, 'PMA administrators are not able to create destinations.')
+                if is_pma_admin(request.user):
+                    form.add_error(None, 'PMA administrators are not able to create destinations.')
+                    error_message = "PMA administrators are not able to create a project."
             return render(request, 'users/destination_creator.html',
-                          {'form': form, 'primary_group_code': travel_plan.primary_group_code})
+                          {'form': form, 'primary_group_code': travel_plan.primary_group_code, 'error_message': error_message})
         travel_plan = get_object_or_404(TravelPlan, primary_group_code=primary_group_code, users=request.user)
         if request.method == 'POST':
             form = DestinationForm(request.POST, request.FILES)
@@ -155,12 +158,12 @@ def destination_creation(request, primary_group_code):
         else:
             form = DestinationForm()
         return render(request, 'users/destination_creator.html',
-                      {'form': form, 'primary_group_code': travel_plan.primary_group_code})
+                      {'form': form, 'primary_group_code': travel_plan.primary_group_code,
+                       'error_message': error_message})
     else:
         return render(request, 'users/destination_creator.html')
 
 
-# <a style="margin-bottom: 10px; margin-top: 10px;" href="{% url 'edit_destination' primary_group_code=destination.travel_plan.primary_group_code id=destination.id %}" class="btn btn-primary">Edit</a>
 class DestinationUpdateView(generic.UpdateView):
     model = Destination
     form_class = DestinationForm
