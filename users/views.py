@@ -504,7 +504,7 @@ def destination_budget(request, primary_group_code, id):
     destination = get_object_or_404(Destination, id=id, travel_plan__primary_group_code=primary_group_code)
     travelplan = destination.travel_plan
     error_message = ""
-    if request.user not in travelplan.users.all():
+    if request.user not in travelplan.users.all() and not is_pma_admin(request.user):
         return redirect('home')
 
     if request.method == 'POST' and request.user.is_authenticated:
