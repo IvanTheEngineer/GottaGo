@@ -163,7 +163,7 @@
                                 To delete any files, select the "Clear" checkbox for files you want deleted, and save the destination.
             </p>
         <button type="submit" class="btn btn-success" style="width: 100%">Save Destination</button>
-        <a href="{% url 'detail' primary_group_code %}" style="width: 100%; margin-top: 10px;" class="btn btn-danger">Cancel</a>
+        <a href="{% url 'destinations' primary_group_code destination.id %}" style="width: 100%; margin-top: 10px;" class="btn btn-danger">Cancel</a>
     </form>
     {% else %}
     <p class="text-center mt-5" style="font-size: 25px"><a href="{% url 'login' %}">Log in</a> to edit destinations.</p>
