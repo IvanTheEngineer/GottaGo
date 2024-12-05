@@ -192,7 +192,7 @@ class PlanForm(forms.ModelForm):
             'jpg_upload_file': forms.ClearableFileInput(attrs={
                 'class': 'form-control',
                 'id': 'jpg_upload_file',
-                'accept': '.jpg',
+                'accept': 'image/jpeg'
             }),
             'txt_upload_file': forms.ClearableFileInput(attrs={
                 'class': 'form-control',
@@ -481,7 +481,7 @@ class DestinationForm(forms.ModelForm):
             'jpg_upload_file': forms.ClearableFileInput(attrs={
                 'class': 'form-control',
                 'id': 'jpg_upload_file',
-                'accept': '.jpg',
+                'accept': 'image/jpeg'
             }),
             'txt_upload_file': forms.ClearableFileInput(attrs={
                 'class': 'form-control',
