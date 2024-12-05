@@ -92,7 +92,7 @@ class TravelPlanUpdateView(generic.UpdateView):
 
     def dispatch(self, request, *args, **kwargs):
         travel_plan = self.get_object()
-        if request.user not in travel_plan.users.all():
+        if request.user not in travel_plan.users.all() and not is_pma_admin(request.user):
             return redirect('home')
         return super().dispatch(request, *args, **kwargs)
 
@@ -166,7 +166,7 @@ class DestinationUpdateView(generic.UpdateView):
 
     def dispatch(self, request, *args, **kwargs):
         destination = self.get_object()
-        if request.user not in destination.travel_plan.users.all():
+        if request.user not in destination.travel_plan.users.all() and not is_pma_admin(request.user):
             return redirect('home')
         return super().dispatch(request, *args, **kwargs)
 
@@ -391,7 +391,7 @@ class DetailView(generic.DetailView):
 
     def dispatch(self, request, *args, **kwargs):
         travel_plan = self.get_object()
-        if request.user not in travel_plan.users.all():
+        if request.user not in travel_plan.users.all() and not is_pma_admin(request.user):
             return redirect('home')
         return super().dispatch(request, *args, **kwargs)
 
@@ -439,7 +439,7 @@ class DestinationView(generic.DetailView):
 
     def dispatch(self, request, *args, **kwargs):
         travel_plan = self.get_object()
-        if request.user not in travel_plan.users.all():
+        if request.user not in travel_plan.users.all() and not is_pma_admin(request.user):
             return redirect('home')
         return super().dispatch(request, *args, **kwargs)
 
