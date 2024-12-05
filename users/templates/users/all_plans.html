@@ -51,6 +51,27 @@
                 </div>
             {% endfor %}
         </div>
+        <div class="pagination" style="justify-content: center">
+            <span class="step-links">
+                {% if all_travel_plans.has_previous %}
+                    {% if all_travel_plans.paginator.num_pages > 2 and all_travel_plans.number > 2 %}
+                        <a href="?page=1"><button class="btn btn-primary">&laquo; First</button></a>
+                    {% endif %}
+                    <a href="?page={{ all_travel_plans.previous_page_number }}"><button class="btn btn-primary">Previous</button></a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ all_travel_plans.number }} of {{ all_travel_plans.paginator.num_pages }}.
+                </span>
+
+                {% if all_travel_plans.has_next %}
+                    <a href="?page={{ all_travel_plans.next_page_number }}"><button class="btn btn-primary">Next</button></a>
+                    {% if all_travel_plans.paginator.num_pages > 2 and all_travel_plans.number < all_travel_plans.paginator.num_pages|add:"-1" %}
+                        <a href="?page={{ all_travel_plans.paginator.num_pages }}"><button class="btn btn-primary">Last &raquo;</button></a>
+                    {% endif %}
+                {% endif %}
+            </span>
+        </div>
     {% else %}
         <p class="text-center mt-2 fs-5 text-paragraph">No travel plans are available.</p>
     {% endif %}

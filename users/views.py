@@ -262,8 +262,16 @@ def all_plans_view(request):
     if not is_pma_admin(request.user):
         return redirect('plans')
     all_travel_plans = TravelPlan.objects.all().prefetch_related('users')
+    paginator = Paginator(all_travel_plans, 4)
+    page = request.GET.get('page')
+    try:
+        paginated_all_plans = paginator.page(page)
+    except PageNotAnInteger:
+        paginated_all_plans = paginator.page(1)
+    except EmptyPage:
+        paginated_all_plans = paginator.page(paginator.num_pages)
     print(f"Plans found: {all_travel_plans.count()}")
-    context = {'all_travel_plans': all_travel_plans}
+    context = {'all_travel_plans': paginated_all_plans}
     return render(request, 'users/all_plans.html', context)
 
 
