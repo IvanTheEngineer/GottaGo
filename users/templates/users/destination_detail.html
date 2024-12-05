@@ -170,10 +170,10 @@
 
         <div style = "display: flex; align-items: start; justify-content: left;">
             <div style="position: absolute; top: 10px; left: 10px; z-index: 10">
-                <a style="text-align: left;" class="btn btn-primary" href="{% url 'detail' travelplan.primary_group_code %}"> Back</a>
+                <a style="text-align: left;" class="btn btn-primary" href="{% url 'detail' travelplan.primary_group_code %}"> Back to Plan</a>
             </div>
             <div style="position: absolute; top: 10px; right: 10px; z-index: 10">
-                <a style="" href="{% url 'edit_destination' primary_group_code=destination.travel_plan.primary_group_code id=destination.id %}" class="btn btn-primary">Edit</a>
+                <a style="" href="{% url 'edit_destination' primary_group_code=destination.travel_plan.primary_group_code id=destination.id %}" class="btn btn-primary">Edit Destination</a>
             </div>
         </div>
 

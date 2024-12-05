@@ -187,6 +187,8 @@ class DestinationUpdateView(generic.UpdateView):
         # Get the destination instance
         destination = self.get_object()
 
+        context['destination'] = destination
+
         # Pre-populate metadata for the form
         context['form'].initial[
             'txt_file_title'] = destination.txt_metadata.file_title if destination.txt_metadata else ''
