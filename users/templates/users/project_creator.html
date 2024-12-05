@@ -1,3 +1,14 @@
+<!--
+/***************************************************************************************
+*  REFERENCES
+*  Title: How to Implement Django Datepicker Calender in Forms Date Field
+*  Used for: Calendar date selection in forms
+*  Author: Asim Zahid
+*  Date: Sep 9, 2021
+*  URL: https://mrasimzahid.medium.com/how-to-implement-django-datepicker-calender-in-forms-date-field-9e23479b5db
+*************************************************************************************** 
+-->
+
 {% extends "users/base.html" %}
 {% load bootstrap5 %}
 {% load custom_filters %}
@@ -10,6 +21,11 @@
 
 <div class="project-creator-form rounded-2 shadow-sm p-4 py-5 bg-white">
     <h1 class="mb-4 fs-3 fw-bold text-center">Create a New Travel Plan</h1>
+    {% if error_message %}
+        <div class="alert alert-danger mt-3" role="alert">
+            {{ error_message }}
+        </div>
+    {% endif %}
     {% if user.is_authenticated %}
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -18,30 +34,40 @@
         <div class="mb-4">
             <h4>Plan Details</h4>
             <div class="mb-3">
+                <label for="{{ form.destination_name.id_for_label }}" class="required-label">
                 {{ form.plan_name.label_tag }}
+                </label>
                 {{ form.plan_name }}
             </div>
             <div class="mb-3">
+                <label for="{{ form.destination_name.id_for_label }}" class="required-label">
                 {{ form.group_size.label_tag }}
+                </label>
                 {{ form.group_size }}
             </div>
             <div class="mb-3">
+                <label for="{{ form.destination_name.id_for_label }}" class="required-label">
                 {{ form.trip_description.label_tag }}
+                </label>
                 {{ form.trip_description }}
             </div>
             <div class="mb-3">
+                <label for="{{ form.destination_name.id_for_label }}" class="required-label">
                 {{ form.start_date.label_tag }}
+                </label>
                 {{ form.start_date }}
             </div>
             <div class="mb-3">
+                <label for="{{ form.destination_name.id_for_label }}" class="required-label">
                 {{ form.end_date.label_tag }}
+                </label>
                 {{ form.end_date }}
             </div>
         </div>
 
         <!-- Image Upload and Metadata -->
         <div class="mb-4">
-            <h4>Image Upload</h4>
+            <h4>Banner Image Upload</h4>
             
             {{ form.jpg_upload_file }}
             
@@ -61,7 +87,7 @@
             </div>
         </div>
 
-        <!-- PDF Upload and Metadata -->
+        <!-- PDF Upload and Metadata 
         <div class="mb-4">
             <h4>PDF Upload</h4>
             {{ form.pdf_upload_file }}
@@ -80,9 +106,9 @@
                     {{ form.pdf_keywords }}
                 </div>
             </div>
-        </div>
-
-        <!-- TXT Upload and Metadata -->
+        </div>          -->
+        
+        <!-- TXT Upload and Metadata 
         <div class="mb-4">
             <h4>TXT Upload</h4>
             {{ form.txt_upload_file }}
@@ -102,6 +128,8 @@
                 </div>
             </div>
         </div>
+
+        -->
         
         <button type="submit" class="btn btn-success" style="width: 100%">Create Plan</button>
         <a href="{% url 'plans' %}" style="width: 100%; margin-top: 10px;" class="btn btn-danger">Cancel</a>

@@ -1,0 +1,42 @@
+body {
+    background: linear-gradient(to bottom right, powderblue, mediumpurple);
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.btn {
+    align-self: center;
+    border-radius: 50px;
+    /* background-color: ghostwhite; */
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+}
+
+.group-form, .project-creator-form, .profile-form, .destination-creator-form, .join-group, .plans-form, .requests-form {
+    max-width: 50rem;
+    margin: 4rem auto;
+    width: 100%;
+    text-align: left;
+}
+
+.destinations-form {
+    max-width: 72rem;
+    margin: 4rem auto;
+    width: 100%;
+    text-align: center;
+}
+
+.required-label:after {
+    content: " *";
+    color: red;
+}
+
+.text-paragraph {
+    color: #838383;
+}
+
+.text-label {
+    color: #83878a;
+}

@@ -13,10 +13,10 @@ from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.db.models.query_utils import Q
 from .forms import (
-    PlanForm, 
-    JoinGroupForm, 
-    DestinationForm, 
-    CommentForm, 
+    PlanForm,
+    JoinGroupForm,
+    DestinationForm,
+    CommentForm,
     ExpenseForm
 )
 from .decorators import user_not_authenticated
@@ -24,20 +24,24 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy, reverse
 from django.views import generic
 from .models import TravelPlan, Destination, Invite, Comment, Expense
-from django.http import FileResponse
+from django.http import FileResponse, Http404
+from django.http import JsonResponse
 import requests
 import boto3
+import json
 
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Sum
 
 
 def profile(request):
     return render(request, 'users/profile.html')
 
+
 def custom_login(request):
     print("HERE")
     return render(request, 'users/login.html')
+
 
 @login_required
 def custom_logout(request):
@@ -62,11 +66,13 @@ def cancel_login(request):
 
 
 def project_creation(request):
+    error_message = ""
     if request.user.is_authenticated:
         if request.method == 'POST':
             form = PlanForm(request.POST, request.FILES)
             if is_pma_admin(request.user):
                 form.add_error(None, 'PMA administrators are not able to create a project.')
+                error_message = "PMA administrators are not able to create a project."
             elif form.is_valid():
                 plan = form.save(commit=False, user=request.user)
                 print(request.user)
@@ -76,7 +82,7 @@ def project_creation(request):
                 return redirect('plans')
         else:
             form = PlanForm()
-        return render(request, 'users/project_creator.html', {'form': form})
+        return render(request, 'users/project_creator.html', {'form': form, "error_message": error_message})
     else:
         return render(request, 'users/project_creator.html')
 
@@ -85,6 +91,12 @@ class TravelPlanUpdateView(generic.UpdateView):
     model = TravelPlan
     form_class = PlanForm
     template_name = 'users/project_editor.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        travel_plan = self.get_object()
+        if request.user not in travel_plan.users.all() and not is_pma_admin(request.user):
+            return redirect('home')
+        return super().dispatch(request, *args, **kwargs)
 
     def get_object(self, queryset=None):
         group_code = self.kwargs.get("primary_group_code")
@@ -97,32 +109,41 @@ class TravelPlanUpdateView(generic.UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         travel_plan = self.get_object()
-        context['form'].initial['txt_file_title'] = travel_plan.txt_metadata.file_title if travel_plan.txt_metadata else ''
-        context['form'].initial['txt_description'] = travel_plan.txt_metadata.description if travel_plan.txt_metadata else ''
+        context['form'].initial[
+            'txt_file_title'] = travel_plan.txt_metadata.file_title if travel_plan.txt_metadata else ''
+        context['form'].initial[
+            'txt_description'] = travel_plan.txt_metadata.description if travel_plan.txt_metadata else ''
         context['form'].initial['txt_keywords'] = travel_plan.txt_metadata.keywords if travel_plan.txt_metadata else ''
-        context['form'].initial['pdf_file_title'] = travel_plan.pdf_metadata.file_title if travel_plan.pdf_metadata else ''
-        context['form'].initial['pdf_description'] = travel_plan.pdf_metadata.description if travel_plan.pdf_metadata else ''
+        context['form'].initial[
+            'pdf_file_title'] = travel_plan.pdf_metadata.file_title if travel_plan.pdf_metadata else ''
+        context['form'].initial[
+            'pdf_description'] = travel_plan.pdf_metadata.description if travel_plan.pdf_metadata else ''
         context['form'].initial['pdf_keywords'] = travel_plan.pdf_metadata.keywords if travel_plan.pdf_metadata else ''
-        context['form'].initial['jpg_file_title'] = travel_plan.jpg_metadata.file_title if travel_plan.jpg_metadata else ''
-        context['form'].initial['jpg_description'] = travel_plan.jpg_metadata.description if travel_plan.jpg_metadata else ''
+        context['form'].initial[
+            'jpg_file_title'] = travel_plan.jpg_metadata.file_title if travel_plan.jpg_metadata else ''
+        context['form'].initial[
+            'jpg_description'] = travel_plan.jpg_metadata.description if travel_plan.jpg_metadata else ''
         context['form'].initial['jpg_keywords'] = travel_plan.jpg_metadata.keywords if travel_plan.jpg_metadata else ''
         context['has_txt_metadata'] = bool(travel_plan.txt_metadata)
         context['has_pdf_metadata'] = bool(travel_plan.pdf_metadata)
         context['has_jpg_metadata'] = bool(travel_plan.jpg_metadata)
-        
+
         context['primary_group_code'] = self.kwargs.get("primary_group_code")
         return context
 
 
 def destination_creation(request, primary_group_code):
+    error_message = ""
     if request.user.is_authenticated:
         if is_pma_admin(request.user):
             travel_plan = get_object_or_404(TravelPlan, primary_group_code=primary_group_code)
             form = DestinationForm(request.POST or None, request.FILES or None)
             if request.method == 'POST':
-                form.add_error(None, 'PMA administrators are not able to create destinations.')
+                if is_pma_admin(request.user):
+                    form.add_error(None, 'PMA administrators are not able to create destinations.')
+                    error_message = "PMA administrators are not able to create a project."
             return render(request, 'users/destination_creator.html',
-                          {'form': form, 'primary_group_code': travel_plan.primary_group_code})
+                          {'form': form, 'primary_group_code': travel_plan.primary_group_code, 'error_message': error_message})
         travel_plan = get_object_or_404(TravelPlan, primary_group_code=primary_group_code, users=request.user)
         if request.method == 'POST':
             form = DestinationForm(request.POST, request.FILES)
@@ -137,15 +158,22 @@ def destination_creation(request, primary_group_code):
         else:
             form = DestinationForm()
         return render(request, 'users/destination_creator.html',
-                      {'form': form, 'primary_group_code': travel_plan.primary_group_code})
+                      {'form': form, 'primary_group_code': travel_plan.primary_group_code,
+                       'error_message': error_message})
     else:
         return render(request, 'users/destination_creator.html')
 
-# <a style="margin-bottom: 10px; margin-top: 10px;" href="{% url 'edit_destination' primary_group_code=destination.travel_plan.primary_group_code id=destination.id %}" class="btn btn-primary">Edit</a>
+
 class DestinationUpdateView(generic.UpdateView):
     model = Destination
     form_class = DestinationForm
     template_name = 'users/destination_editor.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        destination = self.get_object()
+        if request.user not in destination.travel_plan.users.all() and not is_pma_admin(request.user):
+            return redirect('home')
+        return super().dispatch(request, *args, **kwargs)
 
     def get_object(self, queryset=None):
         id = self.kwargs.get("id")
@@ -153,28 +181,42 @@ class DestinationUpdateView(generic.UpdateView):
 
     def get_success_url(self):
         primary_group_code = self.object.travel_plan.primary_group_code
-        return reverse_lazy('destination_detail', kwargs={'primary_group_code': primary_group_code, 'id': self.object.id})
+        return reverse_lazy('destination_detail',
+                            kwargs={'primary_group_code': primary_group_code, 'id': self.object.id})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        
+
         # Get the destination instance
         destination = self.get_object()
-        
+
+        context['destination'] = destination
+
         # Pre-populate metadata for the form
-        context['form'].initial['txt_file_title'] = destination.txt_metadata.file_title if destination.txt_metadata else ''
-        context['form'].initial['txt_description'] = destination.txt_metadata.description if destination.txt_metadata else ''
+        context['form'].initial[
+            'txt_file_title'] = destination.txt_metadata.file_title if destination.txt_metadata else ''
+        context['form'].initial[
+            'txt_description'] = destination.txt_metadata.description if destination.txt_metadata else ''
         context['form'].initial['txt_keywords'] = destination.txt_metadata.keywords if destination.txt_metadata else ''
-        context['form'].initial['pdf_file_title'] = destination.pdf_metadata.file_title if destination.pdf_metadata else ''
-        context['form'].initial['pdf_description'] = destination.pdf_metadata.description if destination.pdf_metadata else ''
+        context['form'].initial[
+            'pdf_file_title'] = destination.pdf_metadata.file_title if destination.pdf_metadata else ''
+        context['form'].initial[
+            'pdf_description'] = destination.pdf_metadata.description if destination.pdf_metadata else ''
         context['form'].initial['pdf_keywords'] = destination.pdf_metadata.keywords if destination.pdf_metadata else ''
-        context['form'].initial['jpg_file_title'] = destination.jpg_metadata.file_title if destination.jpg_metadata else ''
-        context['form'].initial['jpg_description'] = destination.jpg_metadata.description if destination.jpg_metadata else ''
+        context['form'].initial[
+            'jpg_file_title'] = destination.jpg_metadata.file_title if destination.jpg_metadata else ''
+        context['form'].initial[
+            'jpg_description'] = destination.jpg_metadata.description if destination.jpg_metadata else ''
         context['form'].initial['jpg_keywords'] = destination.jpg_metadata.keywords if destination.jpg_metadata else ''
         context['has_txt_metadata'] = bool(destination.txt_metadata)
         context['has_pdf_metadata'] = bool(destination.pdf_metadata)
         context['has_jpg_metadata'] = bool(destination.jpg_metadata)
-        
+
+        context['location_name'] = destination.location_name if destination.location_name else ''
+        context['location_address'] = destination.location_address if destination.location_address else ''
+        context['latitude'] = destination.latitude if destination.latitude else ''
+        context['longitude'] = destination.longitude if destination.longitude else ''
+
         context['primary_group_code'] = self.kwargs.get("primary_group_code")
         return context
 
@@ -194,7 +236,6 @@ class DestinationUpdateView(generic.UpdateView):
 
 
 def delete_travel_plan(request):
-    print("WTF")
     id = request.GET.get('id')
     travel_plan = get_object_or_404(TravelPlan, id=id)
     if request.user != travel_plan.user and not is_pma_admin(request.user):
@@ -205,6 +246,7 @@ def delete_travel_plan(request):
     if is_pma_admin(request.user):
         return redirect('all_plans')
     return redirect('plans')
+
 
 def delete_destination(request):
     id = request.GET.get('id')
@@ -220,27 +262,60 @@ def all_plans_view(request):
     if not is_pma_admin(request.user):
         return redirect('plans')
     all_travel_plans = TravelPlan.objects.all().prefetch_related('users')
+    paginator = Paginator(all_travel_plans, 4)
+    page = request.GET.get('page')
+    try:
+        paginated_all_plans = paginator.page(page)
+    except PageNotAnInteger:
+        paginated_all_plans = paginator.page(1)
+    except EmptyPage:
+        paginated_all_plans = paginator.page(paginator.num_pages)
     print(f"Plans found: {all_travel_plans.count()}")
-    context = {'all_travel_plans': all_travel_plans}
+    context = {'all_travel_plans': paginated_all_plans}
     return render(request, 'users/all_plans.html', context)
 
 
 def explore_plans_view(request):
     explore_travel_plans = TravelPlan.objects.all()
-    context = {'explore_travel_plans': explore_travel_plans}
+    paginator = Paginator(explore_travel_plans, 4)
+    page = request.GET.get('page')
+    try:
+        paginated_explore_plans = paginator.page(page)
+    except PageNotAnInteger:
+        paginated_explore_plans = paginator.page(1)
+    except EmptyPage:
+        paginated_explore_plans = paginator.page(paginator.num_pages)
+
+    context = {'explore_travel_plans': paginated_explore_plans}
+    # context = {'explore_travel_plans': explore_travel_plans}
     return render(request, 'users/explore_plans.html', context)
 
 
 def user_plans_view(request):
     if request.user.is_authenticated:
         # Get all plans the user is in
-        travel_plans = request.user.plans.all()
-        destinations = request.user.destinations.all()
+        travel_plans = TravelPlan.objects.filter(Q(user=request.user) | Q(users=request.user)).distinct()
+        destinations = Destination.objects.filter(travel_plan__in=travel_plans)
+
+        # Add an explicit ordering to the queryset
+        travel_plans = travel_plans.order_by('start_date')  # or any other field
+        paginator = Paginator(travel_plans, 3)
+        page = request.GET.get('page')
+        try:
+            paginated_travel_plans = paginator.page(page)
+        except PageNotAnInteger:
+            paginated_travel_plans = paginator.page(1)
+        except EmptyPage:
+            paginated_travel_plans = paginator.page(paginator.num_pages)
+
         for plan in travel_plans:
             print(plan.id)
         # return render(request, 'users/plans.html', {'travel_plans': travel_plans})
 
-        return render(request, 'users/plans.html', {'travel_plans': travel_plans, 'destinations': destinations})
+        return render(request, 'users/plans.html',
+                      {'travel_plans': paginated_travel_plans, 'destinations': destinations})
+        # return render(request, 'users/plans.html', {'travel_plans': travel_plans, 'destinations': destinations})
+
     else:
         return render(request, 'users/plans.html')
 
@@ -282,7 +357,7 @@ def join_group(request):
                             context['success_message'] = 'Successfully sent a join request!'
                     else:
                         context['error_message'] = 'You cannot join a plan you are already in.'
-                except TravelPlan.DoesNotExist:
+                except Http404:
                     context['error_message'] = 'Invalid group code. Please try again.'
         else:
             pass
@@ -298,6 +373,7 @@ def joinrequests(request):
         return render(request, 'users/requests.html', {'invites': invites})
     else:
         return render(request, 'users/requests.html')
+
 
 def accept_invite(request):
     id = request.GET.get('id')
@@ -328,9 +404,26 @@ class DetailView(generic.DetailView):
     template_name = "users/detail.html"
     context_object_name = 'travelplan'
 
+    def dispatch(self, request, *args, **kwargs):
+        travel_plan = self.get_object()
+        if request.user not in travel_plan.users.all() and not is_pma_admin(request.user):
+            return redirect('home')
+        return super().dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['destinations'] = Destination.objects.filter(travel_plan=self.object)
+        destinations = Destination.objects.filter(travel_plan=self.object)
+        context['destinations'] = destinations
+        destination_data = [
+            {
+                "name": destination.location_name,
+                "address": destination.location_address,
+                "latitude": destination.latitude,
+                "longitude": destination.longitude,
+            }
+            for destination in destinations if destination.latitude and destination.longitude
+        ]
+        context["destination_data"] = destination_data
 
         # Calculate total expenses for all destinations in this travel plan
         total_plan_expenses = Expense.objects.filter(
@@ -359,24 +452,42 @@ class DestinationView(generic.DetailView):
     template_name = "users/destination_detail.html"
     context_object_name = 'destination'
 
+    def dispatch(self, request, *args, **kwargs):
+        travel_plan = self.get_object()
+        if request.user not in travel_plan.users.all() and not is_pma_admin(request.user):
+            return redirect('home')
+        return super().dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         id = self.kwargs["id"]
         context = {}
-        context['destination'] = Destination.objects.filter(travel_plan=self.object, id=id).first()
+        destination = Destination.objects.filter(travel_plan=self.object, id=id).first()
+        context['destination'] = destination
         context['form'] = CommentForm()
         travelplan = context['destination'].travel_plan
         context['travelplan'] = travelplan
 
         # Add total expenses calculation
-        total_expenses = Expense.objects.filter(destination=context['destination']).aggregate(total=Sum('amount'))['total']
+        total_expenses = Expense.objects.filter(destination=context['destination']).aggregate(total=Sum('amount'))[
+            'total']
         context['total_expenses'] = total_expenses
 
         comments = Comment.objects.filter(destination=context['destination'])
-        paginator = Paginator(comments, 3)
+        paginator = Paginator(comments, 10)
         page_number = self.request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 
         context['page_obj'] = page_obj
+
+        if destination.latitude and destination.longitude:
+            context['saved_location'] = {
+                'lat': destination.latitude,
+                'lng': destination.longitude,
+                'name': destination.location_name,
+                'address': destination.location_address,
+            }
+        else:
+            context['saved_location'] = None
         return context
 
     def post(self, request, *args, **kwargs):
@@ -400,48 +511,78 @@ class DestinationView(generic.DetailView):
 def destination_budget(request, primary_group_code, id):
     destination = get_object_or_404(Destination, id=id, travel_plan__primary_group_code=primary_group_code)
     travelplan = destination.travel_plan
-    
+    error_message = ""
+    if request.user not in travelplan.users.all() and not is_pma_admin(request.user):
+        return redirect('home')
+
     if request.method == 'POST' and request.user.is_authenticated:
         form = ExpenseForm(request.POST)
         if form.is_valid():
-            expense = form.save(commit=False)
-            expense.destination = destination
-            expense.created_by = request.user
-            expense.save()
-            messages.success(request, 'Expense added successfully!')
-            return redirect('destination_budget', primary_group_code=primary_group_code, id=id)
+            if is_pma_admin(request.user):
+                error_message = "PMA administrators are not able to add budget items."
+            else:
+                expense = form.save(commit=False)
+                expense.destination = destination
+                expense.created_by = request.user
+                expense.save()
+                messages.success(request, 'Expense added successfully!')
+                return redirect('destination_budget', primary_group_code=primary_group_code, id=id)
+
+
     else:
         form = ExpenseForm()
-    
+
     expenses = Expense.objects.filter(destination=destination).order_by('-expense_date')
     total_amount = expenses.aggregate(total=Sum('amount'))['total'] or 0
-    
+
     formatted_total_amount = f"{total_amount:.2f}"
 
-    
     context = {
         'destination': destination,
         'travelplan': travelplan,
         'expense_form': form,
         'expenses': expenses,
-        'total_amount': formatted_total_amount
+        'total_amount': formatted_total_amount,
+        'error_message': error_message
     }
-    
+
     return render(request, 'users/destination_budget.html', context)
+
 
 @login_required
 def delete_expense(request, primary_group_code, id, expense_id):
     expense = get_object_or_404(Expense, id=expense_id)
-    
+
     # Check if the user is authorized to delete this expense
     if request.user != expense.created_by:
         messages.error(request, 'You are not authorized to delete this expense.')
-        return redirect('destination_budget', 
-                       primary_group_code=primary_group_code,
-                       id=id)
-    
+        return redirect('destination_budget',
+                        primary_group_code=primary_group_code,
+                        id=id)
+
     expense.delete()
     messages.success(request, 'Expense deleted successfully!')
-    return redirect('destination_budget', 
-                   primary_group_code=primary_group_code,
-                   id=id)
+    return redirect('destination_budget',
+                    primary_group_code=primary_group_code,
+                    id=id)
+
+
+def save_location(request, primary_group_code, id, destination_id):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            travel_plan = get_object_or_404(TravelPlan, primary_group_code=primary_group_code)
+            destination = get_object_or_404(Destination, id=destination_id, travel_plan=travel_plan)
+
+            destination.location_name = data.get('name')
+            destination.location_address = data.get('address')
+            destination.latitude = data.get('lat')
+            destination.longitude = data.get('lng')
+            destination.save()
+
+            return JsonResponse({'success': True, 'message': 'Location saved successfully!'})
+
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)}, status=400)
+
+    return JsonResponse({'success': False, 'message': 'Invalid request method.'}, status=405)

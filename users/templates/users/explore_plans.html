@@ -6,6 +6,13 @@
 
 <div class="plans-form rounded-2 shadow-sm p-4 py-5 bg-white">
     <h1 class="text-center mb-3 fs-3 fw-bold">Explore All Travel Plans</h1>
+    {% if not user.is_authenticated %}
+        <div style="text-align: center; padding-top: 5px; padding-bottom: 5px">
+            <a href="{% url 'login' %}" class="btn btn-primary">Login for more details!</a>
+        </div>
+    {% endif %}
+
+    <p class="text-center mt-2 text-paragraph"> To join a plans, login and enter a group code. Then wait for owner to accept your request!</p>
     {% if explore_travel_plans %}
         <div class="list-group">
             {% for plan in explore_travel_plans %}
@@ -17,13 +24,33 @@
                 </div>
             {% endfor %}
         </div>
+        <div class="pagination" style="justify-content: center">
+            <span class="step-links">
+                {% if explore_travel_plans.has_previous %}
+                    {% if explore_travel_plans.paginator.num_pages > 2 and explore_travel_plans.number > 2 %}
+                        <a href="?page=1"><button class="btn btn-primary">&laquo; First</button></a>
+                    {% endif %}
+                    <a href="?page={{ explore_travel_plans.previous_page_number }}"><button class="btn btn-primary">Previous</button></a>
+                {% endif %}
 
-        <div class="text-center">
-            {% if not user.is_authenticated %}
-            <a href="{% url 'login' %}" class="btn btn-primary">Login for more details!</a>
-            {% endif %}
+                <span class="current">
+                    Page {{ explore_travel_plans.number }} of {{ explore_travel_plans.paginator.num_pages }}.
+                </span>
+
+                {% if explore_travel_plans.has_next %}
+                    <a href="?page={{ explore_travel_plans.next_page_number }}"><button class="btn btn-primary">Next</button></a>
+                    {% if explore_travel_plans.paginator.num_pages > 2 and explore_travel_plans.number < explore_travel_plans.paginator.num_pages|add:"-1" %}
+                        <a href="?page={{ explore_travel_plans.paginator.num_pages }}"><button class="btn btn-primary">Last &raquo;</button></a>
+                    {% endif %}
+                {% endif %}
+            </span>
         </div>
-        <p class="text-center mt-2 text-paragraph"> To join any specific plans, login and enter the desired group code. Then wait until the plan owner accepts your join request!</p>
+{##}
+{#        <div style="text-align: center; padding-top: 10px">#}
+{#            {% if not user.is_authenticated %}#}
+{#            <a href="{% url 'login' %}" class="btn btn-primary">Login for more details!</a>#}
+{#            {% endif %}#}
+{#        </div>#}
     {% else %}
         <p class="text-center mt-2 fs-5 text-paragraph">No travel plans are available.</p>
     {% endif %}

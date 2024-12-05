@@ -1,3 +1,16 @@
+<!--
+/***************************************************************************************
+*  REFERENCES
+*  Title: Extended Component Library 
+*  Used for: Google Maps place picker
+*  Author: awmack, mcreinhard, googlemaps-bot, dependabot[bot], rahul-kamat, frigus02, kwnevarez, copybara-github
+*  Date:  2024-11-01
+*  Code version: v0.6.13
+*  URL: https://github.com/googlemaps/extended-component-library?tab=readme-ov-file
+*  Software License: Apache 2.0
+***************************************************************************************
+-->
+
 {% extends "users/base.html" %}
 {% load bootstrap5 %}
 {% load custom_filters %}
@@ -5,6 +18,46 @@
 {% block content %}
 <head>
     <title>Edit Destination</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const placePicker = document.querySelector('gmpx-place-picker');
+            const latitudeInput = document.getElementById('latitude');
+            const longitudeInput = document.getElementById('longitude');
+            const addressInput = document.getElementById('location_address');
+            const nameInput = document.getElementById('location_name');
+            
+            // Prepopulate the place picker with existing values
+            if ({{ latitude|default:"null"|safe }} && {{ longitude|default:"null"|safe }}) {
+                const prepopulatedPlace = {
+                    location: {
+                        lat: () => parseFloat(latitudeInput.value),
+                        lng: () => parseFloat(longitudeInput.value),
+                    },
+                    displayName: nameInput.value,
+                    formattedAddress: addressInput.value,
+                };
+                placePicker.setAttribute('placeholder', addressInput.value);
+                placePicker.value = prepopulatedPlace;
+            }
+
+            placePicker.addEventListener('gmpx-placechange', () => {
+                const place = placePicker.value;
+
+                if (place && place.location) {
+                    latitudeInput.value = place.location.lat();
+                    longitudeInput.value = place.location.lng();
+                    addressInput.value = place.formattedAddress || '';
+                    nameInput.value = place.displayName || '';
+                } else {
+                    latitudeInput.value = null;
+                    longitudeInput.value = null;
+                    addressInput.value = null;
+                    nameInput.value = null;
+                }
+            });
+        });
+    </script>
+    <script type="module" src="https://unpkg.com/@googlemaps/extended-component-library@0.6"></script>
 </head>
 
 <div class="destination-creator-form rounded-2 shadow-sm p-4 py-5 bg-white">
@@ -17,20 +70,35 @@
         <div class="mb-4">
             <h4>Destination Details</h4>
             <div class="mb-3">
+                <label for="{{ form.destination_name.id_for_label }}" class="required-label">
                 {{ form.destination_name.label_tag }}
+                </label>
                 {{ form.destination_name }} 
             </div>
             <div class="mb-3">
+                <label for="{{ form.destination_name.id_for_label }}" class="required-label">
                 {{ form.destination_description.label_tag }}
+                </label>
                 {{ form.destination_description }}
             </div>
+        </div>
+
+        <div class="mb-4">
+            <h4>Select Destination Location</h4>
+            <gmpx-api-loader key="{{ google_maps_api_key }}" solution-channel="GMP_GE_mapsandplacesautocomplete_v1">
+            </gmpx-api-loader>
+            <gmpx-place-picker placeholder="Enter an address"></gmpx-place-picker>
+            
+            <input type="hidden" id="latitude" name="latitude" value="{{ latitude }}">
+            <input type="hidden" id="longitude" name="longitude" value="{{ longitude }}">
+            <input type="hidden" id="location_address" name="location_address" value="{{ location_address }}">
+            <input type="hidden" id="location_name" name="location_name" value="{{ location_name }}">
         </div>
 
         <!-- Image Upload and Metadata -->
         <div class="mb-4">
             <h4>Image Upload</h4>
             {{ form.jpg_upload_file }}
-            
             <div class="file-metadata-section mt-3" id="jpgMetadata" style="display: {% if has_jpg_metadata %}block{% else %}none{% endif %};">
                 <h5>Image Metadata</h5>
                 <div class="mb-3">
@@ -91,9 +159,11 @@
                 </div>
             </div>
         </div>
-        
+            <p class="text-paragraph">
+                                To delete any files, select the "Clear" checkbox for files you want deleted, and save the destination.
+            </p>
         <button type="submit" class="btn btn-success" style="width: 100%">Save Destination</button>
-        <a href="{% url 'detail' primary_group_code %}" style="width: 100%; margin-top: 10px;" class="btn btn-danger">Cancel</a>
+        <a href="{% url 'destinations' primary_group_code destination.id %}" style="width: 100%; margin-top: 10px;" class="btn btn-danger">Cancel</a>
     </form>
     {% else %}
     <p class="text-center mt-5" style="font-size: 25px"><a href="{% url 'login' %}">Log in</a> to edit destinations.</p>

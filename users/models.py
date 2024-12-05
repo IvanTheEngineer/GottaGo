@@ -8,6 +8,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.conf import settings
 import boto3
+from django.core.exceptions import ValidationError
 
 
 def delete_s3_file(file_path):
@@ -35,6 +36,15 @@ def delete_s3_file(file_path):
         print(f"Successfully deleted file: {key} from bucket: {settings.AWS_STORAGE_BUCKET_NAME}")
     except Exception as e:
         print(f"Error deleting file from S3: {str(e)}")
+
+
+def validate_image_extension(value):
+    """Validator for jpg/jpeg file extensions"""
+    import os
+    ext = os.path.splitext(value.name)[1].lower()
+    valid_extensions = ['.jpg', '.jpeg']
+    if ext not in valid_extensions:
+        raise ValidationError('Unsupported file extension. Please upload a JPG or JPEG file.')
 
 
 class FileMetadata(models.Model):
@@ -73,7 +83,7 @@ class TravelPlan(models.Model):
     )
     group_size = models.IntegerField()
     trip_description = models.TextField()
-    jpg_upload_file = models.FileField(upload_to='uploads/main_plan_jpgs/', blank=True, null=True)
+    jpg_upload_file = models.FileField(upload_to='uploads/main_plan_jpgs/', blank=True, null=True, validators=[validate_image_extension])
     txt_upload_file = models.FileField(upload_to='uploads/txts/', blank=True, null=True)
     pdf_upload_file = models.FileField(upload_to='uploads/pdfs/', blank=True, null=True)
     primary_group_code = models.CharField(max_length=100)
@@ -125,9 +135,13 @@ class Destination(models.Model):
         validators=[MinLengthValidator(1), MaxLengthValidator(100)]
     )
     destination_description = models.TextField()
-    jpg_upload_file = models.FileField(upload_to='uploads/destinations_jpgs/', blank=True, null=True)
+    jpg_upload_file = models.FileField(upload_to='uploads/destinations_jpgs/', blank=True, null=True, validators=[validate_image_extension])
     txt_upload_file = models.FileField(upload_to='uploads/destinations_txts/', blank=True, null=True)
     pdf_upload_file = models.FileField(upload_to='uploads/destination_pdfs/', blank=True, null=True)
+    location_name = models.CharField(max_length=255, blank=True, null=True)
+    location_address = models.TextField(blank=True, null=True)
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
 
     jpg_metadata = models.OneToOneField(
         FileMetadata,

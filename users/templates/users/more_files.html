@@ -1,0 +1,130 @@
+{% extends "users/base.html" %}
+{% block navbar_and_footer %}
+{% load custom_filters %}
+{% load static %}
+{% block content %}
+<div style="padding-top: 20px;"></div>
+ <div class="mb-3 card mx-auto" style="width: 80%; text-align: center">
+    <div class="card-body">
+        <div style = "display: flex; align-items: start; justify-content: left; padding-bottom: 20px;">
+            <div style="display: flex; gap: 10px; align-items: start; justify-content: center">
+                <a style="text-align: left;" class="btn btn-primary" href="{% url 'destinations' travelplan.primary_group_code destination.id %}"> Back</a>
+            </div>
+        </div>
+                <div class="travel-plan-banner mb-3" style="position: relative">
+            {% if travelplan.jpg_upload_file %}
+                <img src="{{ travelplan.jpg_upload_file.url }}" class="img-fluid w-100" alt="{{ travelplan.plan_name }} Banner image" style="height: 200px; object-fit: cover;"/>
+            {% else %}
+                <img src="{% static 'images/no_image.jpg' %}" class="img-fluid" alt="no image" style="object-fit: cover"/>
+            {% endif %}
+ 
+ 
+            <div class="gradient-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: black; opacity: 50%"></div>
+            <div class="banner-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 16px; opacity: 100%; color: white; -webkit-text-stroke: 0.0px darkorchid">
+                <h1 class="mb-2">{{ travelplan.plan_name }} </h1>
+                <p style="font-size: 20px"><strong>Group Code:</strong> {{ travelplan.primary_group_code }} </p>
+                <p style="font-size: 20px"><strong>Group Size:</strong> {{ travelplan.group_size }} </p>
+                {% if travelplan.start_date and travelplan.end_date%}
+                    <p style="font-size: 20px"><strong>Dates: </strong> {{ travelplan.start_date }} <strong> - </strong> {{ travelplan.end_date }}</p>
+                {% else %}
+                    <p style="font-size: 20px"><strong>Dates: </strong> None</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <h1 class="mb-2">{{ destination.destination_name }} Files</h1>
+
+        {% if not destination.txt_upload_file and not destination.pdf_upload_file%}
+        <p>No Files Found</p>
+        {% endif %}
+
+        <div>
+            {% if destination.txt_upload_file %}
+                                <div>
+                                <div class="mt-4" style = "display: flex; gap: 10px; align-items: center; justify-content: center;">
+                                <p style="margin: 0; font-size: 20px"><strong>Text File:</strong></p>
+                                <a href="{% url 'download_file' %}?txturl={{ destination.txt_upload_file.url}}&filename={{ destination.txt_upload_file }}" class="btn btn-primary"> Download</a>
+                                <a href="{{ destination.txt_upload_file.url }}" target="_blank" class="btn btn-outline-primary">
+                                    View
+                                </a>
+                                </div>
+                                <div class="mt-2" style=" text-align: center">
+                                    <iframe src="{{ destination.txt_upload_file.url }}"
+                                    style=" border: #dddddd; box-shadow: 0 0 10px darkmagenta; margin-bottom: 10px;" width="100%" height="400px"></iframe>
+                                </div>
+                                {% if destination.txt_metadata %}
+                                {% with metadata=destination.txt_metadata %}
+                                <div style="text-align: left; margin-left: 10px; margin-right: 10px;">
+                                    {% if metadata.file_title %}
+                                    <p style="margin: 0;" class="text-paragraph">
+                                        <strong>Title:</strong> {{ metadata.file_title }}
+                                    </p>
+                                    {% endif %}
+                                    {% if metadata.description %}
+                                    <p style="margin: 0;" class="text-paragraph">
+                                        <strong>Description:</strong> {{ metadata.description }}
+                                    </p>
+                                    {% endif %}
+                                    {% if metadata.keywords %}
+                                    <p style="margin: 0;" class="text-paragraph">
+                                        <strong>Keywords:</strong> {{ metadata.keywords }}
+                                    </p>
+                                    {% endif %}
+                                    <p style="margin-bottom: 10px;" class="text-paragraph">
+                                        <strong>Uploaded:</strong> {{ metadata.upload_timestamp|date:"F j, Y" }}
+                                    </p>
+                                </div>
+                                {% endwith %}
+                                {% endif %}
+                            </div>
+                            {% endif %}
+
+
+
+                            {% if destination.pdf_upload_file %}
+                                <div class="mt-4" >
+                                <div style = "display: flex; gap: 10px; align-items: center; justify-content: center;">
+                                    <p style="margin: 0;font-size: 20px"><strong>PDF File:</strong></p>
+                                    <a href="{{ destination.pdf_upload_file.url }}" target="_blank" class="btn btn-outline-primary">
+                                        View
+                                    </a>
+                                </div>
+                                <div style="width: 100%;">
+                                    <iframe class="mt-2 fa-file-pdf-o" src="{{ destination.pdf_upload_file.url }}" width="100%" height="1000px"
+                                        loading="lazy" style="border: #dddddd; margin-bottom: 10px;"></iframe>
+ 
+ 
+                                </div>
+                                {% if destination.pdf_metadata %}
+                                {% with metadata=destination.pdf_metadata %}
+                                <div style="text-align: left; margin-left: 10px; margin-right: 10px;">
+                                    {% if metadata.file_title %}
+                                    <p style="margin: 0;" class="text-paragraph">
+                                        <strong>Title:</strong> {{ metadata.file_title }}
+                                    </p>
+                                    {% endif %}
+                                    {% if metadata.description %}
+                                    <p style="margin: 0;" class="text-paragraph">
+                                        <strong>Description:</strong> {{ metadata.description }}
+                                    </p>
+                                    {% endif %}
+                                    {% if metadata.keywords %}
+                                    <p style="margin: 0;" class="text-paragraph">
+                                        <strong>Keywords:</strong> {{ metadata.keywords }}
+                                    </p>
+                                    {% endif %}
+                                    <p style="margin-bottom: 10px;" class="text-paragraph">
+                                        <strong>Uploaded:</strong> {{ metadata.upload_timestamp|date:"F j, Y" }}
+                                    </p>
+                            </div>
+                                {% endwith %}
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                
+
+        </div>
+
+
+{% endblock content %}
+{% endblock %}

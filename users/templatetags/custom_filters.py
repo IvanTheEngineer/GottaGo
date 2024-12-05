@@ -26,3 +26,10 @@ def display_role(user):
     if has_group(user, "PMA"):
         return "PMA"
     return "Regular"
+
+@register.filter
+def email_handle(user):
+    email = user.email
+    if email and '@' in email:
+        return email.split('@')[0]
+    return email

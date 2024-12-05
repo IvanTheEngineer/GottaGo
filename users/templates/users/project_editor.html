@@ -1,3 +1,14 @@
+<!--
+/***************************************************************************************
+*  REFERENCES
+*  Title: How to Implement Django Datepicker Calender in Forms Date Field
+*  Used for: Calendar date selection in forms
+*  Author: Asim Zahid
+*  Date: Sep 9, 2021
+*  URL: https://mrasimzahid.medium.com/how-to-implement-django-datepicker-calender-in-forms-date-field-9e23479b5db
+*************************************************************************************** 
+-->
+
 {% extends "users/base.html" %}
 {% load bootstrap5 %}
 {% load custom_filters %}
@@ -18,30 +29,40 @@
         <div class="mb-4">
             <h4>Plan Details</h4>
             <div class="mb-3">
+                <label for="{{ form.destination_name.id_for_label }}" class="required-label">
                 {{ form.plan_name.label_tag }}
+                </label>
                 {{ form.plan_name }}
             </div>
             <div class="mb-3">
+                <label for="{{ form.destination_name.id_for_label }}" class="required-label">
                 {{ form.group_size.label_tag }}
+                </label>
                 {{ form.group_size }}
             </div>
             <div class="mb-3">
+                <label for="{{ form.destination_name.id_for_label }}" class="required-label">
                 {{ form.trip_description.label_tag }}
+                </label>
                 {{ form.trip_description }}
             </div>
             <div class="mb-3">
+                <label for="{{ form.destination_name.id_for_label }}" class="required-label">
                 {{ form.start_date.label_tag }}
+                </label>
                 {{ form.start_date }}
             </div>
             <div class="mb-3">
+                <label for="{{ form.destination_name.id_for_label }}" class="required-label">
                 {{ form.end_date.label_tag }}
+                </label>
                 {{ form.end_date }}
             </div>
         </div>
 
         <!-- Image Upload and Metadata -->
         <div class="mb-4">
-            <h4>Image Upload</h4>
+            <h4>Banner Image Upload</h4>
             
             {{ form.jpg_upload_file }}
             
@@ -61,7 +82,7 @@
             </div>
         </div>
 
-        <!-- PDF Upload and Metadata -->
+        <!-- PDF Upload and Metadata 
         <div class="mb-4">
             <h4>PDF Upload</h4>
             {{ form.pdf_upload_file }}
@@ -80,9 +101,9 @@
                     {{ form.pdf_keywords }}
                 </div>
             </div>
-        </div>
+        </div>          -->
 
-        <!-- TXT Upload and Metadata -->
+        <!-- TXT Upload and Metadata 
         <div class="mb-4">
             <h4>TXT Upload</h4>
             {{ form.txt_upload_file }}
@@ -101,8 +122,10 @@
                     {{ form.txt_keywords }}
                 </div>
             </div>
-        </div>
-        
+        </div>          -->
+                    <p class="text-paragraph">
+                                To delete a file, select the "Clear" checkbox for the file you want deleted and save the plan.
+            </p>
         <button type="submit" class="btn btn-success" style="width: 100%">Save Plan</button>
         <a href="{% url 'detail' primary_group_code %}" style="width: 100%; margin-top: 10px;" class="btn btn-danger">Cancel</a>
     </form>

@@ -1,11 +1,25 @@
+# ***************************************************************************************
+#  REFERENCES
+#  Title: How to Implement Django Datepicker Calender in Forms Date Field
+#  Used for: Calendar date selection in forms
+#  Author: Asim Zahid
+#  Date: Sep 9, 2021
+#  URL: https://mrasimzahid.medium.com/how-to-implement-django-datepicker-calender-in-forms-date-field-9e23479b5db
+# **************************************************************************************
+
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.forms import ClearableFileInput
+from django.forms.widgets import FILE_INPUT_CONTRADICTION, CheckboxInput
+
 from .models import TravelPlan, Destination, FileMetadata, Comment, Expense
 import uuid
 from django.core.validators import MinValueValidator
 
+
 class DateInput(forms.DateInput):
     input_type = 'date'
+
 
 class UserLoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
@@ -178,7 +192,7 @@ class PlanForm(forms.ModelForm):
             'jpg_upload_file': forms.ClearableFileInput(attrs={
                 'class': 'form-control',
                 'id': 'jpg_upload_file',
-                'accept': '.jpg',
+                'accept': 'image/jpeg'
             }),
             'txt_upload_file': forms.ClearableFileInput(attrs={
                 'class': 'form-control',
@@ -235,17 +249,19 @@ class PlanForm(forms.ModelForm):
             travel_plan.users.add(user)
 
         if travel_plan.jpg_upload_file:
-        # Update or create metadata
+            # Update or create metadata
             if travel_plan.jpg_metadata:
-                if (self.cleaned_data.get('jpg_file_title') == "" and self.cleaned_data.get('jpg_description') == "" and self.cleaned_data.get('jpg_keywords') == ""):
+                if (self.cleaned_data.get('jpg_file_title') == "" and self.cleaned_data.get(
+                        'jpg_description') == "" and self.cleaned_data.get('jpg_keywords') == ""):
                     travel_plan.jpg_metadata.delete()
                     travel_plan.jpg_metadata = None
-                else: 
+                else:
                     travel_plan.jpg_metadata.file_title = self.cleaned_data.get('jpg_file_title', '')
                     travel_plan.jpg_metadata.description = self.cleaned_data.get('jpg_description', '')
                     travel_plan.jpg_metadata.keywords = self.cleaned_data.get('jpg_keywords', '')
                     travel_plan.jpg_metadata.save()
-            elif not (self.cleaned_data.get('jpg_file_title') == "" and self.cleaned_data.get('jpg_description') == "" and self.cleaned_data.get('jpg_keywords') == ""):
+            elif not (self.cleaned_data.get('jpg_file_title') == "" and self.cleaned_data.get(
+                    'jpg_description') == "" and self.cleaned_data.get('jpg_keywords') == ""):
                 jpg_metadata = FileMetadata.objects.create(
                     content_object=travel_plan,
                     file_title=self.cleaned_data.get('jpg_file_title', ''),
@@ -253,16 +269,17 @@ class PlanForm(forms.ModelForm):
                     keywords=self.cleaned_data.get('jpg_keywords', '')
                 )
                 travel_plan.jpg_metadata = jpg_metadata
-                travel_plan.save() 
+                travel_plan.save()
         elif travel_plan.jpg_metadata:
             # Delete metadata if file is removed
             travel_plan.jpg_metadata.delete()
             travel_plan.jpg_metadata = None
 
         if travel_plan.txt_upload_file:
-        # Update or create metadata
+            # Update or create metadata
             if travel_plan.txt_metadata:
-                if (self.cleaned_data.get('txt_file_title') == "" and self.cleaned_data.get('txt_description') == "" and self.cleaned_data.get('txt_keywords') == ""):
+                if (self.cleaned_data.get('txt_file_title') == "" and self.cleaned_data.get(
+                        'txt_description') == "" and self.cleaned_data.get('txt_keywords') == ""):
                     travel_plan.txt_metadata.delete()
                     travel_plan.txt_metadata = None
                 else:
@@ -270,7 +287,8 @@ class PlanForm(forms.ModelForm):
                     travel_plan.txt_metadata.description = self.cleaned_data.get('txt_description', '')
                     travel_plan.txt_metadata.keywords = self.cleaned_data.get('txt_keywords', '')
                     travel_plan.txt_metadata.save()
-            elif not (self.cleaned_data.get('txt_file_title') == "" and self.cleaned_data.get('txt_description') == "" and self.cleaned_data.get('txt_keywords') == ""):
+            elif not (self.cleaned_data.get('txt_file_title') == "" and self.cleaned_data.get(
+                    'txt_description') == "" and self.cleaned_data.get('txt_keywords') == ""):
                 txt_metadata = FileMetadata.objects.create(
                     content_object=travel_plan,
                     file_title=self.cleaned_data.get('txt_file_title', ''),
@@ -278,16 +296,17 @@ class PlanForm(forms.ModelForm):
                     keywords=self.cleaned_data.get('txt_keywords', '')
                 )
                 travel_plan.txt_metadata = txt_metadata
-                travel_plan.save() 
+                travel_plan.save()
         elif travel_plan.txt_metadata:
             # Delete metadata if file is removed
             travel_plan.txt_metadata.delete()
             travel_plan.txt_metadata = None
 
         if travel_plan.pdf_upload_file:
-        # Update or create metadata
+            # Update or create metadata
             if travel_plan.pdf_metadata:
-                if (self.cleaned_data.get('pdf_file_title') == "" and self.cleaned_data.get('pdf_description') == "" and self.cleaned_data.get('pdf_keywords') == ""):
+                if (self.cleaned_data.get('pdf_file_title') == "" and self.cleaned_data.get(
+                        'pdf_description') == "" and self.cleaned_data.get('pdf_keywords') == ""):
                     travel_plan.pdf_metadata.delete()
                     travel_plan.pdf_metadata = None
                 else:
@@ -295,7 +314,8 @@ class PlanForm(forms.ModelForm):
                     travel_plan.pdf_metadata.description = self.cleaned_data.get('pdf_description', '')
                     travel_plan.pdf_metadata.keywords = self.cleaned_data.get('pdf_keywords', '')
                     travel_plan.pdf_metadata.save()
-            elif not (self.cleaned_data.get('pdf_file_title') == "" and self.cleaned_data.get('pdf_description') == "" and self.cleaned_data.get('pdf_keywords') == ""):
+            elif not (self.cleaned_data.get('pdf_file_title') == "" and self.cleaned_data.get(
+                    'pdf_description') == "" and self.cleaned_data.get('pdf_keywords') == ""):
                 pdf_metadata = FileMetadata.objects.create(
                     content_object=travel_plan,
                     file_title=self.cleaned_data.get('pdf_file_title', ''),
@@ -303,7 +323,7 @@ class PlanForm(forms.ModelForm):
                     keywords=self.cleaned_data.get('pdf_keywords', '')
                 )
                 travel_plan.pdf_metadata = pdf_metadata
-                travel_plan.save() 
+                travel_plan.save()
         elif travel_plan.pdf_metadata:
             # Delete metadata if file is removed
             travel_plan.pdf_metadata.delete()
@@ -330,6 +350,25 @@ class DestinationForm(forms.ModelForm):
         self.fields['txt_keywords'].label = "Text File Keywords (comma-separated)"
 
     # Add metadata fields for each file type
+    latitude = forms.FloatField(
+        required=False,
+        widget=forms.HiddenInput()
+    )
+    longitude = forms.FloatField(
+        required=False,
+        widget=forms.HiddenInput()
+    )
+    location_address = forms.CharField(
+        max_length=255,
+        required=False,
+        widget=forms.HiddenInput()
+    )
+    location_name = forms.CharField(
+        max_length=255,
+        required=False,
+        widget=forms.HiddenInput()
+    )
+
     jpg_file_title = forms.CharField(
         max_length=255,
         required=False,
@@ -419,6 +458,10 @@ class DestinationForm(forms.ModelForm):
             'pdf_file_title',
             'pdf_description',
             'pdf_keywords',
+            'latitude',
+            'longitude',
+            'location_address',
+            'location_name',
         ]
         labels = {
             'jpg_upload_file': 'Upload an image for the destination',
@@ -438,7 +481,7 @@ class DestinationForm(forms.ModelForm):
             'jpg_upload_file': forms.ClearableFileInput(attrs={
                 'class': 'form-control',
                 'id': 'jpg_upload_file',
-                'accept': '.jpg',
+                'accept': 'image/jpeg'
             }),
             'txt_upload_file': forms.ClearableFileInput(attrs={
                 'class': 'form-control',
@@ -451,7 +494,6 @@ class DestinationForm(forms.ModelForm):
                 'accept': '.pdf',
             }),
         }
-
 
     def save(self, commit=True, travel_plan=None, user=None):
         destination = super().save(commit=False)
@@ -468,17 +510,19 @@ class DestinationForm(forms.ModelForm):
             destination.users.add(user)
 
         if destination.jpg_upload_file:
-        # Update or create metadata
+            # Update or create metadata
             if destination.jpg_metadata:
-                if (self.cleaned_data.get('jpg_file_title') == "" and self.cleaned_data.get('jpg_description') == "" and self.cleaned_data.get('jpg_keywords') == ""):
+                if (self.cleaned_data.get('jpg_file_title') == "" and self.cleaned_data.get(
+                        'jpg_description') == "" and self.cleaned_data.get('jpg_keywords') == ""):
                     destination.jpg_metadata.delete()
                     destination.jpg_metadata = None
-                else: 
+                else:
                     destination.jpg_metadata.file_title = self.cleaned_data.get('jpg_file_title', '')
                     destination.jpg_metadata.description = self.cleaned_data.get('jpg_description', '')
                     destination.jpg_metadata.keywords = self.cleaned_data.get('jpg_keywords', '')
                     destination.jpg_metadata.save()
-            elif not (self.cleaned_data.get('jpg_file_title') == "" and self.cleaned_data.get('jpg_description') == "" and self.cleaned_data.get('jpg_keywords') == ""):
+            elif not (self.cleaned_data.get('jpg_file_title') == "" and self.cleaned_data.get(
+                    'jpg_description') == "" and self.cleaned_data.get('jpg_keywords') == ""):
                 jpg_metadata = FileMetadata.objects.create(
                     content_object=destination,
                     file_title=self.cleaned_data.get('jpg_file_title', ''),
@@ -486,16 +530,17 @@ class DestinationForm(forms.ModelForm):
                     keywords=self.cleaned_data.get('jpg_keywords', '')
                 )
                 destination.jpg_metadata = jpg_metadata
-                destination.save() 
+                destination.save()
         elif destination.jpg_metadata:
             # Delete metadata if file is removed
             destination.jpg_metadata.delete()
             destination.jpg_metadata = None
 
         if destination.txt_upload_file:
-        # Update or create metadata
+            # Update or create metadata
             if destination.txt_metadata:
-                if (self.cleaned_data.get('txt_file_title') == "" and self.cleaned_data.get('txt_description') == "" and self.cleaned_data.get('txt_keywords') == ""):
+                if (self.cleaned_data.get('txt_file_title') == "" and self.cleaned_data.get(
+                        'txt_description') == "" and self.cleaned_data.get('txt_keywords') == ""):
                     destination.txt_metadata.delete()
                     destination.txt_metadata = None
                 else:
@@ -503,7 +548,8 @@ class DestinationForm(forms.ModelForm):
                     destination.txt_metadata.description = self.cleaned_data.get('txt_description', '')
                     destination.txt_metadata.keywords = self.cleaned_data.get('txt_keywords', '')
                     destination.txt_metadata.save()
-            elif not (self.cleaned_data.get('txt_file_title') == "" and self.cleaned_data.get('txt_description') == "" and self.cleaned_data.get('txt_keywords') == ""):
+            elif not (self.cleaned_data.get('txt_file_title') == "" and self.cleaned_data.get(
+                    'txt_description') == "" and self.cleaned_data.get('txt_keywords') == ""):
                 txt_metadata = FileMetadata.objects.create(
                     content_object=destination,
                     file_title=self.cleaned_data.get('txt_file_title', ''),
@@ -511,15 +557,16 @@ class DestinationForm(forms.ModelForm):
                     keywords=self.cleaned_data.get('txt_keywords', '')
                 )
                 destination.txt_metadata = txt_metadata
-                destination.save() 
+                destination.save()
         elif destination.txt_metadata:
             destination.txt_metadata.delete()
             destination.txt_metadata = None
 
         if destination.pdf_upload_file:
-        # Update or create metadata
+            # Update or create metadata
             if destination.pdf_metadata:
-                if (self.cleaned_data.get('pdf_file_title') == "" and self.cleaned_data.get('pdf_description') == "" and self.cleaned_data.get('pdf_keywords') == ""):
+                if (self.cleaned_data.get('pdf_file_title') == "" and self.cleaned_data.get(
+                        'pdf_description') == "" and self.cleaned_data.get('pdf_keywords') == ""):
                     destination.pdf_metadata.delete()
                     destination.pdf_metadata = None
                 else:
@@ -527,7 +574,8 @@ class DestinationForm(forms.ModelForm):
                     destination.pdf_metadata.description = self.cleaned_data.get('pdf_description', '')
                     destination.pdf_metadata.keywords = self.cleaned_data.get('pdf_keywords', '')
                     destination.pdf_metadata.save()
-            elif not (self.cleaned_data.get('pdf_file_title') == "" and self.cleaned_data.get('pdf_description') == "" and self.cleaned_data.get('pdf_keywords') == ""):
+            elif not (self.cleaned_data.get('pdf_file_title') == "" and self.cleaned_data.get(
+                    'pdf_description') == "" and self.cleaned_data.get('pdf_keywords') == ""):
                 pdf_metadata = FileMetadata.objects.create(
                     content_object=destination,
                     file_title=self.cleaned_data.get('pdf_file_title', ''),
@@ -535,7 +583,7 @@ class DestinationForm(forms.ModelForm):
                     keywords=self.cleaned_data.get('pdf_keywords', '')
                 )
                 destination.pdf_metadata = pdf_metadata
-                destination.save() 
+                destination.save()
         elif destination.pdf_metadata:
             # Delete metadata if file is removed
             destination.pdf_metadata.delete()
@@ -562,6 +610,7 @@ class CommentForm(forms.ModelForm):
 
 class ExpenseForm(forms.ModelForm):
     """Form for creating and editing expenses"""
+
     class Meta:
         model = Expense
         fields = ['expense_name', 'amount', 'expense_date']
@@ -574,6 +623,7 @@ class ExpenseForm(forms.ModelForm):
                 'class': 'form-control',
                 'placeholder': 'Enter amount',
                 'min': '0',
+                'max': '1000000',
                 'step': '0.01'
             }),
             'expense_date': DateInput(attrs={
