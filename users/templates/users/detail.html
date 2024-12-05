@@ -102,24 +102,25 @@
 </head>
 
 <div class="destinations-form rounded-2 shadow-sm bg-white">
-    <div class="card px-4 pb-5">
-        <div class="card-body">
-            <div style = "display: flex; align-items: start; justify-content: left; padding-bottom: 20px;">
-                <div style="display: flex; gap: 10px; align-items: start; justify-content: center">
-                    <a style="text-align: left;" class="btn btn-primary" href="{% url 'plans'  %}"> Back</a>
-                </div>
-                <div style="display: flex; gap: 10px; align-items: start; justify-content: flex-end; width: 100%;">
-                    <a style="" href="{% url 'edit' travelplan.primary_group_code %}" class="btn btn-primary">Edit</a>
-                </div>
-            </div>
-            <div class="travel-plan-banner mb-3" style="position: relative">
+    <div class="card px-0 pb-5" style="width: 100%; border: none">
+        <div class="travel-plan-banner mb-3" style="position: relative">
                 {% if travelplan.jpg_upload_file %}
-                    <img src="{{ travelplan.jpg_upload_file.url }}" class="img-fluid w-100" alt="{{ travelplan.plan_name }} Banner image" style="height: 200px; object-fit: cover;"/>
+                    <img src="{{ travelplan.jpg_upload_file.url }}" class="img-fluid w-100" alt="{{ travelplan.plan_name }} Banner image" style="height: 400px; object-fit: cover; width: 100%"/>
                 {% else %}
                     <div class="img-fluid w-100" alt="no image" style="height: 200px; object-fit: cover; display: block; color: white"> </div>
                 {% endif %}
 
                 <div class="gradient-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: black; opacity: 50%"></div>
+
+                <div style = "display: flex; align-items: start; justify-content: left;">
+                    <div style="position: absolute; top: 10px; left: 10px; z-index: 10">
+                        <a style="text-align: left;" class="btn btn-primary" href="{% url 'plans'  %}"> Back</a>
+                    </div>
+                    <div style="position: absolute; top: 10px; right: 10px; z-index: 10">
+                        <a style="" href="{% url 'edit' travelplan.primary_group_code %}" class="btn btn-primary">Edit</a>
+                    </div>
+                </div>
+
                 <div class="banner-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 10px; opacity: 100%; color: white; -webkit-text-stroke: 0.0px darkorchid">
                     <h1 class="mb-2">{{ travelplan.plan_name }} </h1>
                     <p style="font-size: 20px"><strong>Group Code:</strong> {{ travelplan.primary_group_code }} </p>
@@ -129,45 +130,108 @@
                     {% else %}
                         <p style="font-size: 20px"><strong>Dates: </strong> None</p>
                     {% endif %}
+
+                    {% if travelplan.jpg_upload_file %}
+                        {% if travelplan.jpg_metadata %}
+                        {% with metadata=travelplan.jpg_metadata %}
+                        <div class="mx-5" style="display: flex; gap: 20px; align-items: start; justify-content: center; width: auto;">
+                        <div style="text-align: center; width:auto;" >
+                            <p style="margin-top: 10px; margin-bottom: 0; color: white" class="text-paragraph">
+                                <strong>Banner Metadata</strong>
+                            </p>
+                            {% if metadata.file_title %}
+                            <p style="margin: 0;font-size: 10px; color: white" class="text-paragraph">
+                                <strong>Title:</strong> {{ metadata.file_title }}
+                            </p>
+                            {% endif %}
+                            {% if metadata.description %}
+                            <p style="margin: 0;font-size: 10px; color: white" class="text-paragraph">
+                                <strong>Description:</strong> {{ metadata.description }}
+                            </p>
+                            {% endif %}
+                            {% if metadata.keywords %}
+                            <p style="margin: 0;font-size: 10px; color: white" class="text-paragraph">
+                                <strong>Keywords:</strong> {{ metadata.keywords }}
+                            </p>
+                            {% endif %}
+                            <p style="margin: 0;font-size: 10px; color: white" class="text-paragraph">
+                                <strong>Uploaded:</strong> {{ metadata.upload_timestamp|date:"F j, Y" }}
+                            </p>
+                        </div>
+                    </div>
+                        {% endwith %}
+                        {% endif %}
+                    {% endif %}
                 </div>
             </div>
-            <p style="font-size: 20px"><strong>Description:</strong> {{ travelplan.trip_description }} </p>
+        <div class="card-body">
+{#            <div style = "display: flex; align-items: start; justify-content: left; padding-bottom: 20px;">#}
+{#                <div style="display: flex; gap: 10px; align-items: start; justify-content: center">#}
+{#                    <a style="text-align: left;" class="btn btn-primary" href="{% url 'plans'  %}"> Back</a>#}
+{#                </div>#}
+{#                <div style="display: flex; gap: 10px; align-items: start; justify-content: flex-end; width: 100%;">#}
+{#                    <a style="" href="{% url 'edit' travelplan.primary_group_code %}" class="btn btn-primary">Edit</a>#}
+{#                </div>#}
+{#            </div>#}
 
-            {% if travelplan.jpg_upload_file %}
-                {% if travelplan.jpg_metadata %}
-                {% with metadata=travelplan.jpg_metadata %}
-                <div class="mx-5" style="display: flex; gap: 20px; align-items: start; justify-content: center; width: auto;">
-                <div style="text-align: left; width:auto;" >
-                    <p style="margin: 0; font-size: 12px" class="text-paragraph">
-                        <strong>Banner Metadata</strong>
-                    </p>
-                    {% if metadata.file_title %}
-                    <p style="margin: 0;font-size: 10px" class="text-paragraph">
-                        <strong>Title:</strong> {{ metadata.file_title }}
-                    </p>
-                    {% endif %}
-                    {% if metadata.description %}
-                    <p style="margin: 0;font-size: 10px" class="text-paragraph">
-                        <strong>Description:</strong> {{ metadata.description }}
-                    </p>
-                    {% endif %}
-                    {% if metadata.keywords %}
-                    <p style="margin: 0;font-size: 10px" class="text-paragraph">
-                        <strong>Keywords:</strong> {{ metadata.keywords }}
-                    </p>
-                    {% endif %}
-                    <p style="margin: 0;font-size: 10px" class="text-paragraph">
-                        <strong>Uploaded:</strong> {{ metadata.upload_timestamp|date:"F j, Y" }}
-                    </p>
-                </div>
-            </div>
-                {% endwith %}
-                {% endif %}
-                {% endif %}
 
-            <div  style="display: flex; align-items: start; justify-content: center; width: 100%;">
+{#            <div class="travel-plan-banner mb-3" style="position: relative">#}
+{#                {% if travelplan.jpg_upload_file %}#}
+{#                    <img src="{{ travelplan.jpg_upload_file.url }}" class="img-fluid w-100" alt="{{ travelplan.plan_name }} Banner image" style="height: 400px; object-fit: cover; width: 100%"/>#}
+{#                {% else %}#}
+{#                    <div class="img-fluid w-100" alt="no image" style="height: 200px; object-fit: cover; display: block; color: white"> </div>#}
+{#                {% endif %}#}
+{##}
+{#                <div class="gradient-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: black; opacity: 50%"></div>#}
+{#                <div class="banner-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 10px; opacity: 100%; color: white; -webkit-text-stroke: 0.0px darkorchid">#}
+{#                    <h1 class="mb-2">{{ travelplan.plan_name }} </h1>#}
+{#                    <p style="font-size: 20px"><strong>Group Code:</strong> {{ travelplan.primary_group_code }} </p>#}
+{#                    <p style="font-size: 20px"><strong>Group Size:</strong> {{ travelplan.group_size }} </p>#}
+{#                    {% if travelplan.start_date and travelplan.end_date%}#}
+{#                        <p style="font-size: 20px"><strong>Dates: </strong> {{ travelplan.start_date }} <strong> - </strong> {{ travelplan.end_date }}</p>#}
+{#                    {% else %}#}
+{#                        <p style="font-size: 20px"><strong>Dates: </strong> None</p>#}
+{#                    {% endif %}#}
+{#                </div>#}
+{#            </div>#}
 
-            <div class="my-3" width="100%">
+{#            {% if travelplan.jpg_upload_file %}#}
+{#                {% if travelplan.jpg_metadata %}#}
+{#                {% with metadata=travelplan.jpg_metadata %}#}
+{#                <div class="mx-5" style="display: flex; gap: 20px; align-items: start; justify-content: center; width: auto;">#}
+{#                <div style="text-align: left; width:auto;" >#}
+{#                    <p style="margin: 0;" class="text-paragraph">#}
+{#                        <strong>Banner Metadata</strong>#}
+{#                    </p>#}
+{#                    {% if metadata.file_title %}#}
+{#                    <p style="margin: 0;font-size: 10px" class="text-paragraph">#}
+{#                        <strong>Title:</strong> {{ metadata.file_title }}#}
+{#                    </p>#}
+{#                    {% endif %}#}
+{#                    {% if metadata.description %}#}
+{#                    <p style="margin: 0;font-size: 10px" class="text-paragraph">#}
+{#                        <strong>Description:</strong> {{ metadata.description }}#}
+{#                    </p>#}
+{#                    {% endif %}#}
+{#                    {% if metadata.keywords %}#}
+{#                    <p style="margin: 0;font-size: 10px" class="text-paragraph">#}
+{#                        <strong>Keywords:</strong> {{ metadata.keywords }}#}
+{#                    </p>#}
+{#                    {% endif %}#}
+{#                    <p style="margin: 0;font-size: 10px" class="text-paragraph">#}
+{#                        <strong>Uploaded:</strong> {{ metadata.upload_timestamp|date:"F j, Y" }}#}
+{#                    </p>#}
+{#                </div>#}
+{#            </div>#}
+{#                {% endwith %}#}
+{#                {% endif %}#}
+{#            {% endif %}#}
+
+            <p style="font-size: 20px; margin-top: 0"><strong>Description:</strong> {{ travelplan.trip_description }} </p>
+
+            <div style="display: flex; align-items: start; justify-content: center; width: 100%;">
+
+            <div class="my-3" style="max-width: 100%; overflow: hidden">
                 <p style="font-size: 20px; margin-bottom:0px"><strong>Destination Pins</strong></p>
                 <gmpx-api-loader key="{{ google_maps_api_key }}" solution-channel="GMP_GE_mapsandplacesautocomplete_v1">
                 </gmpx-api-loader>
@@ -216,24 +280,24 @@
                                     <p>No image uploaded for destination</p>
                                 {% endif %}
 
-    {#                            {% if destination.jpg_metadata.all.0 %}#}
-    {#                            {% with metadata=destination.jpg_metadata.all.0 %}#}
-    {#                            <div style="text-align: center">#}
-    {#                                <p class="text-paragraph">#}
-    {#                                    <strong>Title:</strong> {{ metadata.file_title }}#}
-    {#                                </p>#}
-    {#                                <p class="text-paragraph">#}
-    {#                                    <strong>Description:</strong> {{ metadata.description }}#}
-    {#                                </p>#}
-    {#                                <p class="text-paragraph">#}
-    {#                                    <strong>Keywords:</strong> {{ metadata.keywords }}#}
-    {#                                </p>#}
-    {#                                <p class="text-paragraph">#}
-    {#                                    <strong>Uploaded:</strong> {{ metadata.upload_timestamp|date:"F j, Y" }}#}
-    {#                                </p>#}
-    {#                            </div>#}
-    {#                            {% endwith %}#}
-    {#                            {% endif %}#}
+{#                                {% if destination.jpg_metadata.all.0 %}#}
+{#                                {% with metadata=destination.jpg_metadata.all.0 %}#}
+{#                                <div style="text-align: center">#}
+{#                                    <p class="text-paragraph">#}
+{#                                        <strong>Title:</strong> {{ metadata.file_title }}#}
+{#                                    </p>#}
+{#                                    <p class="text-paragraph">#}
+{#                                        <strong>Description:</strong> {{ metadata.description }}#}
+{#                                    </p>#}
+{#                                    <p class="text-paragraph">#}
+{#                                        <strong>Keywords:</strong> {{ metadata.keywords }}#}
+{#                                    </p>#}
+{#                                    <p class="text-paragraph">#}
+{#                                        <strong>Uploaded:</strong> {{ metadata.upload_timestamp|date:"F j, Y" }}#}
+{#                                    </p>#}
+{#                                </div>#}
+{#                                {% endwith %}#}
+{#                                {% endif %}#}
 
     {#                        <div>#}
     {#                            <p style="font-size: 20px"><strong>Text Files:</strong></p>#}

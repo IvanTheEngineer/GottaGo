@@ -77,3 +77,17 @@ body {
     transform: translateY(-8px);
     box-shadow: 0 2px 4px black;
 }
+
+.desc-box {
+    background-color: white;
+    border-radius: 8px;
+    border: 1px solid black;
+    padding: 5px;
+    box-shadow: 0 2px 4px black;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+}
