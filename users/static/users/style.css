@@ -60,7 +60,7 @@ body {
 .home-box {
     background-color: white;
     border-radius: 8px;
-    border: 1px solid black;
+    border: 1px solid rgba(0, 0, 0, 0.5);
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -81,7 +81,7 @@ body {
 .desc-box {
     background-color: white;
     border-radius: 8px;
-    border: 1px solid black;
+    border: 1px solid rgba(0, 0, 0, 0.5);
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     width: auto;
