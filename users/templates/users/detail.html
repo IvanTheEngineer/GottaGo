@@ -197,30 +197,28 @@
 
             {% if travelplan.destinations %}
             <div class = "list-group">
-                {% for destination in page_obj %}
-                    <a href="{% url 'destinations' travelplan.primary_group_code destination.id %}">
-                        <p style = "text-align: left; margin-bottom:0px" class="text-left mt-2 fs-5 text-primary"> {{destination.destination_name}}</p>
-                    </a>
+                                {% for destination in page_obj %}
+                    <div class="list-group-item mb-3 p-3 border rounded shadow-sm">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px">
+                            <a href="{% url 'destinations' travelplan.primary_group_code destination.id %}">
+                                <span class="fw-bold"> {{destination.destination_name}}</span>
+                            </a>
 
-                    <div style = "display: flex; align-items: start; justify-content: left; padding-bottom: 20px;">
+                            <a style = "text-align: right" href="{% url 'delete_destination' %}?id={{destination.id}}" class="btn btn-danger"
+                            onclick="return confirm('Are you sure you want to delete this destination?')">Delete</a>
+                        </div>
 
-                        <div style="display: flex; gap: 10px; align-items: start; justify-content: center">
-                            
+                        <div style = "display: flex; align-items: start; justify-content: left; padding-bottom: 20px;">
 
+                            <div style="display: flex; gap: 10px; align-items: start; justify-content: center">
                                 {% if destination.jpg_upload_file %}
                                     <img src="{{ destination.jpg_upload_file.url }}" style="width: 200px; height: 200px; margin-right: 20px;"
                                     class="rounded" alt="{{ plan.plan_name }} image"/>
                                 {% else %}
-                                    <p>No image uploaded for destination</p>
+                                    <img src="{% static 'images/no_image.jpg' %}" style="width: 200px; height: 200px; margin-right: 20px;" class="rounded" alt="no image"/>
                                 {% endif %}
-
+                            </div>
                         </div>
-                        <div style="display: flex; gap: 10px; align-items: flex-end; justify-content: flex-end; width: 100%;">
-                            <a  style = "text-align: right" href="{% url 'delete_destination' %}?id={{destination.id}}" class="btn btn-danger"
-                            onclick="return confirm('Are you sure you want to delete this destination?')">
-                                            Delete</a>
-                        </div>
-    
                     </div>
                 {% endfor %}
             </div>
