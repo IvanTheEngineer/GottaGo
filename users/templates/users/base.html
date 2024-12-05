@@ -89,22 +89,22 @@
 
     </footer>
 
-    <script>
-        document.querySelectorAll('.icon-hover').forEach(item => {
-            item.addEventListener('mouseover', () => {
-                const svg = item.querySelector('svg');
-                if (svg) {
-                    svg.style.transform = 'scale(1.1)';
-                    svg.style.filter = 'invert(1)'
-                }
-            });
-            item.addEventListener('mouseout', () => {
-                const svg = item.querySelector('svg');
-                if (svg) {
-                    svg.style.transform = 'scale(1)';
-                    svg.style.filter = 'invert(0)'
-                }
-            });
-        });
-    </script>
+{#    <script>#}
+{#        document.querySelectorAll('.icon-hover').forEach(item => {#}
+{#            item.addEventListener('mouseover', () => {#}
+{#                const svg = item.querySelector('svg');#}
+{#                if (svg) {#}
+{#                    svg.style.transform = 'scale(1.1)';#}
+{#                    svg.style.filter = 'invert(1)'#}
+{#                }#}
+{#            });#}
+{#            item.addEventListener('mouseout', () => {#}
+{#                const svg = item.querySelector('svg');#}
+{#                if (svg) {#}
+{#                    svg.style.transform = 'scale(1)';#}
+{#                    svg.style.filter = 'invert(0)'#}
+{#                }#}
+{#            });#}
+{#        });#}
+{#    </script>#}
 </body>

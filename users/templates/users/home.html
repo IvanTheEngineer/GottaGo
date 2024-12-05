@@ -27,89 +27,101 @@
         <div class="container mt-5">
             <div class="row">
                 <div class="col-md-4 mb-4 mt-5">
-                    <h5 class="fw-bold" >Profile</h5>
-                    {% if user.is_authenticated %}
-                        <div class="icon-hover">
-                            <a href="{% url 'profile' %}"> {% bs_icon 'person-circle' size="3rem" color="#6a5acd" %}</a>
-                        </div>
-                    {% else %}
-                        <div class="icon-hover">
-                            <a href="{% url 'profile' %}"> {% bs_icon 'person-circle' size="3rem" color="grey" %}</a>
-                        </div>
-                    {% endif %}
-                    <p class="mt-2">View and edit your user profile.</p>
+                    <div class="home-box">
+                        {% if user.is_authenticated %}
+                            <div class="icon-hover">
+                                <a href="{% url 'profile' %}"> {% bs_icon 'person-circle' size="3rem" color="#2F4289" %}</a>
+                            </div>
+                        {% else %}
+                            <div class="icon-hover">
+                                <a href="{% url 'profile' %}"> {% bs_icon 'person-circle' size="3rem" color="#5E5C6C" %}</a>
+                            </div>
+                        {% endif %}
+                        <h5 class="fw-bold" style="margin-top: 5px" >Profile</h5>
+                        <p class="mt-0">View and edit your user profile.</p>
+                    </div>
                 </div>
 
                 <div class="col-md-4 mb-4 mt-5">
-                    <h5 class="fw-bold">Travel Plans</h5>
-                    {% if user.is_authenticated %}
-                        <div class="icon-hover">
-                            <a href="{% url 'plans' %}"> {% bs_icon 'briefcase-fill' size="3rem" color="black" %}</a>
-                        </div>
-                    {% else %}
-                        <div class="icon-hover">
-                            <a href="{% url 'plans' %}"> {% bs_icon 'briefcase-fill' size="3rem" color="grey" %}</a>
-                        </div>
-                    {% endif %}
-                    <p class="mt-2">View, create, and manage your travel plans.</p>
+                    <div class="home-box">
+                        {% if user.is_authenticated %}
+                            <div class="icon-hover">
+                                <a href="{% url 'plans' %}"> {% bs_icon 'briefcase-fill' size="3rem" color="#2F4289" %}</a>
+                            </div>
+                        {% else %}
+                            <div class="icon-hover">
+                                <a href="{% url 'plans' %}"> {% bs_icon 'briefcase-fill' size="3rem" color="#5E5C6C" %}</a>
+                            </div>
+                        {% endif %}
+                        <h5 class="fw-bold" style="margin-top: 5px">Travel Plans</h5>
+                        <p class="mt-0">View, create, and manage your travel plans.</p>
+                    </div>
                 </div>
 
                 <div class="col-md-4 mb-4 mt-5">
-                    <h5 class="fw-bold">Create Travel Plan</h5>
-                    {% if user.is_authenticated %}
-                        <div class="icon-hover">
-                            <a href="{% url 'project_creator' %}"> {% bs_icon 'plus-circle-fill' size="3rem" color="#00ffbb" %}</a>
-                        </div>
-                    {% else %}
-                        <div class="icon-hover">
-                            <a href="{% url 'project_creator' %}"> {% bs_icon 'plus-circle-fill' size="3rem" color="grey" %}</a>
-                        </div>
-                    {% endif %}
-                    <p class="mt-2">Create new travel plans and set destinations.</p>
+                    <div class="home-box">
+                        {% if user.is_authenticated %}
+                            <div class="icon-hover">
+                                <a href="{% url 'project_creator' %}"> {% bs_icon 'plus-circle-fill' size="3rem" color="#2F4289" %}</a>
+                            </div>
+                        {% else %}
+                            <div class="icon-hover">
+                                <a href="{% url 'project_creator' %}"> {% bs_icon 'plus-circle-fill' size="3rem" color="#5E5C6C" %}</a>
+                            </div>
+                        {% endif %}
+                        <h5 class="fw-bold" style="margin-top: 5px">Create Travel Plan</h5>
+                        <p class="mt-0">Create new travel plans and set destinations.</p>
+                    </div>
                 </div>
 
             </div>
             <div class="row">
                 <div class="col-md-4 mb-4 mt-3">
-                    <h5 class="fw-bold">Requests</h5>
-                    {% if user.is_authenticated %}
-                        <div class="icon-hover">
-                            <a href="{% url 'joinrequests' %}"> {% bs_icon 'envelope-open-fill' size="3rem" color="#ffb3cb" %}</a>
-                        </div>
-                    {% else %}
-                        <div class="icon-hover">
-                            <a href="{% url 'joinrequests' %}"> {% bs_icon 'envelope-open-fill' size="3rem" color="grey" %}</a>
-                        </div>
-                    {% endif %}
-                    <p class="mt-2">Manage group join requests received.</p>
+                    <div class="home-box">
+                        {% if user.is_authenticated %}
+                            <div class="icon-hover">
+                                <a href="{% url 'joinrequests' %}"> {% bs_icon 'envelope-open-fill' size="3rem" color="#2F4289"%}</a>
+                            </div>
+                        {% else %}
+                            <div class="icon-hover">
+                                <a href="{% url 'joinrequests' %}"> {% bs_icon 'envelope-open-fill' size="3rem" color="#5E5C6C" %}</a>
+                            </div>
+                        {% endif %}
+                        <h5 class="fw-bold" style="margin-top: 5px">Requests</h5>
+                        <p class="mt-0">Manage group join requests received.</p>
+                    </div>
                 </div>
 
                 <div class="col-md-4 mb-4 mt-3">
-                    <h5 class="fw-bold">Explore All Plans</h5>
-                    {% if user.is_authenticated %}
-                        <div class="icon-hover">
-                            <a href="{% url 'explore_plans' %}"> {% bs_icon 'airplane-fill' size="3rem" color="white" %}</a>
-                        </div>
-                    {% else %}
-                        <div class="icon-hover">
-                            <a href="{% url 'explore_plans' %}"> {% bs_icon 'airplane-fill' size="3rem" color="white" %}</a>
-                        </div>
-                    {% endif %}
-                    <p class="mt-2">View a listing of all existing travel plans.</p>
+                    <div class="home-box">
+                        {% if user.is_authenticated %}
+                            <div class="icon-hover">
+                                <a href="{% url 'explore_plans' %}"> {% bs_icon 'airplane-fill' size="3rem" color="#2F4289"%}</a>
+                            </div>
+                        {% else %}
+                            <div class="icon-hover">
+                                <a href="{% url 'explore_plans' %}"> {% bs_icon 'airplane-fill' size="3rem" color="#2F4289" %}</a>
+                            </div>
+                        {% endif %}
+                        <h5 class="fw-bold" style="margin-top: 5px">Explore All Plans</h5>
+                        <p class="mt-0">View a listing of all existing travel plans.</p>
+                    </div>
                 </div>
 
                 <div class="col-md-4 mb-4 mt-3">
-                    <h5 class="fw-bold">Join Groups</h5>
-                    {% if user.is_authenticated %}
-                        <div class="icon-hover">
-                            <a href="{% url 'join_group' %}"> {% bs_icon 'people-fill' size="3rem" color="#87ceeb" %}</a>
-                        </div>
-                    {% else %}
-                        <div class="icon-hover">
-                            <a href="{% url 'join_group' %}"> {% bs_icon 'people-fill' size="3rem" color="grey" %}</a>
-                        </div>
-                    {% endif %}
-                    <p class="mt-2">Join travel groups to collaborate with others.</p>
+                    <div class="home-box">
+                        {% if user.is_authenticated %}
+                            <div class="icon-hover">
+                                <a href="{% url 'join_group' %}"> {% bs_icon 'people-fill' size="3rem" color="#2F4289" %}</a>
+                            </div>
+                        {% else %}
+                            <div class="icon-hover">
+                                <a href="{% url 'join_group' %}"> {% bs_icon 'people-fill' size="3rem" color="#5E5C6C" %}</a>
+                            </div>
+                        {% endif %}
+                        <h5 class="fw-bold" style="margin-top: 5px">Join Groups</h5>
+                        <p class="mt-0">Join travel groups to collaborate with others.</p>
+                    </div>
                 </div>
             </div>
         </div>
