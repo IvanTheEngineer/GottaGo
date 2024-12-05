@@ -146,9 +146,8 @@
     <style>
         gmp-map {
             display: block;
-            height: 400px;
-            width: 900px;
-            margin: auto;
+            height: 500px;
+            width: 70vw;
         }
       .place-picker-container {
         padding: 20px;
@@ -158,8 +157,8 @@
  <script>
     var csrftoken = '{{ csrf_token }}';
  </script>
- <div style="padding-top: 20px;"></div>
- <div class="mb-3 card mx-auto" style="width: 80%; text-align: center; border: none">
+ <div class="destinations-form rounded-2 shadow-sm bg-white">
+ <div class="card px-0 pb-5" style="width: 100%; border: none">
     <div class="travel-plan-banner mb-3" style="position: relative">
         {% if travelplan.jpg_upload_file %}
             <img src="{{ travelplan.jpg_upload_file.url }}" class="img-fluid w-100" alt="{{ travelplan.plan_name }} Banner image" style="height: 400px; object-fit: cover; width: 100%"/>
@@ -171,10 +170,10 @@
 
         <div style = "display: flex; align-items: start; justify-content: left;">
             <div style="position: absolute; top: 10px; left: 10px; z-index: 10">
-                <a style="text-align: left;" class="btn btn-primary" href="{% url 'plans'  %}"> Back</a>
+                <a style="text-align: left;" class="btn btn-primary" href="{% url 'detail' travelplan.primary_group_code %}"> Back</a>
             </div>
             <div style="position: absolute; top: 10px; right: 10px; z-index: 10">
-                <a style="" href="{% url 'edit' travelplan.primary_group_code %}" class="btn btn-primary">Edit</a>
+                <a style="" href="{% url 'edit_destination' primary_group_code=destination.travel_plan.primary_group_code id=destination.id %}" class="btn btn-primary">Edit</a>
             </div>
         </div>
 
@@ -302,7 +301,7 @@
                                     Expanded View
                                 </a>
                                 </div>
-                                <img style="margin-bottom: 10px; max-height: 650px; max-width: 900px; width: auto; height: auto;" src="{{ destination.jpg_upload_file.url }}" class="rounded mt-2"
+                                <img style="margin-bottom: 10px; max-height: 650px; max-width: 70vw;; width: auto; height: auto;" src="{{ destination.jpg_upload_file.url }}" class="rounded mt-2"
                                 alt="{{ destination.destination_name }} image" />
                                
                                
@@ -339,8 +338,10 @@
                                
                         </div>
                     </div>
+                
+                    <div style="display: flex; align-items: start; justify-content: center; width: 100%;">
 
-                    <div class="my-3">
+                        <div class="my-3" style="max-width: 100%; overflow: hidden">
                         <div style = "display: flex; gap: 10px; align-items: center; justify-content: center;">
                         <p style="margin: 0;font-size: 20px"><strong>Location Pin:</strong></p> <button class="btn btn-success" id="saveButton">Update Stored Pin</button>
                         </div>
@@ -352,7 +353,7 @@
                           </div>
                           <gmp-advanced-marker></gmp-advanced-marker>
                         </gmp-map>
-                       
+                    </div>
                     </div>
 
                     <div class="mx-5 my-4" id="files" style="display: flex; gap: 20px; align-items: start; justify-content: space-between; width: auto;">
@@ -535,6 +536,7 @@
 
 
 
+</div>
 </div>
 
 {% endblock content %}

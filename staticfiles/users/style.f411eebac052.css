@@ -1,0 +1,79 @@
+body {
+    background: #A2BCE0  fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.btn {
+    align-self: center;
+    border-radius: 50px;
+    /* background-color: ghostwhite; */
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+}
+
+.group-form, .project-creator-form, .profile-form, .destination-creator-form, .join-group, .plans-form, .requests-form {
+    max-width: 50rem;
+    margin: 4rem auto;
+    width: 100%;
+    text-align: left;
+}
+
+.destinations-form {
+    max-width: 72rem;
+    margin: 4rem auto;
+    width: 100%;
+    text-align: center;
+}
+
+.required-label:after {
+    content: " *";
+    color: red;
+}
+
+.text-paragraph {
+    color: #838383;
+}
+
+.text-label {
+    color: #83878a;
+}
+
+.card-footer-container {
+    padding: 1.5rem 0 !important;
+}
+
+.icon-hover svg{
+    transition: transform 0.3s ease, fill 0.3s ease;
+    margin-bottom: 2px;
+}
+
+.icon-hover:hover svg{
+    transform: scale(1.3);
+    fill: #5299D3;
+}
+
+.home-box {
+    background-color: white;
+    border-radius: 8px;
+    border: 1px solid black;
+    padding: 20px;
+    box-shadow: 0 2px 4px black;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+}
+
+.home-box:hover {
+    background-color: #f3eef9;
+    transform: translateY(-8px);
+    box-shadow: 0 2px 4px black;
+}
