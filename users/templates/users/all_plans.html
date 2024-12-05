@@ -30,7 +30,7 @@
 
                         <div class="flex-container ms-0">
                             <div class="sub-destinations d-flex flex-wrap">
-                                {% for destination in plan.destinations.all %}
+                                {% for destination in plan.destinations.all|slice:"0:4" %}
                                     {% if destination.jpg_upload_file %}
                                         <img src="{{ destination.jpg_upload_file.url }}" style="width: 100px; height: 100px; margin-right: 10px;"
                                              class="rounded" alt="{{ destination.destination_name }} image"/>
