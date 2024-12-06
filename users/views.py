@@ -39,7 +39,6 @@ def profile(request):
 
 
 def custom_login(request):
-    print("HERE")
     return render(request, 'users/login.html')
 
 
@@ -75,7 +74,7 @@ def project_creation(request):
                 error_message = "PMA administrators are not able to create a project."
             elif form.is_valid():
                 plan = form.save(commit=False, user=request.user)
-                print(request.user)
+                # print(request.user)
                 plan.user = request.user
                 plan.save()
                 # print(f"File uploaded to S3: {plan.jpg_upload_file.url}")
@@ -150,7 +149,7 @@ def destination_creation(request, primary_group_code):
             if form.is_valid():
                 plan = form.save(commit=False, travel_plan=travel_plan, user=request.user)
                 # If this doesn't work, create a destination form object.
-                print(request.user)
+                # print(request.user)
                 plan.user = request.user
                 plan.travel_plan = travel_plan
                 plan.save()
@@ -270,7 +269,7 @@ def all_plans_view(request):
         paginated_all_plans = paginator.page(1)
     except EmptyPage:
         paginated_all_plans = paginator.page(paginator.num_pages)
-    print(f"Plans found: {all_travel_plans.count()}")
+    # print(f"Plans found: {all_travel_plans.count()}")
     context = {'all_travel_plans': paginated_all_plans}
     return render(request, 'users/all_plans.html', context)
 
@@ -308,8 +307,8 @@ def user_plans_view(request):
         except EmptyPage:
             paginated_travel_plans = paginator.page(paginator.num_pages)
 
-        for plan in travel_plans:
-            print(plan.id)
+        # for plan in travel_plans:
+            # print(plan.id)
         # return render(request, 'users/plans.html', {'travel_plans': travel_plans})
 
         return render(request, 'users/plans.html',
@@ -367,7 +366,7 @@ def join_group(request):
 
 
 def joinrequests(request):
-    print(request.user)
+    # print(request.user)
     if request.user.is_authenticated:
         invites = Invite.objects.filter(requested_to=request.user)
         return render(request, 'users/requests.html', {'invites': invites})

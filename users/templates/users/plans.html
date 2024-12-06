@@ -30,7 +30,6 @@
             <div class="list-group">
                 {% for plan in travel_plans %}
 
-{#                    <div style="display: flex; align-items: start; justify-content: start; padding-bottom: 20px;">#}
                         <div class="list-group-item mb-3 p-3 border rounded shadow-sm">
                             <p style="display: flex; justify-content: space-between; align-items: center;">
                                 <a href="{% url 'detail' plan.primary_group_code %}"> <span class="fw-bold">{{ plan.plan_name }}</span></a> &nbsp;- Group Code: {{plan.primary_group_code}}
@@ -99,7 +98,6 @@
                     <a href="{% url 'project_creator' %}" class="btn btn-success">Create Plan</a>
             </div>
         {% else %}
-{#            <p class="text-center mt-2 fs-5 text-paragraph">No plans are available, create one <a href="{% url 'project_creator' %}">here</a>.</p>#}
             <p class="text-center mt-2 fs-5 text-paragraph">No plans are available</p>
             <div style="display: flex; align-items: center; justify-content: center;">
                     <a href="{% url 'project_creator' %}" class="btn btn-success">Create Plan</a>
