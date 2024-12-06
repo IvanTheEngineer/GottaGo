@@ -56,7 +56,7 @@
 
                 // Update the map center and place a marker at the saved location
                 map.center = location;
-                map.zoom = 7; // Adjust zoom level as needed
+                map.zoom = 7;
                 marker.position = location;
 
                 // Optionally display location info (e.g., in an infowindow)
@@ -93,7 +93,6 @@
             // Save button click event
             document.getElementById('saveButton').addEventListener('click', () => {
                 if (savedLocation) {
-                    // Replace with your TravelPlan ID
                     const destinationId = destination.id;
                     fetch(`/plans/${destination.travel_plan.primary_group_code}/destination/${destinationId}/save-location/${destinationId}/`, {
                         method: 'POST',
@@ -227,53 +226,7 @@
         </div>
     </div>
 
-
     <div class="card-body">
-{#        <div style = "display: flex; align-items: start; justify-content: left; padding-bottom: 20px;">#}
-{#            <div style="display: flex; gap: 10px; align-items: start; justify-content: center">#}
-{#                <a style="text-align: left;" class="btn btn-primary" href="{% url 'detail' travelplan.primary_group_code %}"> Back</a>#}
-{#            </div>#}
-{#            <div style="display: flex; gap: 10px; align-items: start; justify-content: flex-end; width: 100%;">#}
-{#                <a href="{% url 'edit_destination' primary_group_code=destination.travel_plan.primary_group_code id=destination.id %}" class="btn btn-primary">Edit</a>#}
-{#            </div>#}
-{#        </div>#}
-{#                <div class="travel-plan-banner mb-3" style="position: relative">#}
-{#            {% if travelplan.jpg_upload_file %}#}
-{#                <img src="{{ travelplan.jpg_upload_file.url }}" class="img-fluid w-100" alt="{{ travelplan.plan_name }} Banner image" style="height: 400px; object-fit: cover;"/>#}
-{#            {% else %}#}
-{#                <img src="{% static 'images/no_image.jpg' %}" class="img-fluid" alt="no image" style="object-fit: cover"/>#}
-{#            {% endif %}#}
-{##}
-{##}
-{#            <div class="gradient-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: black; opacity: 50%"></div>#}
-{#            <div class="banner-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 10px; opacity: 100%; color: white; -webkit-text-stroke: 0.0px darkorchid">#}
-{#                <h1 class="mb-2">{{ travelplan.plan_name }} </h1>#}
-{#                <p style="font-size: 20px"><strong>Group Code:</strong> {{ travelplan.primary_group_code }} </p>#}
-{#                <p style="font-size: 20px"><strong>Group Size:</strong> {{ travelplan.group_size }} </p>#}
-{#                {% if travelplan.start_date and travelplan.end_date%}#}
-{#                    <p style="font-size: 20px"><strong>Dates: </strong> {{ travelplan.start_date }} <strong> - </strong> {{ travelplan.end_date }}</p>#}
-{#                {% else %}#}
-{#                    <p style="font-size: 20px"><strong>Dates: </strong> None</p>#}
-{#                {% endif %}#}
-{#            </div>#}
-{#        </div>#}
- 
- 
-    <!--<h3 class="mb-2">Destination page test | {{ travelplan.plan_name }} </h3>
-        <p style="font-size: 20px"><strong>Group Code:</strong> {{ travelplan.primary_group_code }} </p>
-        <p style="font-size: 20px"><strong>Group Size:</strong> {{ travelplan.group_size }} </p>
-        <p style="font-size: 20px"><strong>Description:</strong> {{ travelplan.trip_description }} </p>
- 
- 
-        <div class="mt-3">
-            <p style="font-size: 20px"><strong>Images:</strong></p>
-            {% if travelplan.jpg_upload_file %}
-            <img src="{{ travelplan.jpg_upload_file.url }}" width="400" height="400" class="rounded"
-                alt="{{ travelplan.plan_name }} image" />
-            {% else %}
-            <p>No images uploaded.</p>
-            {% endif %}
-        </div> -->
         {% if destination %}
             <script>
                 const destination = {
@@ -338,10 +291,6 @@
                             </div>
                             {% endif %}
                            
- 
- 
-                           
-                               
                         </div>
                     </div>
                 
