@@ -29,7 +29,7 @@ Make sure to also set these environment variables for the project to work.
 * GOOGLE_OAUTH_SECRET
 
 After that, run
-"python manage.py makemigrations", "python manage.py migrate", "python manage.py collectstatic", and "python manage.py runserver"
+"pip install -r requirements.txt", "python manage.py makemigrations", "python manage.py migrate", "python manage.py collectstatic", and "python manage.py runserver"
 Once you run these commands, whenever you want to run the website locally, just type
 "python manage.py runserver" in the terminal within the project file. To close
 the local server, just close the terminal or hit control c. 
