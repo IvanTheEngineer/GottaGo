@@ -25,6 +25,8 @@ Make sure to also set these environment variables for the project to work.
 * AWS_ACCESS_KEY_ID
 * AWS_SECRET_ACCESS_KEY
 * AWS_STORAGE_BUCKET_NAME
+* GOOGLE_OAUTH_ID
+* GOOGLE_OAUTH_SECRET
 
 After that, run
 "python manage.py makemigrations", "python manage.py migrate", "python manage.py collectstatic", and "python manage.py runserver"
